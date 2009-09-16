@@ -23,50 +23,60 @@ import org.hhu.c2c.openlr.geo.Coordinate;
  *      (World Geodetic System 1984)</a>
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version 1.0, 2009-09-20
+ * @version %I%, %G%
  * 
  */
 public class LocationReferencePoint {
 
 	/**
-	 * {@link Coordinate}
+	 * Holds the coordinate
 	 */
 	private Coordinate coordinate;
 
 	/**
-	 * {@link Bearing}
+	 * Holds the bearing
 	 */
 	private Bearing bearing;
 
 	/**
-	 * Holds the {@link Distance} to the the next {@link LocationReferencePoint}
+	 * Holds the distance to the the next location reference point. When this
+	 * location reference point is the last one of a location reference this
+	 * defaults to <code>new Distance(0)</code>
 	 */
 	private Distance distanceToNextPoint;
 
 	/**
-	 * {@link FunctionalRoadClass}
+	 * Holds the functional road class
 	 */
 	private FunctionalRoadClass functionalRoadClass;
 
 	/**
-	 * {@link FormOfWay}
+	 * Holda the form of way
 	 */
 	private FormOfWay formOfWay;
 
 	/**
-	 * {@link #getLowestFRCToNextPoint()}
+	 * Holds the lowest functional road class to the next location reference
+	 * point. When this location reference point is the last one of a location
+	 * reference this is <code>null</code>
 	 */
 	private FunctionalRoadClass lowestFRCToNextPoint;
+
+	// TODO set to a default value like -1 or so when last point?
 
 	/**
 	 * Constructs a new location reference point, wihtout a value for lfrcnp and
 	 * distance, indicating that it is used to describe the last point of a
 	 * location reference.
 	 * 
-	 * @param coordinate the coordinate
-	 * @param frc the functional road class
-	 * @param fow the form of way
-	 * @param bearing the bearing
+	 * @param coordinate
+	 *            the coordinate
+	 * @param frc
+	 *            the functional road class
+	 * @param fow
+	 *            the form of way
+	 * @param bearing
+	 *            the bearing
 	 */
 	protected LocationReferencePoint(Coordinate coordinate,
 			FunctionalRoadClass frc, FormOfWay fow, Bearing bearing) {
@@ -78,14 +88,21 @@ public class LocationReferencePoint {
 	}
 
 	/**
-	 * Constructs a new location reference point with all the neccesary parameters.
+	 * Constructs a new location reference point with all the neccesary
+	 * parameters.
 	 * 
-	 * @param coordinate the coordinate
-	 * @param frc the functional road class
-	 * @param fow the form of way
-	 * @param lfrcnp the lowest functional road class to the next point
-	 * @param bearing the bearing
-	 * @param distance the distance
+	 * @param coordinate
+	 *            the coordinate
+	 * @param frc
+	 *            the functional road class
+	 * @param fow
+	 *            the form of way
+	 * @param lfrcnp
+	 *            the lowest functional road class to the next point
+	 * @param bearing
+	 *            the bearing
+	 * @param distance
+	 *            the distance
 	 */
 	protected LocationReferencePoint(Coordinate coordinate,
 			FunctionalRoadClass frc, FormOfWay fow, FunctionalRoadClass lfrcnp,

@@ -4,6 +4,13 @@ import org.hhu.c2c.openlr.core.Distance;
 import org.hhu.c2c.openlr.core.FormOfWay;
 import org.hhu.c2c.openlr.core.FunctionalRoadClass;
 
+/**
+ * This class offers static definitions shared between the {@link Encoder} and the {@link Decoder}
+ * 
+ * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
+ * @version %I%, %G%
+ * 
+ */
 public class PhysicalDataFormat {
 
 	/**

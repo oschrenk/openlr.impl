@@ -8,7 +8,7 @@ import org.junit.Test;
  * Test cases for {@link Bearing}
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version 1.0, 2009-09-20
+ * @version %I%, %G%
  * 
  */
 public class BearingTest {

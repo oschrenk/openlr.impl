@@ -16,9 +16,6 @@ import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_RELAT
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.POSITIVE_OFFSET_FLAG_BITMASK;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.VERSION_NUMBER_BITMASK;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hhu.c2c.openlr.core.Bearing;
 import org.hhu.c2c.openlr.core.Distance;
 import org.hhu.c2c.openlr.core.FormOfWay;
@@ -31,93 +28,87 @@ import org.hhu.c2c.openlr.geo.Coordinate;
 import org.hhu.c2c.openlr.geo.CoordinateFactory;
 import org.hhu.c2c.openlr.geo.CoordinateUtils;
 import org.hhu.c2c.openlr.util.ByteArrayFiFo;
+import org.hhu.c2c.openlr.util.ValidationException;
 
+/**
+ * Used for unmarshalling a byte representation of a location reference.
+ * 
+ * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
+ * @version %I%, %G%
+ * 
+ */
 public class Decoder {
 
-	
-	
-	private CoordinateFactory coordinateFactory;
-	
-	public Decoder () {
-		coordinateFactory = CoordinateFactory.getInstance();
-	}
-	
 	/**
 	 * Converts the given byte array into a location reference
 	 * 
 	 * @param bytes
 	 *            the byte arra representing a location reference
 	 * @return a location reference
+	 * @throws ValidationException
+	 *             if the location reference trying wasn't valid
 	 * @throws IllegalArgumentException
 	 *             if the byte array is malformed, containing either less or
 	 *             more bytes than required
 	 */
-	public LocationReference read(byte[] bytes) {
+	public LocationReference decode(byte[] bytes) throws ValidationException {
 		if (bytes.length < MINIMUM_NUMBER_OF_BYTES)
 			throw new IllegalArgumentException(
 					"Byte array too small. A valid location reference needs at least "
 							+ MINIMUM_NUMBER_OF_BYTES + " bytes.");
+		// TODO home made exception?
 
 		ByteArrayFiFo fifo = new ByteArrayFiFo(bytes);
 
+		LocationReferenceBuilder lrb = new LocationReferenceBuilder();
+		lrb.start();
+
 		// read header byte
-		// TODO attribute flag beachten
-		// TODO area flag beachten
-		// TODO versions feld untersuchen, kompabiltität prüfen
-		boolean areaFlag = (fifo.peek() & AREA_FLAG_BITMASK) == AREA_FLAG_BITMASK ? true
-				: false;
-		boolean attributeFlag = (fifo.peek() & ATTRIBUTE_FLAG_BITMASK) == ATTRIBUTE_FLAG_BITMASK ? true
-				: false;
-		byte version = (byte) (fifo.pop() & VERSION_NUMBER_BITMASK);
+		lrb
+				.setAreaFlag((fifo.peek() & AREA_FLAG_BITMASK) == AREA_FLAG_BITMASK ? true
+						: false);
+		lrb
+				.setAttributeFlag(((fifo.peek() & ATTRIBUTE_FLAG_BITMASK) == ATTRIBUTE_FLAG_BITMASK ? true
+						: false));
+		lrb.setVersion((byte) (fifo.pop() & VERSION_NUMBER_BITMASK));
 
-		List<LocationReferencePoint> points = new ArrayList<LocationReferencePoint>();
-
-		// get the first point, ts an absolute one
-		points.add(getAbsoluteLRP(fifo.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_LRP)));
+		// get the first point, its an absolute one
+		LocationReferencePoint p = getAbsoluteLRP(fifo
+				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_LRP));
+		lrb.addLocationReferencePoint(p);
 
 		// get following, relative ones, if there are any
 		while (fifo.capacity() >= NUMBER_OF_BYTES_FOR_RELATIVE_LRP
 				+ MINIMUM_NUMBER_OF_BYTES_FOR_LAST_LRP) {
-			points.add(getLRPfromRelative(points.get(points.size())
-					.getCoordinate(), fifo
-					.pop(NUMBER_OF_BYTES_FOR_RELATIVE_LRP)));
+			p = getLRPfromRelative(p.getCoordinate(), fifo
+					.pop(NUMBER_OF_BYTES_FOR_RELATIVE_LRP));
+			lrb.addLocationReferencePoint(p);
 		}
 
-		// we have to prepare the last one very carfully
-		Coordinate c = new Coordinate(
-				CoordinateUtils.getDegreeFromRelative(CoordinateUtils
-						.getRelativeCoordinateIntValue(fifo
-								.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
-						points.get(points.size()).getCoordinate()
-								.getLongitude()),
-				CoordinateUtils
-						.getDegreeFromRelative(
-								CoordinateUtils
-										.getRelativeCoordinateIntValue(fifo
-												.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
-								points.get(points.size()).getCoordinate()
-										.getLatitude()));
-		FunctionalRoadClass fcr = FunctionalRoadClass
-				.getFunctionalRoadClass((byte) ((fifo.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK));
-		FormOfWay fow = FormOfWay
-				.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK));
+		// we have to prepare the last one very carfully as the last attribute
+		// has info about the last point and the complete lr
+		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
+		lrpb.setCoordinate(getCoordinate(p.getCoordinate(), fifo));
+		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
+				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
+		lrpb.setFow(FormOfWay
+				.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)));
+
 		boolean positiveOffsetFlag = (fifo.peek() & POSITIVE_OFFSET_FLAG_BITMASK) == POSITIVE_OFFSET_FLAG_BITMASK;
 		boolean negativeOffsetFlag = (fifo.peek() & NEGATIVE_OFFSET_FLAG_BITMASK) == NEGATIVE_OFFSET_FLAG_BITMASK;
-
-		Bearing bearing = Bearing.newBearing(fifo.pop());
-		Distance positiveOffset = new Distance(0);
-		Distance negativeOffset = new Distance(0);
+		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
+		lrb.addLocationReferencePoint(lrpb.get());
 
 		// if pooffF is set, there should be at least one byte left
 		if (positiveOffsetFlag && fifo.capacity() >= 1)
-			positiveOffset = Distance.newDistance(fifo.pop());
+			lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
 		else
 			throw new IllegalArgumentException(
 					"ByteArray is malformed. Was awaiting a byte for positive offset");
 
 		// if noffF is set, the byte for the offset must be there
 		if (negativeOffsetFlag && fifo.capacity() == 1)
-			negativeOffset = Distance.newDistance(fifo.pop());
+			lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
 		else
 			throw new IllegalArgumentException(
 					"ByteArray is malformed. Was awaiting a byte for negative offset");
@@ -125,12 +116,10 @@ public class Decoder {
 		// if there are somy bytes left, somwthing went wrong
 		if (fifo.capacity() != 0) {
 			throw new IllegalArgumentException(
-					"Somethign went treeribly wrong. You figure it out.");
+					"Someting went terribbly wrong. You figure it out.");
 		}
-		points.add(LocationReferencePointBuilder.newLocationReferencePoint(c, fcr, fow, bearing));
 
-		return LocationReferenceBuilder.newLocationReference(areaFlag, attributeFlag, version, points,
-				positiveOffset, negativeOffset);
+		return lrb.get();
 	}
 
 	/**
@@ -145,34 +134,50 @@ public class Decoder {
 	 *            the byte array representation of the current relative location
 	 *            reference point
 	 * @return the current location reference point with absolut values
+	 * @throws ValidationException
+	 *             if the location reference point trying to build couldn't be
+	 *             validated
 	 */
 	private LocationReferencePoint getLRPfromRelative(Coordinate previous,
-			byte[] b) {
-
+			byte[] b) throws ValidationException {
+		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(b);
 
-		return LocationReferencePointBuilder.newLocationReferencePoint(
-				new Coordinate(
-						CoordinateUtils
-								.getDegreeFromRelative(
-										CoordinateUtils
-												.getRelativeCoordinateIntValue(fifo
-														.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
-										previous.getLongitude()),
-						CoordinateUtils
-								.getDegreeFromRelative(
-										CoordinateUtils
-												.getRelativeCoordinateIntValue(fifo
-														.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
-										previous.getLatitude())),
-				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
-				FormOfWay
-						.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)),
-				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
-				Bearing.newBearing(fifo.pop()), Distance
-						.newDistance(fifo.pop()));
+		lrpb.start();
+		lrpb.setCoordinate(getCoordinate(previous, fifo));
+		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
+				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
+		lrpb.setFow(FormOfWay
+				.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)));
+		lrpb.setLfrcnp(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
+				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
+		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
+		lrpb.setDnp(Distance.newDistance(fifo.pop()));
+
+		return lrpb.get();
+	}
+
+	/**
+	 * Returns a new absolute {@link Coordinate} from a given previous
+	 * coordinate, and a byte representation of the current relative location
+	 * reference point.
+	 * 
+	 * @param previous
+	 *            the coordinate of the previous location reference point
+	 * @param fifo
+	 *            the {@link ByteArrayFiFo} cholding the current location
+	 *            reference point
+	 * @return the absolute coordinate of the current location reference point
+	 */
+	private Coordinate getCoordinate(Coordinate previous, ByteArrayFiFo fifo) {
+		return new Coordinate(CoordinateUtils.getDegreeFromRelative(
+				CoordinateUtils.getRelativeCoordinateIntValue(fifo
+						.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
+				previous.getLongitude()), CoordinateUtils
+				.getDegreeFromRelative(CoordinateUtils
+						.getRelativeCoordinateIntValue(fifo
+								.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
+						previous.getLatitude()));
 	}
 
 	/**
@@ -184,21 +189,28 @@ public class Decoder {
 	 *            the byte representation of a location reference point with an
 	 *            absolute coordinate
 	 * @return the location reference point
+	 * @throws ValidationException
+	 *             if the location reference point trying to build couldn't be
+	 *             validated
 	 */
-	private LocationReferencePoint getAbsoluteLRP(byte[] b) {
+	private LocationReferencePoint getAbsoluteLRP(byte[] b)
+			throws ValidationException {
+		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(b);
+		CoordinateFactory coordinateFactory = CoordinateFactory.getInstance();
 
-		return LocationReferencePointBuilder.newLocationReferencePoint(
-				coordinateFactory.getCoordinate(fifo
-						.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)),
-				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
-				FormOfWay
-						.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)),
-				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
-				Bearing.newBearing(fifo.pop()), Distance
-						.newDistance(fifo.pop()));
+		lrpb.start();
+		lrpb.setCoordinate(coordinateFactory.getCoordinate(fifo
+				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)));
+		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
+				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
+		lrpb.setFow(FormOfWay
+				.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)));
+		lrpb.setLfrcnp(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
+				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
+		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
+		lrpb.setDnp(Distance.newDistance(fifo.pop()));
+		return lrpb.get();
 	}
-	
+
 }

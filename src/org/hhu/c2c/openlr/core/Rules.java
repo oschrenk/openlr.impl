@@ -77,7 +77,7 @@ package org.hhu.c2c.openlr.core;
  * 
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version 1.0, 2009-09-20
+ * @version %I%, %G%
  * 
  */
 public class Rules {

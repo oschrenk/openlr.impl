@@ -9,7 +9,7 @@ package org.hhu.c2c.openlr.core;
  * be done or less important classes needs to be ignored.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version 1.0, 2009-09-20
+ * @version %I%, %G%
  * 
  */
 public enum FunctionalRoadClass {

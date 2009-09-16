@@ -13,53 +13,63 @@ import java.util.List;
  * a shortest-path calculation between each consecutive pair of LR- points.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version 1.0, 2009-09-20
+ * @version %I%, %G%
  * 
  */
 public class LocationReference {
 
 	/**
-	 * Declares the default value for the area flag. As of right now, the
-	 * protocol doesn't support location references describing areas, so this
-	 * flag is by default <code>false</code>
+	 * The <code>ArF</code> (<b>area flag</b>) indicates whether the location
+	 * reference describes an area or not. If this flag is set then the location
+	 * shall be connected and we describe an area. <br>
+	 * <i>Note: The current physical data format supports only line locations so
+	 * that the <code>ArF</code> is constantly set to false.</i>
+	 * 
+	 * @see #hasAreaFlag()
 	 */
-	private static final boolean AREA_FLAG_DEFAULT = false;
+	private boolean areaFlag;
 
 	/**
-	 * Declares the default value for the attribute flag. As of right now, the
-	 * protocol only supports location references, that are describes with the
-	 * additional data of attributes, so this is by default <code>true></code>
+	 * The <code>AF</code> (<b>attribute flag</b>) indicates whether there are
+	 * attributes appended to each LR-point or not. The <code>AF</code> value is
+	 * <code>false</code> if no attributes are appended and therefore the
+	 * location reference only consists of coordinates. Otherwise a value of
+	 * <code>true</code> indicates that attributes are appended to each
+	 * LR-point. <br>
+	 * <i>Note: Since the current version of the physical format supports only
+	 * location references including attributes the <code>AF</code> flag will
+	 * constantly be set to <code>true</code>. </i>
+	 * 
+	 * @see #hasAttributeFlag()
 	 */
-	private static final boolean ATTRIBUTE_FLAG_DEFAULT = true;
+	private boolean attributeFlag;
 
 	/**
-	 * As of right now theOpen LR Standard has only one protocol. By defintion
-	 * the standard version number is <code>2</code>.
+	 * The version is used to distinguish between several physical and data
+	 * formats for location references. The version number is represented by 3
+	 * bits. <br>
+	 * <i>Note: The actual version of the physical data format is 2 so that the
+	 * <code>VER</code> field is constantly set to binary 010.</i>
+	 * 
+	 * @see #getVersion()
 	 */
-	protected static final byte VERSION_NUMBER_DEFAULT = 2;
+	private byte version;
 
 	/**
-	 * {@link #hasAreaFlag()}
-	 */
-	private boolean areaFlag = AREA_FLAG_DEFAULT;
-
-	/**
-	 * {@link #hasAttributeFlag()}
-	 */
-	private boolean attributeFlag = ATTRIBUTE_FLAG_DEFAULT;
-
-	/**
-	 * {@link #getVersion()}
-	 */
-	private byte version = VERSION_NUMBER_DEFAULT;
-
-	/**
-	 * {@link #getPositiveOffset()}
+	 * The <code>POFF</code> (<b>positive offset</b>) value indicates the
+	 * distance between the start of the location reference path and the “real”
+	 * start of the location.
+	 * 
+	 * @see #getPositiveOffset()
 	 */
 	private Distance positiveOffset;
 
 	/**
-	 * {@link #getNegativeOffset()}
+	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
+	 * distance between the end of the location reference path and the “real”
+	 * end of the location.
+	 * 
+	 * @see #getNegativeOffset()
 	 */
 	private Distance negativeOffset;
 
@@ -67,61 +77,6 @@ public class LocationReference {
 	 * Holds a list of location reference points.
 	 */
 	private List<LocationReferencePoint> points;
-
-	/**
-	 * Constructs a new {@link LocationReference} using the default values for
-	 * the area flag, attribute flag and version number. It is described by the
-	 * list of location reference points. The start (end) point has no offset
-	 * value.
-	 * 
-	 * @param points
-	 *            the list of location reference points
-	 */
-	protected LocationReference(List<LocationReferencePoint> points) {
-		this(points, new Distance(0), new Distance(0));
-	}
-
-	/**
-	 * Constructs a new {@link LocationReference} using the default values for
-	 * the area flag, attribute flag and version number. It is described by the
-	 * list of location reference points and assigns the start and end point
-	 * offset values.
-	 * 
-	 * @param points
-	 *            the list of location reference points
-	 * @param positiveOffset
-	 *            the distance from the starting point
-	 * @param negativeOffset
-	 *            the distance to the end point
-	 */
-	protected LocationReference(List<LocationReferencePoint> points,
-			Distance positiveOffset, Distance negativeOffset) {
-		this(AREA_FLAG_DEFAULT, ATTRIBUTE_FLAG_DEFAULT, VERSION_NUMBER_DEFAULT,
-				points, positiveOffset, negativeOffset);
-	}
-
-	/**
-	 * Constructs a new {@link LocationReference} using the given values for the
-	 * area flag, attributeFlag and version number. It is described by the list
-	 * of location reference points. The start (end) point has no offset value.
-	 * 
-	 * @param areaFlag
-	 *            <code>true</code> if the location reference describes an
-	 *            enclosed area, <code>false</code> otherwise
-	 * @param attributeFlag
-	 *            <code>true</code> if the location reference uses attributes
-	 *            for additional data, <code>false</code> otherwise
-	 * @param version
-	 *            the version number, represented by the three least significant
-	 *            bits of the byte
-	 * @param points
-	 *            the list of location reference points
-	 */
-	protected LocationReference(boolean areaFlag, boolean attributeFlag,
-			byte version, List<LocationReferencePoint> points) {
-		this(areaFlag, attributeFlag, version, points, new Distance(0),
-				new Distance(0));
-	}
 
 	/**
 	 * Constructs a new {@link LocationReference} using the given values for the
