@@ -248,7 +248,7 @@ public class Bearing {
 	 *            a byte,
 	 * @return a new bearing
 	 */
-	protected static Bearing newBearing(byte b) {
+	public static Bearing newBearing(byte b) {
 		return new Bearing((b & BITMASK) * ONE_32TH_CIRCLE);
 	}
 }

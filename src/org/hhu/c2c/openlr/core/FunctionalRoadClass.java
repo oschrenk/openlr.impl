@@ -105,7 +105,7 @@ public enum FunctionalRoadClass {
 	 * @return the functional road class corrsesponding to the byte value of the
 	 *         three least significant bits
 	 */
-	protected static FunctionalRoadClass getFunctionalRoadClass(byte b) {
+	public static FunctionalRoadClass getFunctionalRoadClass(byte b) {
 		b = (byte) (b & THREE_BIT_BITMASK);
 
 		switch (b) {

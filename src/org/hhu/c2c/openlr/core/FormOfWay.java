@@ -105,7 +105,7 @@ public enum FormOfWay {
 	 * @return the form of way corrsesponding to the byte value of the three
 	 *         least significant bits
 	 */
-	protected static FormOfWay getFormOfWay(byte b) {
+	public static FormOfWay getFormOfWay(byte b) {
 		b = (byte) (b & THREE_BIT_BITMASK);
 		switch (b) {
 		case 0:

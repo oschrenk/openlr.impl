@@ -95,7 +95,7 @@ public class Distance {
 	 *            the byte value
 	 * @return a new distance, measured in meter
 	 */
-	protected static Distance newDistance(byte b) {
+	public static Distance newDistance(byte b) {
 		return new Distance((int) (b * Rules.ONE_BIT_DISTANCE));
 	}
 
