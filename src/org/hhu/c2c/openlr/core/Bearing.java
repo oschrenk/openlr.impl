@@ -1,7 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
 /**
- * The <code>BEAR</code> (<b>bearing</b>) describes the angle between the true
+ * The <b>bearing</b> (<code>BEAR</code>) describes the angle between the true
  * North and a line which is defined by the coordinate of the LR-point and a
  * coordinate which is BEARDIST along the line defined by the LR- point
  * attributes. If the line length is less than BEARDIST then the opposite point

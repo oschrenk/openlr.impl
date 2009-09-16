@@ -1,7 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
 /**
- * The <code>FRC</code> (<b>functional road class</b>) is a road classification
+ * The <b>functional road class</b> (<code>FRC</code>) is a road classification
  * based on the importance of a road. The possible values cover the range of
  * navigable roads from highest to lowest importance. If there are fewer or more
  * FRC values defined in the encoder map, or decoder map respectively, than

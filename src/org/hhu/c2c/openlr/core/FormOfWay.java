@@ -1,7 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
 /**
- * The <code>FOW</code> (<b>form of way</b>) describes the physical road type.
+ * The <b>form of way</b> (<code>FOW</code>) describes the physical road type.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
  * @version 1.0, 2009-09-20

@@ -1,7 +1,7 @@
 package org.hhu.c2c.openlr.geo;
 
 /**
- * A <code>COORD</code> (<b>Coordinate pair</b>) stands for a pair of WGS84
+ * A <b>Coordinate pair</b> (<code>COORD</code>) stands for a pair of WGS84
  * longitude (lon) and latitude (lat) values. This coordinate pair specifies a
  * geometric point in a digital map. The lon and lat values are stored in a
  * decamicrodegrees resolution ( {pow(10, -5)} , five decimals).
