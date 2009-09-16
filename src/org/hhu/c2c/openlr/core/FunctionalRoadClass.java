@@ -54,7 +54,7 @@ public enum FunctionalRoadClass {
 	 */
 	OTHER_CLASS_ROAD(7);
 
-	/*
+	/**
 	 * Describes a bitmask, masking the three least significant bits:
 	 * "0000 0100"
 	 */

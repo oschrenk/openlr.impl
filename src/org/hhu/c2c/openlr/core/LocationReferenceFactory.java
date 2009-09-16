@@ -72,8 +72,22 @@ public class LocationReferenceFactory {
 	 */
 	private static final int MINIMUM_NUMBER_OF_BYTES = 16;
 
+	/**
+	 * The functional road class is encoded as aq 3 bit value, when transmitted
+	 * over wire it uses bit 5-3 (in order from most to least significant bit).
+	 * As the datatype uses the value 0 to 7 as a normalized internal value, the
+	 * values have to be shifted 3 bits to the right when reading from the
+	 * encoded byte.
+	 */
 	private static final int FRC_BITSHIFT = 3;
 
+	/**
+	 * The least funcional road to the next point is represented by the same
+	 * three bit value and thus by the same underlying class
+	 * FunctionalRoadClass, which uses a normalized vlaue 0 0 to 7. As the
+	 * LFRCNP is encoded as biz 8 -8 (from most to least significant bit) the
+	 * value is shifted 5 bits to the right when read from an encoded byte.
+	 */
 	private static final int LFRCNP_BITSHIFT = 5;
 
 	/**
@@ -101,7 +115,7 @@ public class LocationReferenceFactory {
 	 * The three least significant bits of the header byte represent the version
 	 * number
 	 * 
-	 * @see #VERSION
+	 * @see LocationReference#VERSION_NUMBER_DEFAULT
 	 */
 	private static final byte VERSION_NUMBER_BITMASK = THREE_LEAST_SIGNIFICANT_BITS_BITMASK;
 	// TODO check compbability of version
@@ -121,13 +135,26 @@ public class LocationReferenceFactory {
 	private static final byte FORM_OF_WAY_BITMASK = THREE_LEAST_SIGNIFICANT_BITS_BITMASK;
 
 	/**
+	 * The bitmask used by the positive offset flag. The last location reference
+	 * point send over the wire also includes information whether the location
+	 * reference starts (or ends) with an offset. The flag uses the 2nd most
+	 * significant bit.
+	 */
+	private static final byte POSITIVE_OFFSET_FLAG_BITMASK = 64;
+
+	/**
+	 * The bitmask used by the negative offset flag. The last location reference
+	 * point send over the wire also includes information whether the location
+	 * reference starts (or ends) with an offset. The flag uses the 3nd most
+	 * significant bit.
+	 */
+	private static final byte NEGATIVE_OFFSET_FLAG_BITMASK = 32;
+
+	/**
 	 * Holds the singleton instance
 	 */
 	private static final LocationReferenceFactory instance = new LocationReferenceFactory();
 
-	private static final byte POSITIVE_OFFSET_FLAG_BITMASK = 64;
-
-	private static final byte NEGATIVE_OFFSET_FLAG_BITMASK = 32;
 	/**
 	 * Holds the coordinate factory
 	 */
@@ -150,16 +177,16 @@ public class LocationReferenceFactory {
 	}
 
 	/**
-	 * Writes the given location reference into the given output stream.
+	 * Writes the given location reference to the given output stream.
 	 * 
-	 * @param bout
+	 * @param out
 	 *            the output stream
 	 * @param lr
 	 *            the location reference
 	 * @throws IOException
 	 *             if there are problems with the output stream
 	 */
-	public void write(OutputStream bout, LocationReference lr)
+	public void write(OutputStream out, LocationReference lr)
 			throws IOException {
 
 		LinkedList<LocationReferencePoint> points = new LinkedList<LocationReferencePoint>(
@@ -169,7 +196,7 @@ public class LocationReferenceFactory {
 					"There have to be at least two location reference points.");
 
 		// write 1 byte header
-		writeHeader(bout, lr.hasAreaFlag(), lr.hasAttributeFlag(), lr
+		writeHeader(out, lr.hasAreaFlag(), lr.hasAttributeFlag(), lr
 				.getVersion());
 
 		LocationReferencePoint previousPoint = null;
@@ -179,23 +206,23 @@ public class LocationReferenceFactory {
 		c = previousPoint.getCoordinate();
 
 		// write 3 bytes longitude
-		bout
+		out
 				.write(CoordinateUtils.getByteArrayRepresentation(c
 						.getLongitude()));
 
 		// write 3 byte latitude
-		bout.write(CoordinateUtils.getByteArrayRepresentation(c.getLatitude()));
+		out.write(CoordinateUtils.getByteArrayRepresentation(c.getLatitude()));
 
 		// write 1st attribute (2 empty bit, 3 bit FRC, 3 bit FOW)
-		writeFirstAttribute(bout, previousPoint.getFunctionalRoadClass(),
+		writeFirstAttribute(out, previousPoint.getFunctionalRoadClass(),
 				previousPoint.getFormOfWay());
 
 		// write 2nd attribute (3 bit LFRCNP, 5 bit BEAR)
-		writeSecondAttribute(bout, previousPoint.getLowestFRCToNextPoint(),
+		writeSecondAttribute(out, previousPoint.getLowestFRCToNextPoint(),
 				previousPoint.getBearing());
 
 		// write 3rd attribute (8bit DNP)
-		writeThirdAttribute(bout, previousPoint.getDistanceToNextPoint());
+		writeThirdAttribute(out, previousPoint.getDistanceToNextPoint());
 
 		// write following points
 		int i = points.size();
@@ -207,14 +234,14 @@ public class LocationReferenceFactory {
 			currentPoint = points.poll();
 
 			// write 2 byte longitude, write 2 byte latitude
-			bout.write(CoordinateUtils.getByteArrayRepresentation(currentPoint
+			out.write(CoordinateUtils.getByteArrayRepresentation(currentPoint
 					.getCoordinate(), previousPoint.getCoordinate()));
 
-			writeFirstAttribute(bout, currentPoint.getFunctionalRoadClass(),
+			writeFirstAttribute(out, currentPoint.getFunctionalRoadClass(),
 					currentPoint.getFormOfWay());
-			writeSecondAttribute(bout, currentPoint.getLowestFRCToNextPoint(),
+			writeSecondAttribute(out, currentPoint.getLowestFRCToNextPoint(),
 					currentPoint.getBearing());
-			writeThirdAttribute(bout, currentPoint.getDistanceToNextPoint());
+			writeThirdAttribute(out, currentPoint.getDistanceToNextPoint());
 
 			// we need to save the previous one for the next round
 			previousPoint = currentPoint;
@@ -226,25 +253,25 @@ public class LocationReferenceFactory {
 
 		// write relative point
 		// write 2 byte longitude, write 2 byte latitude
-		bout.write(CoordinateUtils.getByteArrayRepresentation(currentPoint
+		out.write(CoordinateUtils.getByteArrayRepresentation(currentPoint
 				.getCoordinate(), previousPoint.getCoordinate()));
 
 		// write 1st attribute
-		writeFirstAttribute(bout, currentPoint.getFunctionalRoadClass(),
+		writeFirstAttribute(out, currentPoint.getFunctionalRoadClass(),
 				currentPoint.getFormOfWay());
 
 		// write 4th attribute (1 empty bit, 1 bit positive offset flag (pOffF),
 		// 1 bit negative offset flag (nOffF), 5 bit bearing)
-		writeFourthAttribute(bout, lr.hasPositiveOffset(), lr
+		writeFourthAttribute(out, lr.hasPositiveOffset(), lr
 				.hasNegativeOffset(), currentPoint.getBearing());
 
 		// write positive offset byte IFF pOffF true
 		if (lr.hasPositiveOffset()) {
-			writeDistance(bout, lr.getPositiveOffset());
+			writeDistance(out, lr.getPositiveOffset());
 		}
 		// write negative offset byte IFF nOffF true
 		if (lr.hasNegativeOffset()) {
-			writeDistance(bout, lr.getNegativeOffset());
+			writeDistance(out, lr.getNegativeOffset());
 		}
 
 	}
@@ -386,6 +413,19 @@ public class LocationReferenceFactory {
 				positiveOffset, negativeOffset);
 	}
 
+	/**
+	 * Returns a {@link LocationReferencePoint} from a given previous
+	 * coordinate, and a byte representation of the current relative location
+	 * reference point.
+	 * 
+	 * @param previous
+	 *            The absolute coordinate from the prrevious location reference
+	 *            point
+	 * @param b
+	 *            the byte array representation of the current relative location
+	 *            reference point
+	 * @return the current location reference point with absolut values
+	 */
 	private LocationReferencePoint getLRPfromRelative(Coordinate previous,
 			byte[] b) {
 
@@ -415,6 +455,16 @@ public class LocationReferenceFactory {
 						.newDistance(fifo.pop()));
 	}
 
+	/**
+	 * Returns a location reference point from a given byte array of 9 bytes
+	 * representing a location reference point with an absolute coordinate and
+	 * three attribute bytes
+	 * 
+	 * @param b
+	 *            the byte representation of a location reference point with an
+	 *            absolute coordinate
+	 * @return the location reference point
+	 */
 	private LocationReferencePoint getAbsoluteLRP(byte[] b) {
 		ByteArrayFiFo fifo = new ByteArrayFiFo(b);
 

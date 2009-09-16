@@ -9,8 +9,8 @@ package org.hhu.c2c.openlr.core;
  */
 public enum FormOfWay {
 
-	//TODO reverse code and b in class java doc
-	
+	// TODO reverse code and b in class java doc
+
 	/**
 	 * The physical road type is unknown.
 	 */
@@ -59,7 +59,7 @@ public enum FormOfWay {
 	 */
 	OTHER(7);
 
-	/*
+	/**
 	 * Describes a bitmask, masking the three least significant bits:
 	 * "0000 0100"
 	 */
@@ -127,7 +127,8 @@ public enum FormOfWay {
 		case 7:
 			return OTHER;
 		default:
-			throw new RuntimeException("GuruMeditationFailure: Reached default case, which should never happen.");
+			throw new RuntimeException(
+					"GuruMeditationFailure: Reached default case, which should never happen.");
 		}
 	}
 }
