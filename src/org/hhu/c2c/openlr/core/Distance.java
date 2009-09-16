@@ -54,7 +54,7 @@ public class Distance {
 	 * @return the byte representation using the full 8 bits of a byte
 	 */
 	public byte getByteRepresentation() {
-		return getDistance(distance);
+		return (byte) (distance / Rules.ONE_BIT_DISTANCE);
 	}
 
 	/**
@@ -63,20 +63,7 @@ public class Distance {
 	 * @return the distance in meter
 	 */
 	public int getDistance() {
-		return getDistance(distance);
-	}
-
-	/**
-	 * Returns the byte representation of the distance
-	 * 
-	 * @see #getByteRepresentation()
-	 * 
-	 * @param distance
-	 *            the distance in meter
-	 * @return the byte representation, using all 8 bit of the byte
-	 */
-	private byte getDistance(int distance) {
-		return (byte) (distance / Rules.ONE_BIT_DISTANCE);
+		return distance;
 	}
 
 	/*
