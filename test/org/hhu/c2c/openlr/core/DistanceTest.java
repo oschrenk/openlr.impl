@@ -1,6 +1,6 @@
 package org.hhu.c2c.openlr.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -16,20 +16,10 @@ public class DistanceTest {
 	/**
 	 * Tests various edge cases for constructing
 	 */
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testConstructing() {
-		try {
-			new Distance(-1);
-			fail("Should fail. No negative distance allowed");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			new Distance(Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + 1);
-			fail("Should fail. Distance should be allowed under maximum distance.");
-		} catch (IllegalArgumentException e) {
-		}
-
+		new Distance(-1);
+		new Distance(Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + 1);
 	}
 
 	/**
@@ -38,22 +28,22 @@ public class DistanceTest {
 	 */
 	@Test
 	public void testRepresentationsConversions() {
-		Distance d;
+		Distance distance;
 
-		d = new Distance(0);
-		assertEquals(d.getDistance(), Distance.newDistance(
-				d.getByteRepresentation()).getDistance());
+		distance = new Distance(0);
+		assertEquals("Expected to be equal", distance.getDistance(), Distance
+				.newDistance(distance.getByteRepresentation()).getDistance());
 
-		d = new Distance(1000);
-		assertEquals(d.getDistance(), Distance.newDistance(
-				d.getByteRepresentation()).getDistance());
+		distance = new Distance(1000);
+		assertEquals("Expected to be equal", distance.getDistance(), Distance
+				.newDistance(distance.getByteRepresentation()).getDistance());
 
-		d = new Distance(5000);
-		assertEquals(d.getDistance(), Distance.newDistance(
-				d.getByteRepresentation()).getDistance());
+		distance = new Distance(5000);
+		assertEquals("Expected to be equal", distance.getDistance(), Distance
+				.newDistance(distance.getByteRepresentation()).getDistance());
 
-		d = new Distance(15000);
-		assertEquals(d.getDistance(), Distance.newDistance(
-				d.getByteRepresentation()).getDistance());
+		distance = new Distance(15000);
+		assertEquals("Expected to be equal", distance.getDistance(), Distance
+				.newDistance(distance.getByteRepresentation()).getDistance());
 	}
 }

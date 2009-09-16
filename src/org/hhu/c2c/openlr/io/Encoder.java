@@ -2,8 +2,8 @@ package org.hhu.c2c.openlr.io;
 
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.AREA_FLAG_BITMASK;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.ATTRIBUTE_FLAG_BITMASK;
-import static org.hhu.c2c.openlr.io.PhysicalDataFormat.POSITIVE_OFFSET_FLAG_BITMASK;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NEGATIVE_OFFSET_FLAG_BITMASK;
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.POSITIVE_OFFSET_FLAG_BITMASK;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,32 +34,34 @@ public class Encoder {
 	 * 
 	 * @param out
 	 *            the output stream
-	 * @param lr
+	 * @param locationReference
 	 *            the location reference
 	 * @throws IOException
 	 *             if there are problems with the output stream
 	 */
-	public void write(OutputStream out, LocationReference lr)
-			throws IOException {
+	public void write(final OutputStream out,
+			final LocationReference locationReference) throws IOException {
 
-		LinkedList<LocationReferencePoint> points = new LinkedList<LocationReferencePoint>(
-				lr.getLocationReferencePoints());
+		final LinkedList<LocationReferencePoint> points = new LinkedList<LocationReferencePoint>(
+				locationReference.getLocationReferencePoints());
 
 		// write 1 byte header
-		writeHeader(out, lr.hasAreaFlag(), lr.hasAttributeFlag(), lr
-				.getVersion());
+		writeHeader(out, locationReference.hasAreaFlag(), locationReference
+				.hasAttributeFlag(), locationReference.getVersion());
 
-		LocationReferencePoint previousPoint = null;
-		Coordinate c;
+		LocationReferencePoint previousPoint;
+		Coordinate coordinate;
 		// write absolute starting point
 		previousPoint = points.poll();
-		c = previousPoint.getCoordinate();
+		coordinate = previousPoint.getCoordinate();
 
 		// write 3 bytes longitude
-		out.write(CoordinateUtils.getByteArrayRepresentation(c.getLongitude()));
+		out.write(CoordinateUtils.getByteArrayRepresentation(coordinate
+				.getLongitude()));
 
 		// write 3 byte latitude
-		out.write(CoordinateUtils.getByteArrayRepresentation(c.getLatitude()));
+		out.write(CoordinateUtils.getByteArrayRepresentation(coordinate
+				.getLatitude()));
 
 		// write 1st attribute (2 empty bit, 3 bit FRC, 3 bit FOW)
 		writeFirstAttribute(out, previousPoint.getFunctionalRoadClass(),
@@ -73,11 +75,11 @@ public class Encoder {
 		writeThirdAttribute(out, previousPoint.getDistanceToNextPoint());
 
 		// write following points
-		int i = points.size();
+		int size = points.size();
 		LocationReferencePoint currentPoint;
 
 		// if there were only two to begin with, we skip this par
-		while (i >= 2) {
+		while (size >= 2) {
 			// write relative point
 			currentPoint = points.poll();
 
@@ -93,7 +95,7 @@ public class Encoder {
 
 			// we need to save the previous one for the next round
 			previousPoint = currentPoint;
-			i--;
+			size--;
 		}
 
 		// only one point should be left, write last point
@@ -110,42 +112,34 @@ public class Encoder {
 
 		// write 4th attribute (1 empty bit, 1 bit positive offset flag (pOffF),
 		// 1 bit negative offset flag (nOffF), 5 bit bearing)
-		writeFourthAttribute(out, lr.hasPositiveOffset(), lr
-				.hasNegativeOffset(), currentPoint.getBearing());
+		writeFourthAttribute(out, locationReference.hasPositiveOffset(),
+				locationReference.hasNegativeOffset(), currentPoint
+						.getBearing());
 
 		// write positive offset byte IFF pOffF true
-		if (lr.hasPositiveOffset()) {
-			writeDistance(out, lr.getPositiveOffset());
+		if (locationReference.hasPositiveOffset()) {
+			writeDistance(out, locationReference.getPositiveOffset());
 		}
 		// write negative offset byte IFF nOffF true
-		if (lr.hasNegativeOffset()) {
-			writeDistance(out, lr.getNegativeOffset());
+		if (locationReference.hasNegativeOffset()) {
+			writeDistance(out, locationReference.getNegativeOffset());
 		}
 
 	}
 
 	/**
-	 * Writes the header information, the area flag, the attribute flag and the
-	 * version number to the output stream as a byte presentation
+	 * Writes the distance as a byte array representation into the output
+	 * stream.
 	 * 
 	 * @param out
 	 *            the output stream
-	 * @param areaFlag
-	 *            the area flag
-	 * @param attributeFlag
-	 *            the attribute flag
-	 * @param version
-	 *            the version number
+	 * @param distance
+	 *            the distance
 	 * @throws IOException
 	 */
-	private void writeHeader(OutputStream out, boolean areaFlag,
-			boolean attributeFlag, byte version) throws IOException {
-		int header = version;
-		if (areaFlag)
-			header = header | AREA_FLAG_BITMASK;
-		if (attributeFlag)
-			header = header | ATTRIBUTE_FLAG_BITMASK;
-		out.write(header);
+	private void writeDistance(final OutputStream out, final Distance distance)
+			throws IOException {
+		out.write(distance.getByteRepresentation());
 	}
 
 	/**
@@ -160,44 +154,11 @@ public class Encoder {
 	 *            the form of way
 	 * @throws IOException
 	 */
-	private void writeFirstAttribute(OutputStream out, FunctionalRoadClass fcr,
-			FormOfWay fow) throws IOException {
+	private void writeFirstAttribute(final OutputStream out,
+			final FunctionalRoadClass fcr, final FormOfWay fow)
+			throws IOException {
 		out.write(fcr.getByteRepresentation() << 3
 				| fow.getByteRepresentation());
-	}
-
-	/**
-	 * Writes the second attribute, the lowest functional road class to the next
-	 * point and the bearing, as a byte array representation into the output
-	 * stream.
-	 * 
-	 * @param out
-	 *            the output stream
-	 * @param lowestFRCToNextPoint
-	 * @param bearing
-	 *            the bearing
-	 * @throws IOException
-	 */
-	private void writeSecondAttribute(OutputStream out,
-			FunctionalRoadClass lowestFRCToNextPoint, Bearing bearing)
-			throws IOException {
-		out.write(lowestFRCToNextPoint.getByteRepresentation() << 5
-				| bearing.getByteRepresentation());
-	}
-
-	/**
-	 * Writes the third attribute, the distance to the next point, as a byte
-	 * array representation into the output stream.
-	 * 
-	 * @param out
-	 *            the output stream
-	 * @param distanceToNextPoint
-	 *            the distance to next location reference point
-	 * @throws IOException
-	 */
-	private void writeThirdAttribute(OutputStream out,
-			Distance distanceToNextPoint) throws IOException {
-		writeDistance(out, distanceToNextPoint);
 	}
 
 	/**
@@ -215,30 +176,81 @@ public class Encoder {
 	 *            the bearing
 	 * @throws IOException
 	 */
-	private void writeFourthAttribute(OutputStream out,
-			boolean positiveOffsetFlag, boolean negativeOffsetFlag,
-			Bearing bearing) throws IOException {
-		int b = 0;
-		if (positiveOffsetFlag)
-			b = b | POSITIVE_OFFSET_FLAG_BITMASK;
-		if (negativeOffsetFlag)
-			b = b | NEGATIVE_OFFSET_FLAG_BITMASK;
-		out.write (b | bearing.getByteRepresentation());
+	private void writeFourthAttribute(final OutputStream out,
+			final boolean positiveOffsetFlag, final boolean negativeOffsetFlag,
+			final Bearing bearing) throws IOException {
+		int attribute = 0;
+		if (positiveOffsetFlag) {
+			attribute = attribute | POSITIVE_OFFSET_FLAG_BITMASK;
+		}
+
+		if (negativeOffsetFlag) {
+			attribute = attribute | NEGATIVE_OFFSET_FLAG_BITMASK;
+		}
+		out.write(attribute | bearing.getByteRepresentation());
 
 	}
 
 	/**
-	 * Writes the distance as a byte array representation into the output
+	 * Writes the header information, the area flag, the attribute flag and the
+	 * version number to the output stream as a byte presentation
+	 * 
+	 * @param out
+	 *            the output stream
+	 * @param areaFlag
+	 *            the area flag
+	 * @param attributeFlag
+	 *            the attribute flag
+	 * @param version
+	 *            the version number
+	 * @throws IOException
+	 */
+	private void writeHeader(final OutputStream out, final boolean areaFlag,
+			final boolean attributeFlag, final byte version) throws IOException {
+		int header = version;
+		if (areaFlag) {
+			header = header | AREA_FLAG_BITMASK;
+		}
+
+		if (attributeFlag) {
+			header = header | ATTRIBUTE_FLAG_BITMASK;
+		}
+
+		out.write(header);
+	}
+
+	/**
+	 * Writes the second attribute, the lowest functional road class to the next
+	 * point and the bearing, as a byte array representation into the output
 	 * stream.
 	 * 
 	 * @param out
 	 *            the output stream
-	 * @param d
-	 *            the distance
+	 * @param lowestFRCToNextPoint
+	 * @param bearing
+	 *            the bearing
 	 * @throws IOException
 	 */
-	private void writeDistance(OutputStream out, Distance d) throws IOException {
-		out.write(d.getByteRepresentation());
+	private void writeSecondAttribute(final OutputStream out,
+			final FunctionalRoadClass lowestFRCToNextPoint,
+			final Bearing bearing) throws IOException {
+		out.write(lowestFRCToNextPoint.getByteRepresentation() << 5
+				| bearing.getByteRepresentation());
+	}
+
+	/**
+	 * Writes the third attribute, the distance to the next point, as a byte
+	 * array representation into the output stream.
+	 * 
+	 * @param out
+	 *            the output stream
+	 * @param distanceToNextPoint
+	 *            the distance to next location reference point
+	 * @throws IOException
+	 */
+	private void writeThirdAttribute(final OutputStream out,
+			final Distance distanceToNextPoint) throws IOException {
+		writeDistance(out, distanceToNextPoint);
 	}
 
 }

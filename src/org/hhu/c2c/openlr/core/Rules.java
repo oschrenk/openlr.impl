@@ -81,6 +81,7 @@ package org.hhu.c2c.openlr.core;
  * 
  */
 public class Rules {
+
 	/**
 	 * <b>Rule 1:</b>The maximum distance between two location reference points
 	 * shall not exceed 15km. The distance is measured along the location
@@ -88,7 +89,7 @@ public class Rules {
 	 * reference then a sufficient number of additional LR-points shall be
 	 * inserted.
 	 */
-	protected static final int MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS = 15000;
+	protected static final int MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS = 15000;;
 
 	/**
 	 * <b>Lemma 1.1:</b> As distances are encoded as a byte, using all 8 bit
@@ -101,4 +102,10 @@ public class Rules {
 	 * LR-points is not limited.
 	 */
 	protected static final int MINIMUM_NUMBER_OF_LR_POINTS = 2;
+
+	/**
+	 * Prevents class from being instantiated
+	 */
+	private Rules() {
+	}
 }

@@ -21,13 +21,13 @@ public class Coordinate {
 	 * Holds the longitude, for east-west measuring, represented by vertical
 	 * lines
 	 */
-	private float longitude;
+	private final float longitude;
 
 	/**
 	 * Holds the latitude, for north-south measuring, represented by horizontal
 	 * lines
 	 */
-	private float latitude;
+	private final float latitude;
 
 	/**
 	 * Creates a new coordinate by passing longitude and a latitude parameter.
@@ -42,31 +42,37 @@ public class Coordinate {
 	 *             If either the longitude or the latitude a misformed. (eg.
 	 *             being lower than -180 degree or above 180 degrees)
 	 */
-	public Coordinate(float longitude, float latitude) {
-		if (longitude < -180 || longitude > 180)
+	public Coordinate(final float longitude, final float latitude) {
+		if (longitude < -180 || longitude > 180) {
 			throw new IllegalArgumentException(
 					"The longitude isn't properly formatted.");
-		if (latitude < -180 || latitude > 180)
+		}
+
+		if (latitude < -180 || latitude > 180) {
 			throw new IllegalArgumentException(
 					"The longitude isn't properly formatted.");
+
+		}
 
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
 
 	/**
-	 * Returns the longitude
-	 * @return the longitude
-	 */
-	public float getLongitude() {
-		return longitude;
-	}
-
-	/**
 	 * Returns the latitude
+	 * 
 	 * @return the latitude
 	 */
 	public float getLatitude() {
 		return latitude;
+	}
+
+	/**
+	 * Returns the longitude
+	 * 
+	 * @return the longitude
+	 */
+	public float getLongitude() {
+		return longitude;
 	}
 }

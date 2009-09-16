@@ -20,10 +20,30 @@ package org.hhu.c2c.openlr.core;
  */
 public class Distance {
 
+	/*
+	 * Breaks "Single Responsibility Principle" as the class is now also,
+	 * responsible for its own creation. But as this class is very static by
+	 * contract (the protocol definition of Open LR won't change that fast), we
+	 * can accept that. Also we prohibit casses outside this package to access
+	 * the method.
+	 */
+	/**
+	 * Returns a new distance value by passing a byte value. The whole byte is
+	 * used to compute the distance. Each bit value represents an intervall of
+	 * 56.8 meter in compliance with the data format rules.
+	 * 
+	 * @param distance
+	 *            the byte value
+	 * @return a new distance, measured in meter
+	 */
+	public static Distance newDistance(final byte distance) {
+		return new Distance((int) (distance * Rules.ONE_BIT_DISTANCE));
+	}
+
 	/**
 	 * Holds the distance.
 	 */
-	private int distance;
+	final private int distance;
 
 	/**
 	 * Creates a new distance by passing an integer value of the real distance
@@ -35,13 +55,16 @@ public class Distance {
 	 *             if the distance violates the first rule of the data format
 	 *             rules
 	 */
-	public Distance(int distance) {
-		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS)
+	public Distance(final int distance) {
+		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS) {
 			throw new IllegalArgumentException("Distance too long. Maximum is "
 					+ Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + "m.");
-		if (distance < 0)
+		}
+
+		if (distance < 0) {
 			throw new IllegalArgumentException("Distance must be positive.");
-		
+		}
+
 		this.distance = distance;
 	}
 
@@ -64,26 +87,6 @@ public class Distance {
 	 */
 	public int getDistance() {
 		return distance;
-	}
-
-	/*
-	 * Breaks "Single Responsibility Principle" as the class is now also,
-	 * responsible for its own creation. But as this class is very static by
-	 * contract (the protocol definition of Open LR won't change that fast), we
-	 * can accept that. Also we prohibit casses outside this package to access
-	 * the method.
-	 */
-	/**
-	 * Returns a new distance value by passing a byte value. The whole byte is
-	 * used to compute the distance. Each bit value represents an intervall of
-	 * 56.8 meter in compliance with the data format rules.
-	 * 
-	 * @param b
-	 *            the byte value
-	 * @return a new distance, measured in meter
-	 */
-	public static Distance newDistance(byte b) {
-		return new Distance((int) (b * Rules.ONE_BIT_DISTANCE));
 	}
 
 }

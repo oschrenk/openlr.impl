@@ -31,29 +31,29 @@ public class LocationReferencePoint {
 	/**
 	 * Holds the coordinate
 	 */
-	private Coordinate coordinate;
+	private final Coordinate coordinate;
 
 	/**
 	 * Holds the bearing
 	 */
-	private Bearing bearing;
+	private final Bearing bearing;
 
 	/**
 	 * Holds the distance to the the next location reference point. When this
 	 * location reference point is the last one of a location reference this
 	 * defaults to <code>new Distance(0)</code>
 	 */
-	private Distance distanceToNextPoint;
+	private final Distance distanceToNextPoint;
 
 	/**
 	 * Holds the functional road class
 	 */
-	private FunctionalRoadClass functionalRoadClass;
+	private final FunctionalRoadClass functionalRoadClass;
 
 	/**
 	 * Holda the form of way
 	 */
-	private FormOfWay formOfWay;
+	private final FormOfWay formOfWay;
 
 	/**
 	 * Holds the lowest functional road class to the next location reference
@@ -78,13 +78,15 @@ public class LocationReferencePoint {
 	 * @param bearing
 	 *            the bearing
 	 */
-	protected LocationReferencePoint(Coordinate coordinate,
-			FunctionalRoadClass frc, FormOfWay fow, Bearing bearing) {
+	protected LocationReferencePoint(final Coordinate coordinate,
+			final FunctionalRoadClass frc, final FormOfWay fow,
+			final Bearing bearing) {
 		// TODO handle last point differently? DNP=0? LFRCNP= ????
 		this.coordinate = coordinate;
 		this.functionalRoadClass = frc;
 		this.formOfWay = fow;
 		this.bearing = bearing;
+		this.distanceToNextPoint = new Distance(0);
 	}
 
 	/**
@@ -104,15 +106,25 @@ public class LocationReferencePoint {
 	 * @param distance
 	 *            the distance
 	 */
-	protected LocationReferencePoint(Coordinate coordinate,
-			FunctionalRoadClass frc, FormOfWay fow, FunctionalRoadClass lfrcnp,
-			Bearing bearing, Distance distance) {
+	protected LocationReferencePoint(final Coordinate coordinate,
+			final FunctionalRoadClass frc, final FormOfWay fow,
+			final FunctionalRoadClass lfrcnp, final Bearing bearing,
+			final Distance distance) {
 		this.coordinate = coordinate;
 		this.functionalRoadClass = frc;
 		this.formOfWay = fow;
 		this.lowestFRCToNextPoint = lfrcnp;
 		this.bearing = bearing;
 		this.distanceToNextPoint = distance;
+	}
+
+	/**
+	 * Returns the {@link Bearing} of this {@link LocationReferencePoint}
+	 * 
+	 * @return the bearing of this location reference point
+	 */
+	public Bearing getBearing() {
+		return bearing;
 	}
 
 	/**
@@ -125,13 +137,17 @@ public class LocationReferencePoint {
 	}
 
 	/**
-	 * Returns the {@link FunctionalRoadClass} of this
-	 * {@link LocationReferencePoint}
+	 * This <code>DNP</code> (<b>distance to next location reference point</b>)
+	 * field describes the distance to the next {@link LocationReferencePoint}
+	 * in the topological connection of the LR- points. The distance is measured
+	 * in meters and is calculated along the location reference path. The last
+	 * LR-point will have the distance value 0.
 	 * 
-	 * @return the functional road class of this location reference point
+	 * @return the distance to the next location reference point
 	 */
-	public FunctionalRoadClass getFunctionalRoadClass() {
-		return functionalRoadClass;
+	public Distance getDistanceToNextPoint() {
+		// TODO the last lr point has distance = 0?
+		return distanceToNextPoint;
 	}
 
 	/**
@@ -141,6 +157,16 @@ public class LocationReferencePoint {
 	 */
 	public FormOfWay getFormOfWay() {
 		return formOfWay;
+	}
+
+	/**
+	 * Returns the {@link FunctionalRoadClass} of this
+	 * {@link LocationReferencePoint}
+	 * 
+	 * @return the functional road class of this location reference point
+	 */
+	public FunctionalRoadClass getFunctionalRoadClass() {
+		return functionalRoadClass;
 	}
 
 	/**
@@ -157,29 +183,6 @@ public class LocationReferencePoint {
 	 */
 	public FunctionalRoadClass getLowestFRCToNextPoint() {
 		return lowestFRCToNextPoint;
-	}
-
-	/**
-	 * Returns the {@link Bearing} of this {@link LocationReferencePoint}
-	 * 
-	 * @return the bearing of this location reference point
-	 */
-	public Bearing getBearing() {
-		return bearing;
-	}
-
-	/**
-	 * This <code>DNP</code> (<b>distance to next location reference point</b>)
-	 * field describes the distance to the next {@link LocationReferencePoint}
-	 * in the topological connection of the LR- points. The distance is measured
-	 * in meters and is calculated along the location reference path. The last
-	 * LR-point will have the distance value 0.
-	 * 
-	 * @return the distance to the next location reference point
-	 */
-	public Distance getDistanceToNextPoint() {
-		// TODO the last lr point has distance = 0?
-		return distanceToNextPoint;
 	}
 
 }

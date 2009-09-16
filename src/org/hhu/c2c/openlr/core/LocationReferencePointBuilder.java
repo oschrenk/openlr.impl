@@ -20,43 +20,54 @@ public class LocationReferencePointBuilder implements
 	/**
 	 * Holds the coordinate
 	 **/
-	private Coordinate coordinate;
+	transient private Coordinate coordinate;
 
 	/**
 	 * Holds the functional road class
 	 */
-	private FunctionalRoadClass frc;
+	transient private FunctionalRoadClass frc;
 
 	/**
 	 * Holds the form of way
 	 */
-	private FormOfWay fow;
+	transient private FormOfWay fow;
 
 	/**
 	 * Holds the lowest functional road class to the next location reference
 	 * point. When building the last location reference point of a location
 	 * reference this defaults to <code>null</code>
 	 */
-	private FunctionalRoadClass lfrcnp;
+	transient private FunctionalRoadClass lfrcnp;
 	// TODO default to a something else, null value or so?
 
 	/**
 	 * Holds the bearing
 	 */
-	private Bearing bearing;
+	transient private Bearing bearing;
 
 	/**
 	 * Holds the distance to the next location reference point. When building
 	 * the last location reference point of a location reference this defaults
 	 * to <code>new Distance(0)</code>.
 	 */
-	private Distance dnp;
+	transient private Distance dnp;
 
 	/**
 	 * Constructs a new {@link LocationReferencePointBuilder}
 	 */
 	public LocationReferencePointBuilder() {
 		init();
+	}
+
+	/**
+	 * {@link Builder#get()}
+	 */
+	@Override
+	public LocationReferencePoint get() throws ValidationException {
+		// TODO what if last point
+		// TODO test distances < 15000, when constructing
+		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
+				bearing, dnp);
 	}
 
 	/**
@@ -72,11 +83,15 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
-	 * {@link Builder#start()}
+	 * Sets the bearing
+	 * 
+	 * @param bearing
+	 *            the new bearing
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
 	 */
-	@Override
-	public LocationReferencePointBuilder start() {
-		init();
+	public LocationReferencePointBuilder setBearing(final Bearing bearing) {
+		this.bearing = bearing;
 		return this;
 	}
 
@@ -88,62 +103,9 @@ public class LocationReferencePointBuilder implements
 	 * @return the same instance of this {@link LocationReferencePointBuilder}
 	 *         for use in a fluid interface
 	 */
-	public LocationReferencePointBuilder setCoordinate(Coordinate coordinate) {
+	public LocationReferencePointBuilder setCoordinate(
+			final Coordinate coordinate) {
 		this.coordinate = coordinate;
-		return this;
-	}
-
-	/**
-	 * Sets the functional road class
-	 * 
-	 * @param frc
-	 *            the new functional road class
-	 * @return the same instance of this {@link LocationReferencePointBuilder}
-	 *         for use in a fluid interface
-	 */
-	public LocationReferencePointBuilder setFrc(FunctionalRoadClass frc) {
-		this.frc = frc;
-		return this;
-	}
-
-	/**
-	 * Sets the form of way
-	 * 
-	 * @param fow
-	 *            the new form of way
-	 * @return the same instance of this {@link LocationReferencePointBuilder}
-	 *         for use in a fluid interface
-	 */
-	public LocationReferencePointBuilder setFow(FormOfWay fow) {
-		this.fow = fow;
-		return this;
-	}
-
-	/**
-	 * Sets the lowest functional road class to the next point
-	 * 
-	 * @param lfrcnp
-	 *            the new lowest functional road class to the next point
-	 * @return the same instance of this {@link LocationReferencePointBuilder}
-	 *         for use in a fluid interface
-	 */
-	public LocationReferencePointBuilder setLfrcnp(FunctionalRoadClass lfrcnp) {
-		this.lfrcnp = lfrcnp;
-		return this;
-	}
-
-	// TODO better javadoc for lfrcnp
-
-	/**
-	 * Sets the bearing
-	 * 
-	 * @param bearing
-	 *            the new bearing
-	 * @return the same instance of this {@link LocationReferencePointBuilder}
-	 *         for use in a fluid interface
-	 */
-	public LocationReferencePointBuilder setBearing(Bearing bearing) {
-		this.bearing = bearing;
 		return this;
 	}
 
@@ -155,20 +117,60 @@ public class LocationReferencePointBuilder implements
 	 * @return the same instance of this {@link LocationReferencePointBuilder}
 	 *         for use in a fluid interface
 	 */
-	public LocationReferencePointBuilder setDnp(Distance dnp) {
+	public LocationReferencePointBuilder setDnp(final Distance dnp) {
 		this.dnp = dnp;
 		return this;
 	}
 
 	/**
-	 * {@link Builder#get()}
+	 * Sets the form of way
+	 * 
+	 * @param fow
+	 *            the new form of way
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
+	 */
+	public LocationReferencePointBuilder setFow(final FormOfWay fow) {
+		this.fow = fow;
+		return this;
+	}
+
+	// TODO better javadoc for lfrcnp
+
+	/**
+	 * Sets the functional road class
+	 * 
+	 * @param frc
+	 *            the new functional road class
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
+	 */
+	public LocationReferencePointBuilder setFrc(final FunctionalRoadClass frc) {
+		this.frc = frc;
+		return this;
+	}
+
+	/**
+	 * Sets the lowest functional road class to the next point
+	 * 
+	 * @param lfrcnp
+	 *            the new lowest functional road class to the next point
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
+	 */
+	public LocationReferencePointBuilder setLfrcnp(
+			final FunctionalRoadClass lfrcnp) {
+		this.lfrcnp = lfrcnp;
+		return this;
+	}
+
+	/**
+	 * {@link Builder#start()}
 	 */
 	@Override
-	public LocationReferencePoint get() throws ValidationException {
-		// TODO what if last point
-		// TODO validate
-		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
-				bearing, dnp);
+	public LocationReferencePointBuilder start() {
+		init();
+		return this;
 	}
 
 	/**

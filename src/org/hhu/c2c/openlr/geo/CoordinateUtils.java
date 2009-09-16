@@ -24,29 +24,27 @@ public class CoordinateUtils {
 	private static final int RELATIVE_FORMAT_INT_MULTIPLIER = 100000;
 
 	/**
-	 * Returns the long representation of a float, used for converting
-	 * coordinate values like longitude or latitude
+	 * Returns a byte array representation of a relative coordinate
 	 * 
-	 * @param f
-	 *            a longitude or latitude
-	 * @return the long representation of the longitude (ot latitude)
+	 * @param current
+	 *            the current coordinate
+	 * @param previous
+	 *            the previous coordinat
+	 * @return a byte array representation of a relative coordinate
 	 */
-	private static long getLongRepresentation(float f) {
-		return (long) (Math.signum(f) / 2 + (f / 360)
-				* (Math.pow(2, RESOLUTION_PARAMETER)));
-	}
+	public static byte[] getByteArrayRepresentation(final Coordinate current,
+			final Coordinate previous) {
+		int longitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
+				.getLongitude() - previous.getLongitude()));
+		int latitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
+				.getLatitude() - previous.getLatitude()));
 
-	/**
-	 * Returns the float represenation of longitude or latitude encoded as a
-	 * long value
-	 * 
-	 * @param l
-	 *            the long value of the longitude (or latitude)
-	 * @return the float representation
-	 */
-	protected static float getFloatRepresentation(long l) {
-		return (float) ((l - Math.signum(l) / 2) * 360 * (Math.pow(2,
-				-RESOLUTION_PARAMETER)));
+		byte[] relativeCoordinate = new byte[4];
+		relativeCoordinate[0] = (byte) (longitude >> 8);
+		relativeCoordinate[1] = (byte) (longitude >> 0);
+		relativeCoordinate[2] = (byte) (latitude >> 8);
+		relativeCoordinate[3] = (byte) (latitude >> 0);
+		return relativeCoordinate;
 	}
 
 	/**
@@ -56,50 +54,13 @@ public class CoordinateUtils {
 	 * @param degree
 	 * @return a byte array representation of a longitude or latitude
 	 */
-	public static byte[] getByteArrayRepresentation(float degree) {
-		byte[] b = new byte[3];
+	public static byte[] getByteArrayRepresentation(final float degree) {
+		byte[] longOrLat = new byte[3];
 		long longitude = CoordinateUtils.getLongRepresentation(degree);
-		b[0] = new Long(longitude >> 16).byteValue();
-		b[1] = new Long(longitude >> 8).byteValue();
-		b[2] = new Long(longitude >> 0).byteValue();
-		return b;
-	}
-
-	/**
-	 * Returns a byte array representation of a relative coordinate
-	 * 
-	 * @param current
-	 *            the current coordinate
-	 * @param previous
-	 *            the previous coordinat
-	 * @return a byte array representation of a relative coordinate
-	 */
-	public static byte[] getByteArrayRepresentation(Coordinate current,
-			Coordinate previous) {
-		int longitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
-				.getLongitude() - previous.getLongitude()));
-		int latitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
-				.getLatitude() - previous.getLatitude()));
-
-		byte[] b = new byte[4];
-		b[0] = new Integer(longitude >> 8).byteValue();
-		b[1] = new Integer(longitude >> 0).byteValue();
-		b[2] = new Integer(latitude >> 8).byteValue();
-		b[3] = new Integer(latitude >> 0).byteValue();
-		return b;
-	}
-
-	/**
-	 * Returns the integer representation of a relative coordinate
-	 * 
-	 * @param b
-	 *            a relative longitude or relative latitude encoded as two bytes
-	 * @return the integer representation of a relative coordinate
-	 */
-	public static int getRelativeCoordinateIntValue(byte[] b) {
-		int i = 0;
-		i = i | (b[0]) << 8;
-		return i | b[1];
+		longOrLat[0] = (byte) (longitude >> 16);
+		longOrLat[1] = (byte) (longitude >> 8);
+		longOrLat[2] = (byte) (longitude >> 0);
+		return longOrLat;
 	}
 
 	/**
@@ -107,13 +68,56 @@ public class CoordinateUtils {
 	 * integer encoded value of a longitude (or latitude) and the absolute
 	 * longitude (or latitude as a float from the previous point)
 	 * 
-	 * @param relative the integer representation of a relative longitude (or latitude) from the current point
-	 * @param previousPointDegree the float representation of the absolute longitude (or latitude) from the previous point
-	 * @return the absolute value of the longitude (or latitude) of the current point
+	 * @param relative
+	 *            the integer representation of a relative longitude (or
+	 *            latitude) from the current point
+	 * @param previousPointDegree
+	 *            the float representation of the absolute longitude (or
+	 *            latitude) from the previous point
+	 * @return the absolute value of the longitude (or latitude) of the current
+	 *         point
 	 */
-	public static float getDegreeFromRelative(int relative,
-			float previousPointDegree) {
+	public static float getDegreeFromRelative(final int relative,
+			final float previousPointDegree) {
 		return relative / RELATIVE_FORMAT_INT_MULTIPLIER + previousPointDegree;
+	}
+
+	/**
+	 * Returns the float represenation of longitude or latitude encoded as a
+	 * long value
+	 * 
+	 * @param degree
+	 *            the long value of the longitude (or latitude)
+	 * @return the float representation
+	 */
+	protected static float getFloatRepresentation(final long degree) {
+		return (float) ((degree - Math.signum(degree) / 2) * 360 * (Math.pow(2,
+				-RESOLUTION_PARAMETER)));
+	}
+
+	/**
+	 * Returns the long representation of a degree, used for converting
+	 * coordinate values like longitude or latitude
+	 * 
+	 * @param degree
+	 *            a longitude or latitude
+	 * @return the long representation of the longitude (ot latitude)
+	 */
+	private static long getLongRepresentation(final float degree) {
+		return (long) (Math.signum(degree) / 2 + (degree / 360)
+				* (Math.pow(2, RESOLUTION_PARAMETER)));
+	}
+
+	/**
+	 * Returns the integer representation of a relative coordinate
+	 * 
+	 * @param coordinate
+	 *            a relative longitude or relative latitude encoded as two bytes
+	 * @return the integer representation of a relative coordinate
+	 */
+	public static int getRelativeCoordinateIntValue(final byte[] coordinate) {
+		int relativeCoordinate = coordinate[0] << 8;
+		return relativeCoordinate | coordinate[1];
 	}
 
 }

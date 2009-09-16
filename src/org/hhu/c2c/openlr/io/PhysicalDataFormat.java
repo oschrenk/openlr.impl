@@ -5,7 +5,8 @@ import org.hhu.c2c.openlr.core.FormOfWay;
 import org.hhu.c2c.openlr.core.FunctionalRoadClass;
 
 /**
- * This class offers static definitions shared between the {@link Encoder} and the {@link Decoder}
+ * This class offers static definitions shared between the {@link Encoder} and
+ * the {@link Decoder}
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
  * @version %I%, %G%
@@ -132,5 +133,11 @@ public class PhysicalDataFormat {
 	 * significant bit.
 	 */
 	protected static final byte NEGATIVE_OFFSET_FLAG_BITMASK = 32;
-	
+
+	/**
+	 * This class should not be instantiated
+	 */
+	private PhysicalDataFormat() {
+	}
+
 }

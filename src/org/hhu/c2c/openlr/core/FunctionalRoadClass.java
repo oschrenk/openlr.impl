@@ -60,35 +60,6 @@ public enum FunctionalRoadClass {
 	 */
 	private static final byte THREE_BIT_BITMASK = 7;
 
-	/**
-	 * Holds the byte value (the three least significant bits) of the functional
-	 * road class
-	 */
-	private final byte functionalRoadClass;
-
-	/**
-	 * Creating a new {@link FunctionalRoadClass}. The lower the number, the
-	 * more important the road
-	 * 
-	 * @param i
-	 *            the importance of the road, the lower, the more important,
-	 *            ranging from 0 to 7
-	 */
-	FunctionalRoadClass(int i) {
-		this.functionalRoadClass = (byte) (i);
-	}
-
-	/**
-	 * Returns the byte representation of the functional road class. The
-	 * <code>FRC</code> is encoded using three bits, storing 8 values from 0 to
-	 * 7.
-	 * 
-	 * @return the byte representation using the three least significant bits
-	 */
-	public byte getByteRepresentation() {
-		return functionalRoadClass;
-	}
-
 	/*
 	 * Breaks "Single Responsibility Principle" as the class is now also,
 	 * responsible for its own creation. But as this class is very static by
@@ -99,16 +70,16 @@ public enum FunctionalRoadClass {
 	 * Creates a new functional road class with the passed byte. Only the three
 	 * least significant bits are used.
 	 * 
-	 * @param b
+	 * @param frc
 	 *            the byte containing the functional road class encoded as the
 	 *            last three significant bits of a byte
 	 * @return the functional road class corrsesponding to the byte value of the
 	 *         three least significant bits
 	 */
-	public static FunctionalRoadClass getFunctionalRoadClass(byte b) {
-		b = (byte) (b & THREE_BIT_BITMASK);
+	public static FunctionalRoadClass getFunctionalRoadClass(byte frc) {
+		frc = (byte) (frc & THREE_BIT_BITMASK);
 
-		switch (b) {
+		switch (frc) {
 		case 0:
 			return FunctionalRoadClass.MAIN_ROAD;
 		case 1:
@@ -127,8 +98,38 @@ public enum FunctionalRoadClass {
 			return FunctionalRoadClass.OTHER_CLASS_ROAD;
 
 		default:
-			throw new RuntimeException("GuruMeditationFailure: Reached default case, which should never happen.");
+			throw new RuntimeException(
+					"GuruMeditationFailure: Reached default case, which should never happen.");
 		}
+	}
+
+	/**
+	 * Holds the byte value (the three least significant bits) of the functional
+	 * road class
+	 */
+	private final byte functionalRoadClass;
+
+	/**
+	 * Creating a new {@link FunctionalRoadClass}. The lower the number, the
+	 * more important the road
+	 * 
+	 * @param frc
+	 *            the importance of the road, the lower, the more important,
+	 *            ranging from 0 to 7
+	 */
+	FunctionalRoadClass(final int frc) {
+		this.functionalRoadClass = (byte) (frc);
+	}
+
+	/**
+	 * Returns the byte representation of the functional road class. The
+	 * <code>FRC</code> is encoded using three bits, storing 8 values from 0 to
+	 * 7.
+	 * 
+	 * @return the byte representation using the three least significant bits
+	 */
+	public byte getByteRepresentation() {
+		return functionalRoadClass;
 	}
 
 }

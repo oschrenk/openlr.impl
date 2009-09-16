@@ -163,10 +163,29 @@ public class Bearing {
 	 */
 	private static final byte BITMASK = 1 + 2 + 4 + 8 + 16;
 
+	/*
+	 * Breaks "Single Responsibility Principle" as the class is now also,
+	 * responsible for its own creation. But as this class is very static by
+	 * contract (the protocol definition of Open LR won't change that fast), we
+	 * can accept that. Also we prohibit casses outside this package to access
+	 * the method.
+	 */
+	/**
+	 * Returns a new Bearing for the given byte value. Only the five least
+	 * significant bits are used
+	 * 
+	 * @param bearing
+	 *            a byte,
+	 * @return a new bearing
+	 */
+	public static Bearing newBearing(final byte bearing) {
+		return new Bearing((bearing & BITMASK) * ONE_32TH_CIRCLE);
+	}
+
 	/**
 	 * {@link #getBearing()}
 	 */
-	private float bearing;
+	private final float bearing;
 
 	/**
 	 * Creates a new bearing from the given degree. This degree can have a value
@@ -178,7 +197,7 @@ public class Bearing {
 	 *            the angle between the true north and the road, counting
 	 *            clockwise
 	 */
-	public Bearing(float degree) {
+	public Bearing(final float degree) {
 		this.bearing = normalize(degree);
 	}
 
@@ -189,6 +208,20 @@ public class Bearing {
 	 */
 	public float getBearing() {
 		return bearing;
+	}
+
+	/**
+	 * Returns the byte value of the bearing using only the five least
+	 * significant bits.
+	 * 
+	 * @param degree
+	 *            the degree
+	 * @return the byte value of the bearing using only the five least
+	 *         significant bits.
+	 */
+	private byte getBearing(final float degree) {
+		// can only be between 0 and 31
+		return (byte) (degree / ONE_32TH_CIRCLE);
 	}
 
 	/**
@@ -217,38 +250,5 @@ public class Bearing {
 			degree = degree + 360.0f;
 		}
 		return degree;
-	}
-
-	/**
-	 * Returns the byte value of the bearing using only the five least
-	 * significant bits.
-	 * 
-	 * @param degree
-	 *            the degree
-	 * @return the byte value of the bearing using only the five least
-	 *         significant bits.
-	 */
-	private byte getBearing(float degree) {
-		// can only be between 0 and 31
-		return (byte) (degree / ONE_32TH_CIRCLE);
-	}
-
-	/*
-	 * Breaks "Single Responsibility Principle" as the class is now also,
-	 * responsible for its own creation. But as this class is very static by
-	 * contract (the protocol definition of Open LR won't change that fast), we
-	 * can accept that. Also we prohibit casses outside this package to access
-	 * the method.
-	 */
-	/**
-	 * Returns a new Bearing for the given byte value. Only the five least
-	 * significant bits are used
-	 * 
-	 * @param b
-	 *            a byte,
-	 * @return a new bearing
-	 */
-	public static Bearing newBearing(byte b) {
-		return new Bearing((b & BITMASK) * ONE_32TH_CIRCLE);
 	}
 }

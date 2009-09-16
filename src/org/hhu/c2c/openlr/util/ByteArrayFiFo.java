@@ -15,7 +15,7 @@ package org.hhu.c2c.openlr.util;
 public class ByteArrayFiFo {
 
 	/** Holds the byte array */
-	private byte[] b;
+	final private byte[] array;
 
 	/** Hols the current position */
 	private int position;
@@ -23,14 +23,27 @@ public class ByteArrayFiFo {
 	/**
 	 * Constructs a new {@link ByteArrayFiFo}
 	 * 
-	 * @param b
+	 * @param array
 	 *            the byte array that sould be accessed
 	 */
-	public ByteArrayFiFo(byte[] b) {
-		if (b == null)
+	public ByteArrayFiFo(final byte[] array) {
+		if (array == null) {
 			throw new IllegalArgumentException("Byte array mustn't be null.");
-		this.b = b;
+		}
+
+		this.array = array.clone();
 		position = 0;
+	}
+
+	/**
+	 * Returns the number of bytes that can still by obtained by calling
+	 * {@link #pop()}
+	 * 
+	 * @return the number of bytes that can still by obtained by calling
+	 *         {@link #pop()}
+	 */
+	public int capacity() {
+		return size() - position;
 	}
 
 	/**
@@ -43,7 +56,30 @@ public class ByteArrayFiFo {
 	 * @return the byte at the current position
 	 */
 	public byte peek() {
-		return b[position];
+		return array[position];
+	}
+
+	/**
+	 * Peeks at the next <code>size</code> bytes of the byte array, returning
+	 * them as a new byte array but not changing the position of the marker,
+	 * allowing for multiple operations on the same bytes.
+	 * 
+	 * @see #peek()
+	 * 
+	 * @param size
+	 *            the number of bytes to peek at
+	 * @return the byte at the current position
+	 * @throws IndexOutOfBoundsException
+	 *             if the size is bigger than the remaining {@link #capacity()}
+	 */
+	public byte[] peek(final int size) {
+		if (size() - size < position) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		byte[] buffer = new byte[size];
+		System.arraycopy(array, position, buffer, 0, size);
+		return buffer;
 	}
 
 	/**
@@ -60,30 +96,9 @@ public class ByteArrayFiFo {
 	public byte pop() {
 		if (position < size()) {
 			position++;
-			return b[position - 1];
+			return array[position - 1];
 		}
 		throw new IndexOutOfBoundsException();
-	}
-
-	/**
-	 * Peeks at the next <code>size</code> bytes of the byte array, returning
-	 * them as a new byte array but not changing the position of the marker,
-	 * allowing for multiple operations on the same bytes.
-	 * 
-	 * @see #peek()
-	 * 
-	 * @param size
-	 *            the number of bytes to peek at
-	 * @return the byte at the current position
-	 * @throws IndexOutOfBoundsException
-	 *             if the size is bigger than the remaining {@link #capacity()}
-	 */
-	public byte[] peek(int size) {
-		if (size() - size < position)
-			throw new IndexOutOfBoundsException();
-		byte[] buffer = new byte[size];
-		System.arraycopy(b, position, buffer, 0, size);
-		return buffer;
 	}
 
 	/**
@@ -99,28 +114,23 @@ public class ByteArrayFiFo {
 	 * @throws IndexOutOfBoundsException
 	 *             if the size is bigger than the remaining {@link #capacity()}
 	 */
-	public byte[] pop(int size) {
-		if (size() - size < position)
+	public byte[] pop(final int size) {
+		if (size() - size < position) {
 			throw new IndexOutOfBoundsException();
+		}
+
 		byte[] buffer = new byte[size];
-		System.arraycopy(b, position, buffer, 0, size);
+		System.arraycopy(array, position, buffer, 0, size);
 		position += size;
 		return buffer;
 	}
 
 	/**
-	 * Returns the number of bytes that can still by obtained by calling {@link #pop()}
-	 * @return the number of bytes that can still by obtained by calling {@link #pop()}
-	 */
-	public int capacity() {
-		return size() - position;
-	}
-
-	/**
 	 * Returns the length of the original byte array
+	 * 
 	 * @return the length of the original byte array
 	 */
 	public int size() {
-		return b.length;
+		return array.length;
 	}
 }

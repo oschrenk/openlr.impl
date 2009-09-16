@@ -27,7 +27,7 @@ public class LocationReference {
 	 * 
 	 * @see #hasAreaFlag()
 	 */
-	private boolean areaFlag;
+	private final boolean areaFlag;
 
 	/**
 	 * The <code>AF</code> (<b>attribute flag</b>) indicates whether there are
@@ -42,7 +42,7 @@ public class LocationReference {
 	 * 
 	 * @see #hasAttributeFlag()
 	 */
-	private boolean attributeFlag;
+	private final boolean attributeFlag;
 
 	/**
 	 * The version is used to distinguish between several physical and data
@@ -53,7 +53,7 @@ public class LocationReference {
 	 * 
 	 * @see #getVersion()
 	 */
-	private byte version;
+	private final byte version;
 
 	/**
 	 * The <code>POFF</code> (<b>positive offset</b>) value indicates the
@@ -62,7 +62,7 @@ public class LocationReference {
 	 * 
 	 * @see #getPositiveOffset()
 	 */
-	private Distance positiveOffset;
+	private final Distance positiveOffset;
 
 	/**
 	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
@@ -71,12 +71,12 @@ public class LocationReference {
 	 * 
 	 * @see #getNegativeOffset()
 	 */
-	private Distance negativeOffset;
+	private final Distance negativeOffset;
 
 	/**
 	 * Holds a list of location reference points.
 	 */
-	private List<LocationReferencePoint> points;
+	private final List<LocationReferencePoint> points;
 
 	/**
 	 * Constructs a new {@link LocationReference} using the given values for the
@@ -100,9 +100,10 @@ public class LocationReference {
 	 * @param negativeOffset
 	 *            the distance to the end point
 	 */
-	protected LocationReference(boolean areaFlag, boolean attributeFlag,
-			byte version, List<LocationReferencePoint> points,
-			Distance positiveOffset, Distance negativeOffset) {
+	protected LocationReference(final boolean areaFlag,
+			final boolean attributeFlag, final byte version,
+			final List<LocationReferencePoint> points,
+			final Distance positiveOffset, final Distance negativeOffset) {
 		this.areaFlag = areaFlag;
 		this.attributeFlag = attributeFlag;
 		this.version = version;
@@ -112,6 +113,62 @@ public class LocationReference {
 				: positiveOffset;
 		this.negativeOffset = negativeOffset == null ? new Distance(0)
 				: negativeOffset;
+	}
+
+	/**
+	 * Adds a new location reference point to this location reference
+	 * 
+	 * @param point
+	 *            the new location reference point
+	 */
+	protected void add(final LocationReferencePoint point) {
+		points.add(point);
+	}
+
+	/**
+	 * Returns a list of location reference points describing the location
+	 * reference
+	 * 
+	 * @return a list of location reference points describing the location
+	 *         reference
+	 */
+	public List<LocationReferencePoint> getLocationReferencePoints() {
+		return points;
+	}
+
+	/**
+	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
+	 * distance between the end of the location reference path and the “real”
+	 * end of the location.
+	 * 
+	 * @return the negative offset
+	 */
+	public Distance getNegativeOffset() {
+		return negativeOffset;
+	}
+
+	/**
+	 * The <code>POFF</code> (<b>positive offset</b>) value indicates the
+	 * distance between the start of the location reference path and the “real”
+	 * start of the location.
+	 * 
+	 * @return the positive offset
+	 */
+	public Distance getPositiveOffset() {
+		return positiveOffset;
+	}
+
+	/**
+	 * The version is used to distinguish between several physical and data
+	 * formats for location references. The version number is represented by 3
+	 * bits. <br>
+	 * <i>Note: The actual version of the physical data format is 2 so that the
+	 * <code>VER</code> field is constantly set to binary 010.</i>
+	 * 
+	 * @return the version number
+	 */
+	public byte getVersion() {
+		return version;
 	}
 
 	/**
@@ -147,43 +204,6 @@ public class LocationReference {
 	}
 
 	/**
-	 * The version is used to distinguish between several physical and data
-	 * formats for location references. The version number is represented by 3
-	 * bits. <br>
-	 * <i>Note: The actual version of the physical data format is 2 so that the
-	 * <code>VER</code> field is constantly set to binary 010.</i>
-	 * 
-	 * @return the version number
-	 */
-	public byte getVersion() {
-		return version;
-	}
-
-	/**
-	 * Returns a list of location reference points describing the location
-	 * reference
-	 * 
-	 * @return a list of location reference points describing the location
-	 *         reference
-	 */
-	public List<LocationReferencePoint> getLocationReferencePoints() {
-		return points;
-	}
-
-	/**
-	 * The <code>PoffF</code> (<b>positive offset flag</b>) indicates whether
-	 * the data includes a specific positive offset information or not.
-	 * 
-	 * @see #getPositiveOffset()
-	 * @see #hasNegativeOffset()
-	 * @return <code>true</code> if the data has a positive offset,
-	 *         <code>false</code> otherwise
-	 */
-	public boolean hasPositiveOffset() {
-		return positiveOffset.getDistance() != 0;
-	}
-
-	/**
 	 * The <code>NoffF</code> (<b>negative offset flag</b>) indicates whether
 	 * the data includes a specific negative offset information or not.
 	 * 
@@ -198,34 +218,15 @@ public class LocationReference {
 	}
 
 	/**
-	 * The <code>POFF</code> (<b>positive offset</b>) value indicates the
-	 * distance between the start of the location reference path and the “real”
-	 * start of the location.
+	 * The <code>PoffF</code> (<b>positive offset flag</b>) indicates whether
+	 * the data includes a specific positive offset information or not.
 	 * 
-	 * @return the positive offset
+	 * @see #getPositiveOffset()
+	 * @see #hasNegativeOffset()
+	 * @return <code>true</code> if the data has a positive offset,
+	 *         <code>false</code> otherwise
 	 */
-	public Distance getPositiveOffset() {
-		return positiveOffset;
-	}
-
-	/**
-	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
-	 * distance between the end of the location reference path and the “real”
-	 * end of the location.
-	 * 
-	 * @return the negative offset
-	 */
-	public Distance getNegativeOffset() {
-		return negativeOffset;
-	}
-
-	/**
-	 * Adds a new location reference point to this location reference
-	 * 
-	 * @param p
-	 *            the new location reference point
-	 */
-	protected void add(LocationReferencePoint p) {
-		points.add(p);
+	public boolean hasPositiveOffset() {
+		return positiveOffset.getDistance() != 0;
 	}
 }

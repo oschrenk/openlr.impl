@@ -18,6 +18,8 @@ import org.hhu.c2c.openlr.util.ValidationException;
 public class LocationReferenceBuilder implements
 		Builder<LocationReferenceBuilder, LocationReference> {
 
+	// TODO test distances
+
 	/**
 	 * Declares the default value for the area flag. As of right now, the
 	 * protocol doesn't support location references describing areas, so this
@@ -56,7 +58,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#hasAreaFlag()
 	 */
-	private boolean areaFlag;
+	transient private boolean areaFlag;
 
 	/**
 	 * The <code>AF</code> (<b>attribute flag</b>) indicates whether there are
@@ -71,7 +73,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#hasAttributeFlag()
 	 **/
-	private boolean attributeFlag;
+	transient private boolean attributeFlag;
 
 	/**
 	 * The version is used to distinguish between several physical and data
@@ -82,12 +84,12 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#getVersion()
 	 */
-	private byte version;
+	transient private byte version;
 
 	/**
 	 * Holds a list of location reference points.
 	 */
-	private List<LocationReferencePoint> points;
+	transient private List<LocationReferencePoint> points;
 
 	/**
 	 * The <code>POFF</code> (<b>positive offset</b>) value indicates the
@@ -96,7 +98,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#getPositiveOffset()
 	 */
-	private Distance positiveOffset;
+	transient private Distance positiveOffset;
 
 	/**
 	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
@@ -105,15 +107,29 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#getNegativeOffset()
 	 */
-	private Distance negativeOffset;
+	transient private Distance negativeOffset;
 
 	/**
-	 * {@link Builder#start()}
+	 * 
+	 * @param point
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder addLocationReferencePoint(
+			final LocationReferencePoint point) {
+		// TODO only the last one is allowed to miss dnp & lfrcnp
+		points.add(point);
+		return this;
+	}
+
+	/**
+	 * {@link Builder#get()}
 	 */
 	@Override
-	public LocationReferenceBuilder start() {
-		init();
-		return this;
+	public LocationReference get() throws ValidationException {
+		validate();
+		return new LocationReference(areaFlag, attributeFlag, version, points,
+				positiveOffset, negativeOffset);
 	}
 
 	/**
@@ -138,7 +154,7 @@ public class LocationReferenceBuilder implements
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
-	public LocationReferenceBuilder setAreaFlag(boolean areaFlag) {
+	public LocationReferenceBuilder setAreaFlag(final boolean areaFlag) {
 		this.areaFlag = areaFlag;
 		return this;
 	}
@@ -153,8 +169,32 @@ public class LocationReferenceBuilder implements
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
-	public LocationReferenceBuilder setAttributeFlag(boolean attributeFlag) {
+	public LocationReferenceBuilder setAttributeFlag(final boolean attributeFlag) {
 		this.attributeFlag = attributeFlag;
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param negativeOffset
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder setNegativeOffset(
+			final Distance negativeOffset) {
+		this.negativeOffset = negativeOffset;
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param positiveOffset
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder setPositiveOffset(
+			final Distance positiveOffset) {
+		this.positiveOffset = positiveOffset;
 		return this;
 	}
 
@@ -166,62 +206,18 @@ public class LocationReferenceBuilder implements
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
-	public LocationReferenceBuilder setVersion(byte version) {
+	public LocationReferenceBuilder setVersion(final byte version) {
 		this.version = version;
 		return this;
 	}
 
 	/**
-	 * 
-	 * @param point
-	 * @return the same instance of this {@link LocationReferenceBuilder} for
-	 *         use in a fluid interface
-	 */
-	public LocationReferenceBuilder addLocationReferencePoint(
-			LocationReferencePoint point) {
-		// TODO only the last one is allowed to miss dnp & lfrcnp
-		points.add(point);
-		return this;
-	}
-
-	/**
-	 * 
-	 * @param positiveOffset
-	 * @return the same instance of this {@link LocationReferenceBuilder} for
-	 *         use in a fluid interface
-	 */
-	public LocationReferenceBuilder setPositiveOffset(Distance positiveOffset) {
-		this.positiveOffset = positiveOffset;
-		return this;
-	}
-
-	/**
-	 * 
-	 * @param negativeOffset
-	 * @return the same instance of this {@link LocationReferenceBuilder} for
-	 *         use in a fluid interface
-	 */
-	public LocationReferenceBuilder setNegativeOffset(Distance negativeOffset) {
-		this.negativeOffset = negativeOffset;
-		return this;
-	}
-
-	/**
-	 * {@link Builder#get()}
+	 * {@link Builder#start()}
 	 */
 	@Override
-	public LocationReference get() throws ValidationException {
-		validate();
-		return new LocationReference(areaFlag, attributeFlag, version, points,
-				positiveOffset, negativeOffset);
-	}
-
-	/**
-	 * {@link Builder#validates()}
-	 */
-	@Override
-	public boolean validates() {
-		return false;
+	public LocationReferenceBuilder start() {
+		init();
+		return this;
 	}
 
 	/**
@@ -233,5 +229,13 @@ public class LocationReferenceBuilder implements
 		// TODO attribute flag beachten
 		// TODO area flag beachten
 		// TODO versions feld untersuchen, kompabiltität prüfen
+	}
+
+	/**
+	 * {@link Builder#validates()}
+	 */
+	@Override
+	public boolean validates() {
+		return false;
 	}
 }

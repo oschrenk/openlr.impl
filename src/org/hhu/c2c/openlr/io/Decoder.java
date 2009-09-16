@@ -51,12 +51,13 @@ public class Decoder {
 	 *             if the byte array is malformed, containing either less or
 	 *             more bytes than required
 	 */
-	public LocationReference decode(byte[] bytes) throws ValidationException {
-		if (bytes.length < MINIMUM_NUMBER_OF_BYTES)
-			throw new IllegalArgumentException(
+	public LocationReference decode(final byte[] bytes)
+			throws ValidationException {
+		if (bytes.length < MINIMUM_NUMBER_OF_BYTES) {
+			throw new ValidationException(
 					"Byte array too small. A valid location reference needs at least "
 							+ MINIMUM_NUMBER_OF_BYTES + " bytes.");
-		// TODO home made exception?
+		}
 
 		ByteArrayFiFo fifo = new ByteArrayFiFo(bytes);
 
@@ -73,22 +74,22 @@ public class Decoder {
 		lrb.setVersion((byte) (fifo.pop() & VERSION_NUMBER_BITMASK));
 
 		// get the first point, its an absolute one
-		LocationReferencePoint p = getAbsoluteLRP(fifo
+		LocationReferencePoint point = getAbsoluteLRP(fifo
 				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_LRP));
-		lrb.addLocationReferencePoint(p);
+		lrb.addLocationReferencePoint(point);
 
 		// get following, relative ones, if there are any
 		while (fifo.capacity() >= NUMBER_OF_BYTES_FOR_RELATIVE_LRP
 				+ MINIMUM_NUMBER_OF_BYTES_FOR_LAST_LRP) {
-			p = getLRPfromRelative(p.getCoordinate(), fifo
+			point = getLRPfromRelative(point.getCoordinate(), fifo
 					.pop(NUMBER_OF_BYTES_FOR_RELATIVE_LRP));
-			lrb.addLocationReferencePoint(p);
+			lrb.addLocationReferencePoint(point);
 		}
 
 		// we have to prepare the last one very carfully as the last attribute
 		// has info about the last point and the complete lr
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
-		lrpb.setCoordinate(getCoordinate(p.getCoordinate(), fifo));
+		lrpb.setCoordinate(getCoordinate(point.getCoordinate(), fifo));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setFow(FormOfWay
@@ -100,22 +101,24 @@ public class Decoder {
 		lrb.addLocationReferencePoint(lrpb.get());
 
 		// if pooffF is set, there should be at least one byte left
-		if (positiveOffsetFlag && fifo.capacity() >= 1)
+		if (positiveOffsetFlag && fifo.capacity() >= 1) {
 			lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
-		else
-			throw new IllegalArgumentException(
+		} else {
+			throw new ValidationException(
 					"ByteArray is malformed. Was awaiting a byte for positive offset");
+		}
 
 		// if noffF is set, the byte for the offset must be there
-		if (negativeOffsetFlag && fifo.capacity() == 1)
+		if (negativeOffsetFlag && fifo.capacity() == 1) {
 			lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
-		else
-			throw new IllegalArgumentException(
+		} else {
+			throw new ValidationException(
 					"ByteArray is malformed. Was awaiting a byte for negative offset");
+		}
 
 		// if there are somy bytes left, somwthing went wrong
 		if (fifo.capacity() != 0) {
-			throw new IllegalArgumentException(
+			throw new ValidationException(
 					"Someting went terribbly wrong. You figure it out.");
 		}
 
@@ -123,28 +126,27 @@ public class Decoder {
 	}
 
 	/**
-	 * Returns a {@link LocationReferencePoint} from a given previous
-	 * coordinate, and a byte representation of the current relative location
-	 * reference point.
+	 * Returns a location reference point from a given byte array of 9 bytes
+	 * representing a location reference point with an absolute coordinate and
+	 * three attribute bytes
 	 * 
-	 * @param previous
-	 *            The absolute coordinate from the prrevious location reference
-	 *            point
-	 * @param b
-	 *            the byte array representation of the current relative location
-	 *            reference point
-	 * @return the current location reference point with absolut values
+	 * @param point
+	 *            the byte representation of a location reference point with an
+	 *            absolute coordinate
+	 * @return the location reference point
 	 * @throws ValidationException
 	 *             if the location reference point trying to build couldn't be
 	 *             validated
 	 */
-	private LocationReferencePoint getLRPfromRelative(Coordinate previous,
-			byte[] b) throws ValidationException {
+	private LocationReferencePoint getAbsoluteLRP(final byte[] point)
+			throws ValidationException {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
-		ByteArrayFiFo fifo = new ByteArrayFiFo(b);
+		ByteArrayFiFo fifo = new ByteArrayFiFo(point);
+		CoordinateFactory coordinateFactory = CoordinateFactory.getInstance();
 
 		lrpb.start();
-		lrpb.setCoordinate(getCoordinate(previous, fifo));
+		lrpb.setCoordinate(coordinateFactory.getCoordinate(fifo
+				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setFow(FormOfWay
@@ -153,7 +155,6 @@ public class Decoder {
 				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
 		lrpb.setDnp(Distance.newDistance(fifo.pop()));
-
 		return lrpb.get();
 	}
 
@@ -169,7 +170,8 @@ public class Decoder {
 	 *            reference point
 	 * @return the absolute coordinate of the current location reference point
 	 */
-	private Coordinate getCoordinate(Coordinate previous, ByteArrayFiFo fifo) {
+	private Coordinate getCoordinate(final Coordinate previous,
+			final ByteArrayFiFo fifo) {
 		return new Coordinate(CoordinateUtils.getDegreeFromRelative(
 				CoordinateUtils.getRelativeCoordinateIntValue(fifo
 						.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
@@ -181,27 +183,29 @@ public class Decoder {
 	}
 
 	/**
-	 * Returns a location reference point from a given byte array of 9 bytes
-	 * representing a location reference point with an absolute coordinate and
-	 * three attribute bytes
+	 * Returns a {@link LocationReferencePoint} from a given previous
+	 * coordinate, and a byte representation of the current relative location
+	 * reference point.
 	 * 
-	 * @param b
-	 *            the byte representation of a location reference point with an
-	 *            absolute coordinate
-	 * @return the location reference point
+	 * @param previous
+	 *            The absolute coordinate from the prrevious location reference
+	 *            point
+	 * @param currentPoint
+	 *            the byte array representation of the current relative location
+	 *            reference point
+	 * @return the current location reference point with absolut values
 	 * @throws ValidationException
 	 *             if the location reference point trying to build couldn't be
 	 *             validated
 	 */
-	private LocationReferencePoint getAbsoluteLRP(byte[] b)
+	private LocationReferencePoint getLRPfromRelative(
+			final Coordinate previous, final byte[] currentPoint)
 			throws ValidationException {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
-		ByteArrayFiFo fifo = new ByteArrayFiFo(b);
-		CoordinateFactory coordinateFactory = CoordinateFactory.getInstance();
+		ByteArrayFiFo fifo = new ByteArrayFiFo(currentPoint);
 
 		lrpb.start();
-		lrpb.setCoordinate(coordinateFactory.getCoordinate(fifo
-				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)));
+		lrpb.setCoordinate(getCoordinate(previous, fifo));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setFow(FormOfWay
@@ -210,6 +214,7 @@ public class Decoder {
 				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
 		lrpb.setDnp(Distance.newDistance(fifo.pop()));
+
 		return lrpb.get();
 	}
 

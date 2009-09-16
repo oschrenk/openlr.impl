@@ -8,7 +8,7 @@ package org.hhu.c2c.openlr.core;
  * 
  */
 public enum FormOfWay {
-	
+
 	/**
 	 * The physical road type is unknown.
 	 */
@@ -63,32 +63,6 @@ public enum FormOfWay {
 	 */
 	private static final byte THREE_BIT_BITMASK = 7;
 
-	/**
-	 * Holds the byte value (the three least significant bits) of the form of
-	 * way
-	 */
-	private byte formOfWay;
-
-	/**
-	 * Creating a new {@link FormOfWay}.
-	 * 
-	 * @param i
-	 *            the form of way
-	 */
-	FormOfWay(int i) {
-		this.formOfWay = (byte) i;
-	}
-
-	/**
-	 * Returns the byte representation of the form of way. The <code>FOW</code>
-	 * is encoded using three bits, storing 8 values from 0 to 7.
-	 * 
-	 * @return the byte representation using the three least significant bits
-	 */
-	public byte getByteRepresentation() {
-		return formOfWay;
-	}
-
 	/*
 	 * Breaks "Single Responsibility Principle" as the class is now also,
 	 * responsible for its own creation. But as this class is very static by
@@ -99,15 +73,15 @@ public enum FormOfWay {
 	 * Creates a new form of way with the passed byte. Only the three least
 	 * significant bits are used.
 	 * 
-	 * @param b
+	 * @param fow
 	 *            the byte containing the form of way encoded as the last three
 	 *            significant bits of a byte
 	 * @return the form of way corrsesponding to the byte value of the three
 	 *         least significant bits
 	 */
-	public static FormOfWay getFormOfWay(byte b) {
-		b = (byte) (b & THREE_BIT_BITMASK);
-		switch (b) {
+	public static FormOfWay getFormOfWay(byte fow) {
+		fow = (byte) (fow & THREE_BIT_BITMASK);
+		switch (fow) {
 		case 0:
 			return UNDEFINED;
 		case 1:
@@ -128,5 +102,31 @@ public enum FormOfWay {
 			throw new RuntimeException(
 					"GuruMeditationFailure: Reached default case, which should never happen.");
 		}
+	}
+
+	/**
+	 * Holds the byte value (the three least significant bits) of the form of
+	 * way
+	 */
+	private byte formOfWay;
+
+	/**
+	 * Creating a new {@link FormOfWay}.
+	 * 
+	 * @param fow
+	 *            the form of way
+	 */
+	FormOfWay(final int fow) {
+		this.formOfWay = (byte) fow;
+	}
+
+	/**
+	 * Returns the byte representation of the form of way. The <code>FOW</code>
+	 * is encoded using three bits, storing 8 values from 0 to 7.
+	 * 
+	 * @return the byte representation using the three least significant bits
+	 */
+	public byte getByteRepresentation() {
+		return formOfWay;
 	}
 }
