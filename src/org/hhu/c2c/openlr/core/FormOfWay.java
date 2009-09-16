@@ -8,9 +8,7 @@ package org.hhu.c2c.openlr.core;
  * 
  */
 public enum FormOfWay {
-
-	// TODO reverse code and b in class java doc
-
+	
 	/**
 	 * The physical road type is unknown.
 	 */
