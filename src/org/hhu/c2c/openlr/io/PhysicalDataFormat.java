@@ -1,0 +1,129 @@
+package org.hhu.c2c.openlr.io;
+
+import org.hhu.c2c.openlr.core.Distance;
+import org.hhu.c2c.openlr.core.FormOfWay;
+import org.hhu.c2c.openlr.core.FunctionalRoadClass;
+
+public class PhysicalDataFormat {
+
+	/**
+	 * Number of bytes needed for a relative coordinate part, like longitude or
+	 * latitude
+	 */
+	protected static final int NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE = 2;
+
+	/**
+	 * Number of bytes for an absolute coordinate, three bytes for the longitude
+	 * and three bytes for latitude
+	 */
+	protected static final int NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE = 6;
+
+	/**
+	 * The number of bytes used to describe the first location reference point
+	 * of a location reference, including an absolute coordinate represewnted by
+	 * 6 bytes (3 bytes longitude, 3 bytes latitude), one byte describing
+	 * {@link FunctionalRoadClass} (bit 5 to 3) as well as the {@link FormOfWay}
+	 * (bit 2 to 0), followed by the second attribute describing the lowest FRC
+	 * to the next point (bit 7 to 5) as well as the bearing (bit 4 to 0) and
+	 * finally by the {@link Distance} to the next location reference point
+	 * described by a complete byte.
+	 */
+	protected static final int NUMBER_OF_BYTES_FOR_ABSOLUTE_LRP = 9;
+
+	/**
+	 * The number of bytes used to describe following location reference points
+	 * with relative coordinate values. The relative coordinate is described by
+	 * the first 4 bytes (2 for longitude, 2 for latitude). The following three
+	 * bytes are used as in the first absolute location reference point.
+	 */
+	protected static final int NUMBER_OF_BYTES_FOR_RELATIVE_LRP = 7;
+
+	/**
+	 * The number of bytes used to describe the closing location reference
+	 * point. It also makes use of the relative coordinate format (4 bytes), but
+	 * as it is the last it only describes in one byte its own functional road
+	 * class and form of way as the other location reference points, but the
+	 * last byte is used to indicate if the location reference uses a positive
+	 * offset (bit 6) or a negative offset (bit 5) and the last 5 bits for the
+	 * bearing of the incoming line.
+	 */
+	protected static final int MINIMUM_NUMBER_OF_BYTES_FOR_LAST_LRP = 6;
+
+	/**
+	 * As the header uses 1 byte and the protcol demands at least two location
+	 * reference points, the first one, as an absolute point using 9 bytes and
+	 * the last one using 6 bytes.
+	 */
+	protected static final int MINIMUM_NUMBER_OF_BYTES = 16;
+
+	/**
+	 * The functional road class is encoded as aq 3 bit value, when transmitted
+	 * over wire it uses bit 5-3 (in order from most to least significant bit).
+	 * As the datatype uses the value 0 to 7 as a normalized internal value, the
+	 * values have to be shifted 3 bits to the right when reading from the
+	 * encoded byte.
+	 */
+	protected static final int FRC_BITSHIFT = 3;
+
+	/**
+	 * The least funcional road to the next point is represented by the same
+	 * three bit value and thus by the same underlying class
+	 * FunctionalRoadClass, which uses a normalized vlaue 0 0 to 7. As the
+	 * LFRCNP is encoded as biz 8 -8 (from most to least significant bit) the
+	 * value is shifted 5 bits to the right when read from an encoded byte.
+	 */
+	protected static final int LFRCNP_BITSHIFT = 5;
+
+	/**
+	 * The attribute flag in the header byte uses bit 4:<code>0000 1000</code>
+	 */
+	protected static final byte ATTRIBUTE_FLAG_BITMASK = 8;
+
+	/**
+	 * The area flag in the header byte uses bit 5:<code>0001 0000</code>
+	 */
+	protected static final byte AREA_FLAG_BITMASK = 16;
+
+	/**
+	 * Describes a bitmask, with the three least significant bits set to 1:
+	 * "0000 0111"
+	 */
+	private static final byte THREE_LEAST_SIGNIFICANT_BITS_BITMASK = 1 + 2 + 4;
+
+	/**
+	 * The three least significant bits of the header byte represent the version
+	 * number
+	 */
+	protected static final byte VERSION_NUMBER_BITMASK = THREE_LEAST_SIGNIFICANT_BITS_BITMASK;
+
+	/**
+	 * The fifth to third least significant bits represent the functional road
+	 * class in the first attribute. In order to have the value of the
+	 * functional road class in the range of 0 to 7, the bits are shifted to the
+	 * three least significant bits.
+	 */
+	protected static final byte FUNCTIONAL_ROAD_CLASS_BITMASK = THREE_LEAST_SIGNIFICANT_BITS_BITMASK;
+
+	/**
+	 * The three least significant bits are used in the first attribute to
+	 * describe to form of way.
+	 */
+	protected static final byte FORM_OF_WAY_BITMASK = THREE_LEAST_SIGNIFICANT_BITS_BITMASK;
+
+	/**
+	 * The bitmask used by the positive offset flag. The last location reference
+	 * point send over the wire also includes information whether the location
+	 * reference starts (or ends) with an offset. The flag uses the 2nd most
+	 * significant bit.
+	 */
+	protected static final byte POSITIVE_OFFSET_FLAG_BITMASK = 64;
+
+	/**
+	 * The bitmask used by the negative offset flag. The last location reference
+	 * point send over the wire also includes information whether the location
+	 * reference starts (or ends) with an offset. The flag uses the 3nd most
+	 * significant bit.
+	 */
+	protected static final byte NEGATIVE_OFFSET_FLAG_BITMASK = 32;
+	
+}
