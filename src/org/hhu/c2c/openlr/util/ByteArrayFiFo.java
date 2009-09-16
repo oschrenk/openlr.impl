@@ -5,7 +5,7 @@ package org.hhu.c2c.openlr.util;
  * linked list, following the first in, first out principle. It supports various
  * reading operations. The default operation would be {@link #pop()}, which
  * returns the value of the byte array and moves the marker one position to the
- * right. In contrast {@link #peak()} returns the value but without changing the
+ * right. In contrast {@link #peek()} returns the value but without changing the
  * marrker position, allowing multiple operations on the same byte (array).
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
@@ -34,15 +34,15 @@ public class ByteArrayFiFo {
 	}
 
 	/**
-	 * Peaks at current position in the byte array, returning the value but not
+	 * Peeks at current position in the byte array, returning the value but not
 	 * changing the position of the marker, allowing for multiple operations on
 	 * the same byte.
 	 * 
-	 * @see #peak(int)
+	 * @see #peek(int)
 	 * 
 	 * @return the byte at the current position
 	 */
-	public byte peak() {
+	public byte peek() {
 		return b[position];
 	}
 
@@ -66,19 +66,19 @@ public class ByteArrayFiFo {
 	}
 
 	/**
-	 * Peaks at the next <code>size</code> bytes of the byte array, returning
+	 * Peeks at the next <code>size</code> bytes of the byte array, returning
 	 * them as a new byte array but not changing the position of the marker,
 	 * allowing for multiple operations on the same bytes.
 	 * 
-	 * @see #peak()
+	 * @see #peek()
 	 * 
 	 * @param size
-	 *            the number of bytes to peak
+	 *            the number of bytes to peek at
 	 * @return the byte at the current position
 	 * @throws IndexOutOfBoundsException
 	 *             if the size is bigger than the remaining {@link #capacity()}
 	 */
-	public byte[] peak(int size) {
+	public byte[] peek(int size) {
 		if (size() - size < position)
 			throw new IndexOutOfBoundsException();
 		byte[] buffer = new byte[size];

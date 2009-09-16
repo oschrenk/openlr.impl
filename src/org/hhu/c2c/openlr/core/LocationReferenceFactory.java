@@ -317,9 +317,9 @@ public class LocationReferenceFactory {
 		// TODO attribute flag beachten
 		// TODO area flag beachten
 		// TODO versions feld untersuchen
-		boolean areaFlag = (fifo.peak() & AREA_FLAG_BITMASK) == AREA_FLAG_BITMASK ? true
+		boolean areaFlag = (fifo.peek() & AREA_FLAG_BITMASK) == AREA_FLAG_BITMASK ? true
 				: false;
-		boolean attributeFlag = (fifo.peak() & ATTRIBUTE_FLAG_BITMASK) == ATTRIBUTE_FLAG_BITMASK ? true
+		boolean attributeFlag = (fifo.peek() & ATTRIBUTE_FLAG_BITMASK) == ATTRIBUTE_FLAG_BITMASK ? true
 				: false;
 		byte version = (byte) (fifo.pop() & VERSION_NUMBER_BITMASK);
 
@@ -351,11 +351,11 @@ public class LocationReferenceFactory {
 								points.get(points.size()).getCoordinate()
 										.getLatitude()));
 		FunctionalRoadClass fcr = FunctionalRoadClass
-				.getFunctionalRoadClass((byte) ((fifo.peak() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK));
+				.getFunctionalRoadClass((byte) ((fifo.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK));
 		FormOfWay fow = FormOfWay
 				.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK));
-		boolean positiveOffsetFlag = (fifo.peak() & POSITIVE_OFFSET_FLAG_BITMASK) == POSITIVE_OFFSET_FLAG_BITMASK;
-		boolean negativeOffsetFlag = (fifo.peak() & NEGATIVE_OFFSET_FLAG_BITMASK) == NEGATIVE_OFFSET_FLAG_BITMASK;
+		boolean positiveOffsetFlag = (fifo.peek() & POSITIVE_OFFSET_FLAG_BITMASK) == POSITIVE_OFFSET_FLAG_BITMASK;
+		boolean negativeOffsetFlag = (fifo.peek() & NEGATIVE_OFFSET_FLAG_BITMASK) == NEGATIVE_OFFSET_FLAG_BITMASK;
 
 		Bearing bearing = Bearing.newBearing(fifo.pop());
 		Distance positiveOffset = new Distance(0);
@@ -406,11 +406,11 @@ public class LocationReferenceFactory {
 														.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
 										previous.getLatitude())),
 				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peak() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
+						.getFunctionalRoadClass((byte) ((fifo.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
 				FormOfWay
 						.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)),
 				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peak() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
+						.getFunctionalRoadClass((byte) ((fifo.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
 				Bearing.newBearing(fifo.pop()), Distance
 						.newDistance(fifo.pop()));
 	}
@@ -422,11 +422,11 @@ public class LocationReferenceFactory {
 				coordinateFactory.getCoordinate(fifo
 						.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)),
 				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peak() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
+						.getFunctionalRoadClass((byte) ((fifo.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
 				FormOfWay
 						.getFormOfWay((byte) (fifo.pop() & FORM_OF_WAY_BITMASK)),
 				FunctionalRoadClass
-						.getFunctionalRoadClass((byte) ((fifo.peak() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
+						.getFunctionalRoadClass((byte) ((fifo.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)),
 				Bearing.newBearing(fifo.pop()), Distance
 						.newDistance(fifo.pop()));
 	}
