@@ -175,8 +175,12 @@ public class LocationReferenceBuilder implements
 	}
 
 	/**
+	 * Sets the <b>negative offset value</b> (<code>NOFF</code>), indicating the
+	 * distance between the start of the location reference path and the “real”
+	 * start of the location.
 	 * 
 	 * @param negativeOffset
+	 *            the negative offset
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
@@ -187,8 +191,26 @@ public class LocationReferenceBuilder implements
 	}
 
 	/**
+	 * A convenience methid to set the <b>negative offset value</b> (
+	 * <code>NOFF</code>), indicating the distance between the start of the
+	 * location reference path and the “real” start of the location.
+	 * 
+	 * @param negativeOffset
+	 *            the negative offset
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder setNegativeOffset(final int negativeOffset) {
+		return setNegativeOffset(new Distance(negativeOffset));
+	}
+
+	/**
+	 * Sets the <b>positive offset value</b> (<code>POFF</code>), indicating the
+	 * distance between the start of the location reference path and the “real”
+	 * start of the location.
 	 * 
 	 * @param positiveOffset
+	 *            the positive offset
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
@@ -196,6 +218,20 @@ public class LocationReferenceBuilder implements
 			final Distance positiveOffset) {
 		this.positiveOffset = positiveOffset;
 		return this;
+	}
+
+	/**
+	 * A convenience method the set the <b>positive offset value</b> (
+	 * <code>POFF</code>), indicating the distance between the start of the
+	 * location reference path and the “real” start of the location.
+	 * 
+	 * @param positiveOffset
+	 *            the positive offset in meter
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder setPositiveOffset(final int positiveOffset) {
+		return setPositiveOffset(new Distance(positiveOffset));
 	}
 
 	/**

@@ -97,6 +97,18 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
+	 * Convenience method to set the bearing
+	 * 
+	 * @param bearing
+	 *            the new bearing
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
+	 */
+	public LocationReferencePointBuilder setBearing(float bearing) {
+		return setBearing(new Bearing(bearing));
+	}
+
+	/**
 	 * Sets the coordinate
 	 * 
 	 * @param coordinate
@@ -111,6 +123,24 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
+	 * Convenience method to set the coordinate
+	 * 
+	 * @param longitude
+	 *            the longitude
+	 * @param latitude
+	 *            the latitude
+	 * 
+	 * @see #setCoordinate(Coordinate)
+	 * 
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
+	 */
+	public LocationReferencePointBuilder setCoordinate(final float longitude,
+			final float latitude) {
+		return setCoordinate(new Coordinate(longitude, latitude));
+	}
+
+	/**
 	 * Sets the distance to the next location reference point
 	 * 
 	 * @param dnp
@@ -121,6 +151,19 @@ public class LocationReferencePointBuilder implements
 	public LocationReferencePointBuilder setDnp(final Distance dnp) {
 		this.dnp = dnp;
 		return this;
+	}
+
+	/**
+	 * Convenience method to set the distance to the next location reference
+	 * point
+	 * 
+	 * @param dnp
+	 *            the new distance to the next location reference point in meter
+	 * @return the same instance of this {@link LocationReferencePointBuilder}
+	 *         for use in a fluid interface
+	 */
+	public LocationReferencePointBuilder setDnp(int dnp) {
+		return setDnp(new Distance(dnp));
 	}
 
 	/**
