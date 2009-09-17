@@ -6,7 +6,6 @@ import org.hhu.c2c.openlr.util.ValidationException;
  * This example data is taken from the OpenLR (v1.0) white paper pp. 36-40
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class Example {

@@ -11,7 +11,6 @@ import org.junit.runners.Suite;
  * Runs all tests.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 @RunWith(Suite.class)

@@ -6,7 +6,6 @@ package org.hhu.c2c.openlr.util;
  * steps can construct different representations of objects.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  * @param <B>
  *            The class of the builder for use in a fluid interface

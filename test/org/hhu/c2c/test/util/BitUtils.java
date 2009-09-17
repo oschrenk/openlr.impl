@@ -4,7 +4,6 @@ package org.hhu.c2c.test.util;
  * A variety of bit twiddling routines
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class BitUtils {

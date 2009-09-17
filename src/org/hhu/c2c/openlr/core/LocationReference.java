@@ -13,7 +13,7 @@ import java.util.List;
  * a shortest-path calculation between each consecutive pair of LR- points.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
+
  * 
  */
 public class LocationReference {

@@ -15,7 +15,6 @@ import org.junit.Test;
  * Tests {@link Encoder}
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class DecoderTest {

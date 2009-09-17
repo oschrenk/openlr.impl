@@ -9,7 +9,6 @@ package org.hhu.c2c.openlr.util;
  * marrker position, allowing multiple operations on the same byte (array).
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class ByteArrayFiFo {

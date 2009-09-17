@@ -13,7 +13,6 @@ import org.hhu.c2c.openlr.l10n.Messages;
  * 
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class Coordinate {

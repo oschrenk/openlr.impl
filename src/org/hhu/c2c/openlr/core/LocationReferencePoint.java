@@ -23,7 +23,6 @@ import org.hhu.c2c.openlr.geo.Coordinate;
  *      (World Geodetic System 1984)</a>
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class LocationReferencePoint {

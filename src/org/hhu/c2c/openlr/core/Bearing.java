@@ -149,7 +149,6 @@ package org.hhu.c2c.openlr.core;
  * 
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %Id%, %id%
  * 
  */
 public class Bearing implements Comparable<Bearing> {

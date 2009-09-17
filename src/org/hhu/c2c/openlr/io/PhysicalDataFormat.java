@@ -9,7 +9,6 @@ import org.hhu.c2c.openlr.core.FunctionalRoadClass;
  * the {@link Decoder}
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class PhysicalDataFormat {

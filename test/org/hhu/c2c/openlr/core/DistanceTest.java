@@ -8,7 +8,6 @@ import org.junit.Test;
  * Tests {@link Distance}
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class DistanceTest {

@@ -5,7 +5,6 @@ package org.hhu.c2c.openlr.util;
  * validate operation.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class ValidationException extends Exception {

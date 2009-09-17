@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
  * Accessor to the localization bundle of the application
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class Messages {

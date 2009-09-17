@@ -13,7 +13,6 @@ import org.hhu.c2c.openlr.util.ByteArrayFiFo;
  * converting coorinates into and out of their respective representations
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class CoordinateHelper {

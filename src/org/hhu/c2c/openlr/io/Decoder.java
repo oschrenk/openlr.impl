@@ -33,7 +33,6 @@ import org.hhu.c2c.openlr.util.ValidationException;
  * Used for unmarshalling a byte representation of a location reference.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class Decoder {

@@ -17,7 +17,6 @@ import org.hhu.c2c.openlr.l10n.Messages;
  * compliance with the first and second rule of the data format rules).
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class Distance implements Comparable<Distance> {

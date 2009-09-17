@@ -6,7 +6,6 @@ import org.hhu.c2c.openlr.l10n.Messages;
  * The <b>form of way</b> (<code>FOW</code>) describes the physical road type.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public enum FormOfWay {

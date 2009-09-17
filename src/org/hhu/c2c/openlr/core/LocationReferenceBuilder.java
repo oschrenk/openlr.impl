@@ -12,7 +12,6 @@ import org.hhu.c2c.openlr.util.ValidationException;
  * data structure and not imposing any further logic on it.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class LocationReferenceBuilder implements

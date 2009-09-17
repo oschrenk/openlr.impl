@@ -11,7 +11,6 @@ import org.hhu.c2c.openlr.util.ValidationException;
  * @see LocationReferencePoint
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
- * @version %I%, %G%
  * 
  */
 public class LocationReferencePointBuilder implements
