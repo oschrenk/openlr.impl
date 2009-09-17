@@ -11,7 +11,7 @@ import static org.hhu.c2c.openlr.io.PhysicalDataFormat.MINIMUM_NUMBER_OF_BYTES_F
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NEGATIVE_OFFSET_FLAG_BITMASK;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_ABSOLUTE_LRP;
-import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE;
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_RELATIVE_LRP;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.POSITIVE_OFFSET_FLAG_BITMASK;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.VERSION_NUMBER_BITMASK;
@@ -25,8 +25,6 @@ import org.hhu.c2c.openlr.core.LocationReferenceBuilder;
 import org.hhu.c2c.openlr.core.LocationReferencePoint;
 import org.hhu.c2c.openlr.core.LocationReferencePointBuilder;
 import org.hhu.c2c.openlr.geo.Coordinate;
-import org.hhu.c2c.openlr.geo.CoordinateFactory;
-import org.hhu.c2c.openlr.geo.CoordinateUtils;
 import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.ByteArrayFiFo;
 import org.hhu.c2c.openlr.util.ValidationException;
@@ -142,10 +140,9 @@ public class Decoder {
 			throws ValidationException {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(point);
-		CoordinateFactory coordinateFactory = CoordinateFactory.getInstance();
 
 		lrpb.start();
-		lrpb.setCoordinate(coordinateFactory.getCoordinate(fifo
+		lrpb.setCoordinate(CoordinateHelper.getCoordinate(fifo
 				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
@@ -172,13 +169,13 @@ public class Decoder {
 	 */
 	private Coordinate getCoordinate(final Coordinate previous,
 			final ByteArrayFiFo fifo) {
-		return new Coordinate(CoordinateUtils.getDegreeFromRelative(
-				CoordinateUtils.getRelativeCoordinateIntValue(fifo
-						.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
-				previous.getLongitude()), CoordinateUtils
-				.getDegreeFromRelative(CoordinateUtils
+		return new Coordinate(CoordinateHelper.getDegreeFromRelative(
+				CoordinateHelper.getRelativeCoordinateIntValue(fifo
+						.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
+				previous.getLongitude()), CoordinateHelper
+				.getDegreeFromRelative(CoordinateHelper
 						.getRelativeCoordinateIntValue(fifo
-								.pop(NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE)),
+								.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
 						previous.getLatitude()));
 	}
 
@@ -217,5 +214,4 @@ public class Decoder {
 
 		return lrpb.get();
 	}
-
 }

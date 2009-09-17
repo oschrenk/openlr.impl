@@ -83,6 +83,11 @@ public class PhysicalDataFormat {
 	protected static final byte NEGATIVE_OFFSET_FLAG_BITMASK = 32;
 
 	/**
+	 * An angular measurement uses three bytes using big endian notation.
+	 */
+	protected static final int NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT = 3;
+
+	/**
 	 * Number of bytes for an absolute coordinate, three bytes for the longitude
 	 * and three bytes for latitude
 	 */
@@ -104,7 +109,15 @@ public class PhysicalDataFormat {
 	 * Number of bytes needed for a relative coordinate part, like longitude or
 	 * latitude
 	 */
-	protected static final int NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE = 2;
+	protected static final int NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT = 2;
+
+	/**
+	 * The coordinates of the following LR-points and the last LR-point are
+	 * transmitted in a relative format and therefore each value (longitude and
+	 * latitude) will use 2 bytes, each in big endian starting with the
+	 * longitude.
+	 */
+	protected static final int NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE = 4;
 
 	/**
 	 * The number of bytes used to describe following location reference points
@@ -121,6 +134,18 @@ public class PhysicalDataFormat {
 	 * significant bit.
 	 */
 	protected static final byte POSITIVE_OFFSET_FLAG_BITMASK = 64;
+
+	/**
+	 * Used to inflate the integer value when converting a relative coordinate
+	 * to its integer representation
+	 */
+	protected static final int RELATIVE_FORMAT_INT_MULTIPLIER = 100000;
+
+	/**
+	 * The resolution parameter is used to convert the float representation of
+	 * the longiitude (or latitude) into the respective long representation
+	 */
+	protected static final byte RESOLUTION_PARAMETER = 24;
 
 	/**
 	 * The three least significant bits of the header byte represent the version

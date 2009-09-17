@@ -16,7 +16,6 @@ import org.hhu.c2c.openlr.core.FunctionalRoadClass;
 import org.hhu.c2c.openlr.core.LocationReference;
 import org.hhu.c2c.openlr.core.LocationReferencePoint;
 import org.hhu.c2c.openlr.geo.Coordinate;
-import org.hhu.c2c.openlr.geo.CoordinateUtils;
 
 /**
  * Used for marshalling a {@link LocationReference} into a byte stream
@@ -56,11 +55,11 @@ public class Encoder {
 		coordinate = previousPoint.getCoordinate();
 
 		// write 3 bytes longitude
-		out.write(CoordinateUtils.getByteArrayRepresentation(coordinate
+		out.write(CoordinateHelper.getByteArrayRepresentation(coordinate
 				.getLongitude()));
 
 		// write 3 byte latitude
-		out.write(CoordinateUtils.getByteArrayRepresentation(coordinate
+		out.write(CoordinateHelper.getByteArrayRepresentation(coordinate
 				.getLatitude()));
 
 		// write 1st attribute (2 empty bit, 3 bit FRC, 3 bit FOW)
@@ -84,7 +83,7 @@ public class Encoder {
 			currentPoint = points.poll();
 
 			// write 2 byte longitude, write 2 byte latitude
-			out.write(CoordinateUtils.getByteArrayRepresentation(currentPoint
+			out.write(CoordinateHelper.getByteArrayRepresentation(currentPoint
 					.getCoordinate(), previousPoint.getCoordinate()));
 
 			writeFirstAttribute(out, currentPoint.getFunctionalRoadClass(),
@@ -103,7 +102,7 @@ public class Encoder {
 
 		// write relative point
 		// write 2 byte longitude, write 2 byte latitude
-		out.write(CoordinateUtils.getByteArrayRepresentation(currentPoint
+		out.write(CoordinateHelper.getByteArrayRepresentation(currentPoint
 				.getCoordinate(), previousPoint.getCoordinate()));
 
 		// write 1st attribute

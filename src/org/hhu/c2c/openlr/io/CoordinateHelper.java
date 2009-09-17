@@ -1,4 +1,12 @@
-package org.hhu.c2c.openlr.geo;
+package org.hhu.c2c.openlr.io;
+
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT;
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE;
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE;
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RELATIVE_FORMAT_INT_MULTIPLIER;
+import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RESOLUTION_PARAMETER;
+
+import org.hhu.c2c.openlr.geo.Coordinate;
 
 /**
  * <b>CoordinateUtils</b> is a collection of small helper functions for
@@ -8,20 +16,7 @@ package org.hhu.c2c.openlr.geo;
  * @version %I%, %G%
  * 
  */
-public class CoordinateUtils {
-	// TODO I don't like this class
-
-	/**
-	 * The resolution parameter is used to convert the float representation of
-	 * the longiitude (or latitude) into the respective long representation
-	 */
-	private static final byte RESOLUTION_PARAMETER = 24;
-
-	/**
-	 * Used to inflate the integer value when converting a relative coordinate
-	 * to its integer representation
-	 */
-	private static final int RELATIVE_FORMAT_INT_MULTIPLIER = 100000;
+public class CoordinateHelper {
 
 	/**
 	 * Returns a byte array representation of a relative coordinate
@@ -32,14 +27,14 @@ public class CoordinateUtils {
 	 *            the previous coordinat
 	 * @return a byte array representation of a relative coordinate
 	 */
-	public static byte[] getByteArrayRepresentation(final Coordinate current,
+	protected static byte[] getByteArrayRepresentation(final Coordinate current,
 			final Coordinate previous) {
 		int longitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
 				.getLongitude() - previous.getLongitude()));
 		int latitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
 				.getLatitude() - previous.getLatitude()));
 
-		byte[] relativeCoordinate = new byte[4];
+		byte[] relativeCoordinate = new byte[NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE];
 		relativeCoordinate[0] = (byte) (longitude >> 8);
 		relativeCoordinate[1] = (byte) (longitude >> 0);
 		relativeCoordinate[2] = (byte) (latitude >> 8);
@@ -51,12 +46,12 @@ public class CoordinateUtils {
 	 * Returns a longitude or latitude encoded as a float as a byte array
 	 * representation
 	 * 
-	 * @param degree
+	 * @param angularMeasurement longitude or latitude in degree
 	 * @return a byte array representation of a longitude or latitude
 	 */
-	public static byte[] getByteArrayRepresentation(final float degree) {
-		byte[] longOrLat = new byte[3];
-		long longitude = CoordinateUtils.getLongRepresentation(degree);
+	protected static byte[] getByteArrayRepresentation(final float angularMeasurement) {
+		byte[] longOrLat = new byte[NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT];
+		long longitude = CoordinateHelper.getLongRepresentation(angularMeasurement);
 		longOrLat[0] = (byte) (longitude >> 16);
 		longOrLat[1] = (byte) (longitude >> 8);
 		longOrLat[2] = (byte) (longitude >> 0);
@@ -77,7 +72,7 @@ public class CoordinateUtils {
 	 * @return the absolute value of the longitude (or latitude) of the current
 	 *         point
 	 */
-	public static float getDegreeFromRelative(final int relative,
+	protected static float getDegreeFromRelative(final int relative,
 			final float previousPointDegree) {
 		return relative / RELATIVE_FORMAT_INT_MULTIPLIER + previousPointDegree;
 	}
@@ -90,7 +85,7 @@ public class CoordinateUtils {
 	 *            the long value of the longitude (or latitude)
 	 * @return the float representation
 	 */
-	protected static float getFloatRepresentation(final long degree) {
+	static float getFloatRepresentation(final long degree) {
 		return (float) ((degree - Math.signum(degree) / 2) * 360 * (Math.pow(2,
 				-RESOLUTION_PARAMETER)));
 	}
@@ -115,9 +110,53 @@ public class CoordinateUtils {
 	 *            a relative longitude or relative latitude encoded as two bytes
 	 * @return the integer representation of a relative coordinate
 	 */
-	public static int getRelativeCoordinateIntValue(final byte[] coordinate) {
+	protected static int getRelativeCoordinateIntValue(final byte[] coordinate) {
 		int relativeCoordinate = coordinate[0] << 8;
 		return relativeCoordinate | coordinate[1];
+	}
+	
+	/**
+	 * Creates a new {@link Coordinate} from the given byte array
+	 * 
+	 * @param coordinate
+	 *            a byte array of the length of six
+	 * @return a new coordinate
+	 * @throws IllegalArgumentException
+	 *             if the array is malformed, not containing six bytes
+	 */
+	protected static Coordinate getCoordinate(final byte[] coordinate) {
+		if (coordinate.length != NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE) {
+			throw new IllegalArgumentException(
+					"The byte array must have a length of 6");
+		}
+
+		return new Coordinate(CoordinateHelper
+				.getFloatRepresentation(getLongitude(coordinate)),
+				CoordinateHelper.getFloatRepresentation(getLatitude(coordinate)));
+	}
+
+	/**
+	 * Returns the latitude value with the given byte array
+	 * 
+	 * @param latitude
+	 *            a byte array
+	 * @returny the latitude value
+	 */
+	private static long getLatitude(final byte[] latitude) {
+		return Long.valueOf(Long.valueOf(latitude[3]) << 16 + Long
+				.valueOf(latitude[4]) << 8 + Long.valueOf(latitude[5]));
+	}
+
+	/**
+	 * Returns the longitude value with the given byte array
+	 * 
+	 * @param longitude
+	 *            a byte array
+	 * @returny the longitude value
+	 */
+	private static long getLongitude(final byte[] longitude) {
+		return Long.valueOf(Long.valueOf(longitude[0]) << 16 + Long
+				.valueOf(longitude[1]) << 8 + Long.valueOf(longitude[2]));
 	}
 
 }
