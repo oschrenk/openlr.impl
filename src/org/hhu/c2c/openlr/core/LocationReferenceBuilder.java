@@ -76,15 +76,13 @@ public class LocationReferenceBuilder implements
 	transient private boolean attributeFlag;
 
 	/**
-	 * The version is used to distinguish between several physical and data
-	 * formats for location references. The version number is represented by 3
-	 * bits. <br>
-	 * <i>Note: The actual version of the physical data format is 2 so that the
-	 * <code>VER</code> field is constantly set to binary 010.</i>
+	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
+	 * distance between the end of the location reference path and the “real”
+	 * end of the location.
 	 * 
-	 * @see LocationReference#getVersion()
+	 * @see LocationReference#getNegativeOffset()
 	 */
-	transient private byte version;
+	transient private Distance negativeOffset;
 
 	/**
 	 * Holds a list of location reference points.
@@ -101,13 +99,15 @@ public class LocationReferenceBuilder implements
 	transient private Distance positiveOffset;
 
 	/**
-	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
-	 * distance between the end of the location reference path and the “real”
-	 * end of the location.
+	 * The version is used to distinguish between several physical and data
+	 * formats for location references. The version number is represented by 3
+	 * bits. <br>
+	 * <i>Note: The actual version of the physical data format is 2 so that the
+	 * <code>VER</code> field is constantly set to binary 010.</i>
 	 * 
-	 * @see LocationReference#getNegativeOffset()
+	 * @see LocationReference#getVersion()
 	 */
-	transient private Distance negativeOffset;
+	transient private byte version;
 
 	/**
 	 * 

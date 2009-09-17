@@ -18,19 +18,31 @@ public class LocationReferencePointBuilder implements
 		Builder<LocationReferencePointBuilder, LocationReferencePoint> {
 
 	/**
+	 * Holds the bearing
+	 */
+	transient private Bearing bearing;
+
+	/**
 	 * Holds the coordinate
 	 **/
 	transient private Coordinate coordinate;
 
 	/**
-	 * Holds the functional road class
+	 * Holds the distance to the next location reference point. When building
+	 * the last location reference point of a location reference this defaults
+	 * to <code>new Distance(0)</code>.
 	 */
-	transient private FunctionalRoadClass frc;
+	transient private Distance dnp;
 
 	/**
 	 * Holds the form of way
 	 */
 	transient private FormOfWay fow;
+
+	/**
+	 * Holds the functional road class
+	 */
+	transient private FunctionalRoadClass frc;
 
 	/**
 	 * Holds the lowest functional road class to the next location reference
@@ -39,18 +51,6 @@ public class LocationReferencePointBuilder implements
 	 */
 	transient private FunctionalRoadClass lfrcnp;
 	// TODO default to a something else, null value or so?
-
-	/**
-	 * Holds the bearing
-	 */
-	transient private Bearing bearing;
-
-	/**
-	 * Holds the distance to the next location reference point. When building
-	 * the last location reference point of a location reference this defaults
-	 * to <code>new Distance(0)</code>.
-	 */
-	transient private Distance dnp;
 
 	/**
 	 * Constructs a new {@link LocationReferencePointBuilder}

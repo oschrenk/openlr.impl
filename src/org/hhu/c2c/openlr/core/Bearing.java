@@ -155,13 +155,13 @@ package org.hhu.c2c.openlr.core;
 public class Bearing {
 	// TODO add function to calculate bearing as tex to javadoc
 
-	/** Defines one thirty-second of a full circle */
-	private static final float ONE_32TH_CIRCLE = 11.25f;
-
 	/**
 	 * Describes a bitmask masking the least five significant bits: "0001 1111"
 	 */
 	private static final byte BITMASK = 1 + 2 + 4 + 8 + 16;
+
+	/** Defines one thirty-second of a full circle */
+	private static final float ONE_32TH_CIRCLE = 11.25f;
 
 	/*
 	 * Breaks "Single Responsibility Principle" as the class is now also,
