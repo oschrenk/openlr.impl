@@ -2,6 +2,9 @@
 <pmd>
     <useProjectRuleSet>false</useProjectRuleSet>
     <ruleSetFile>.ruleset</ruleSetFile>
+    <excludePatterns>
+        <excludePattern></excludePattern>
+    </excludePatterns>
     <rules>
         <rule>
             <name>UseCorrectExceptionLogging</name>
