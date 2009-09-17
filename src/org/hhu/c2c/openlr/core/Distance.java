@@ -1,5 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
+import org.hhu.c2c.openlr.l10n.Messages;
+
 /**
  * The distance describes can be used to describe the distance between two
  * {@link LocationReferencePoint}s or to describe the
@@ -57,12 +59,11 @@ public class Distance {
 	 */
 	public Distance(final int distance) {
 		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS) {
-			throw new IllegalArgumentException("Distance too long. Maximum is "
-					+ Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + "m.");
+			throw new IllegalArgumentException(Messages.getString("Distance.Exception.OVER_MAXIMUM" , Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS)); //$NON-NLS-1$
 		}
 
 		if (distance < 0) {
-			throw new IllegalArgumentException("Distance must be positive.");
+			throw new IllegalArgumentException(Messages.getString("Distance.Exception.ONLY_POSITIVE")); //$NON-NLS-1$
 		}
 
 		this.distance = distance;

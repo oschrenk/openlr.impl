@@ -1,5 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
+import org.hhu.c2c.openlr.l10n.Messages;
+
 /**
  * The <b>functional road class</b> (<code>FRC</code>) is a road classification
  * based on the importance of a road. The possible values cover the range of
@@ -99,7 +101,7 @@ public enum FunctionalRoadClass {
 
 		default:
 			throw new RuntimeException(
-					"GuruMeditationFailure: Reached default case, which should never happen.");
+					Messages.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
 		}
 	}
 

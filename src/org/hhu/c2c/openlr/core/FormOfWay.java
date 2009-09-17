@@ -1,5 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
+import org.hhu.c2c.openlr.l10n.Messages;
+
 /**
  * The <b>form of way</b> (<code>FOW</code>) describes the physical road type.
  * 
@@ -100,7 +102,7 @@ public enum FormOfWay {
 			return OTHER;
 		default:
 			throw new RuntimeException(
-					"GuruMeditationFailure: Reached default case, which should never happen.");
+					Messages.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
 		}
 	}
 

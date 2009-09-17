@@ -28,7 +28,7 @@ public class ByteArrayFiFo {
 	 */
 	public ByteArrayFiFo(final byte[] array) {
 		if (array == null) {
-			throw new IllegalArgumentException("Byte array mustn't be null.");
+			throw new IllegalArgumentException("Byte array mustn't be null."); //$NON-NLS-1$
 		}
 
 		this.array = array.clone();

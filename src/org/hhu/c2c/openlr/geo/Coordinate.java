@@ -1,5 +1,7 @@
 package org.hhu.c2c.openlr.geo;
 
+import org.hhu.c2c.openlr.l10n.Messages;
+
 /**
  * A <b>Coordinate pair</b> (<code>COORD</code>) stands for a pair of WGS84
  * longitude (lon) and latitude (lat) values. This coordinate pair specifies a
@@ -45,12 +47,12 @@ public class Coordinate {
 	public Coordinate(final float longitude, final float latitude) {
 		if (longitude < -180 || longitude > 180) {
 			throw new IllegalArgumentException(
-					"The longitude isn't properly formatted.");
+					Messages.getString("Coordinate.Exeption.LONGITUDE_MISFORMED")); //$NON-NLS-1$
 		}
 
 		if (latitude < -180 || latitude > 180) {
 			throw new IllegalArgumentException(
-					"The longitude isn't properly formatted.");
+					Messages.getString("Coordinate.Exeption.LATITUDE_MISFORMED")); //$NON-NLS-1$
 
 		}
 

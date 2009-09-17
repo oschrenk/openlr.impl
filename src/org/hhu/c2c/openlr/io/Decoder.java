@@ -27,6 +27,7 @@ import org.hhu.c2c.openlr.core.LocationReferencePointBuilder;
 import org.hhu.c2c.openlr.geo.Coordinate;
 import org.hhu.c2c.openlr.geo.CoordinateFactory;
 import org.hhu.c2c.openlr.geo.CoordinateUtils;
+import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.ByteArrayFiFo;
 import org.hhu.c2c.openlr.util.ValidationException;
 
@@ -55,8 +56,7 @@ public class Decoder {
 			throws ValidationException {
 		if (bytes.length < MINIMUM_NUMBER_OF_BYTES) {
 			throw new ValidationException(
-					"Byte array too small. A valid location reference needs at least "
-							+ MINIMUM_NUMBER_OF_BYTES + " bytes.");
+					Messages.getString("Decoder.Exception.MINIMUM_NUMBER_OF_BYTES", MINIMUM_NUMBER_OF_BYTES)); //$NON-NLS-1$
 		}
 
 		ByteArrayFiFo fifo = new ByteArrayFiFo(bytes);
@@ -105,7 +105,7 @@ public class Decoder {
 			lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
 		} else {
 			throw new ValidationException(
-					"ByteArray is malformed. Was awaiting a byte for positive offset");
+					Messages.getString("Decoder.Exception.POSITIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
 		}
 
 		// if noffF is set, the byte for the offset must be there
@@ -113,13 +113,13 @@ public class Decoder {
 			lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
 		} else {
 			throw new ValidationException(
-					"ByteArray is malformed. Was awaiting a byte for negative offset");
+					Messages.getString("Decoder.Exception.NEGATIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
 		}
 
 		// if there are somy bytes left, somwthing went wrong
 		if (fifo.capacity() != 0) {
 			throw new ValidationException(
-					"Someting went terribbly wrong. You figure it out.");
+					Messages.getString("Decoder.Exception.BYTES_NOT_EXHAUSTED")); //$NON-NLS-1$
 		}
 
 		return lrb.get();
