@@ -48,7 +48,7 @@ package org.hhu.c2c.openlr.core;
  * intermediate LR-points.
  * 
  * <dl>
- * <dt>Rule - 2</dt>
+ * <dt>Rule - 4</dt>
  * <dd>The coordinates of the LR-points shall be chosen on valid network nodes.</dd>
  * </dl>
  * 
