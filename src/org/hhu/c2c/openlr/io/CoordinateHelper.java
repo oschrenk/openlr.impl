@@ -125,10 +125,9 @@ public class CoordinateHelper {
 	 * @return a new coordinate
 	 */
 	protected static Coordinate getCoordinate(final byte[] coordinate) {
-		return new Coordinate(CoordinateHelper
-				.getFloatRepresentation(getLongitude(coordinate)),
-				CoordinateHelper
-						.getFloatRepresentation(getLatitude(coordinate)));
+
+		return new Coordinate(getFloatRepresentation(getLongitude(coordinate)),
+				getFloatRepresentation(getLatitude(coordinate)));
 	}
 
 	/**
