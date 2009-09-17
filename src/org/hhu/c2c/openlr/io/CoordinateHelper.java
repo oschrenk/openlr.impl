@@ -6,6 +6,7 @@ import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RELATIVE_FORMAT_INT_MULTI
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RESOLUTION_PARAMETER;
 
 import org.hhu.c2c.openlr.geo.Coordinate;
+import org.hhu.c2c.openlr.util.ByteArrayFiFo;
 
 /**
  * <b>CoordinateUtils</b> is a collection of small helper functions for
@@ -125,33 +126,26 @@ public class CoordinateHelper {
 	 * @return a new coordinate
 	 */
 	protected static Coordinate getCoordinate(final byte[] coordinate) {
-
-		return new Coordinate(getFloatRepresentation(getLongitude(coordinate)),
-				getFloatRepresentation(getLatitude(coordinate)));
+		ByteArrayFiFo fifo = new ByteArrayFiFo(coordinate);
+		return new Coordinate(
+				getFloatRepresentation(getAbsoluteAngularMeasurement(fifo
+						.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT))),
+				getFloatRepresentation(getAbsoluteAngularMeasurement(fifo
+						.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT))));
 	}
 
 	/**
-	 * Returns the latitude value with the given byte array
+	 * Returns the long value of the angular measurement
 	 * 
-	 * @param latitude
-	 *            a byte array
-	 * @returny the latitude value
-	 */
-	private static long getLatitude(final byte[] latitude) {
-		return Long.valueOf(Long.valueOf(latitude[3]) << 16 + Long
-				.valueOf(latitude[4]) << 8 + Long.valueOf(latitude[5]));
-	}
-
-	/**
-	 * Returns the longitude value with the given byte array
+	 * @param angularMeasurement
+	 *            the angular measurement
 	 * 
-	 * @param longitude
-	 *            a byte array
-	 * @returny the longitude value
+	 * @return the longitude value
 	 */
-	private static long getLongitude(final byte[] longitude) {
-		return Long.valueOf(Long.valueOf(longitude[0]) << 16 + Long
-				.valueOf(longitude[1]) << 8 + Long.valueOf(longitude[2]));
+	private static long getAbsoluteAngularMeasurement(
+			final byte[] angularMeasurement) {
+		return (angularMeasurement[0] << 16) + (angularMeasurement[1] << 8)
+				+ (angularMeasurement[2]);
 	}
 
 }
