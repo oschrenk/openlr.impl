@@ -95,7 +95,7 @@ public class Rules {
 	 * <b>Lemma 1.1:</b> As distances are encoded as a byte, using all 8 bit
 	 * values, each bit value represents an interval length of 58.6 meters.
 	 */
-	protected static final float ONE_BIT_DISTANCE = MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS / 255;
+	protected static final float ONE_BIT_DISTANCE = 58.6f;
 
 	/**
 	 * <b>Rule 3:</b> Two LR-points are mandatory and the number of intermediate
