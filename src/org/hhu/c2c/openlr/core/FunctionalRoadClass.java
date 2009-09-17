@@ -19,42 +19,42 @@ public enum FunctionalRoadClass {
 	/**
 	 * Main Road
 	 */
-	MAIN_ROAD(0),
+	MAIN_ROAD(0, Messages.getString("FunctionalRoadClass.Text.MAIN_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * First class road
 	 */
-	FIRST_CLASS_ROAD(1),
+	FIRST_CLASS_ROAD(1, Messages.getString("FunctionalRoadClass.Text.FIRST_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Second class road
 	 */
-	SECOND_CLASS_ROAD(2),
+	SECOND_CLASS_ROAD(2, Messages.getString("FunctionalRoadClass.Text.SECOND_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Third class road
 	 */
-	THIRD_CLASS_ROAD(3),
+	THIRD_CLASS_ROAD(3, Messages.getString("FunctionalRoadClass.Text.THIRD_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Fourth class road
 	 */
-	FOURTH_CLASS_ROAD(4),
+	FOURTH_CLASS_ROAD(4, Messages.getString("FunctionalRoadClass.Text.FOURTH_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Fifth class road
 	 */
-	FIFTH_CLASS_ROAD(5),
+	FIFTH_CLASS_ROAD(5, Messages.getString("FunctionalRoadClass.Text.FIFTH_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Sixth class road
 	 */
-	SIXTH_CLASS_ROAD(6),
+	SIXTH_CLASS_ROAD(6, Messages.getString("FunctionalRoadClass.Text.SIXTH_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Other class road
 	 */
-	OTHER_CLASS_ROAD(7);
+	OTHER_CLASS_ROAD(7, Messages.getString("FunctionalRoadClass.Text.OTHER_CLASS_ROAD")); //$NON-NLS-1$
 
 	/**
 	 * Describes a bitmask, masking the three least significant bits:
@@ -100,8 +100,8 @@ public enum FunctionalRoadClass {
 			return FunctionalRoadClass.OTHER_CLASS_ROAD;
 
 		default:
-			throw new RuntimeException(
-					Messages.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
+			throw new RuntimeException(Messages
+					.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
 		}
 	}
 
@@ -112,6 +112,11 @@ public enum FunctionalRoadClass {
 	private final byte functionalRoadClass;
 
 	/**
+	 * Holds the name of the functional road class
+	 */
+	private final String name;
+
+	/**
 	 * Creating a new {@link FunctionalRoadClass}. The lower the number, the
 	 * more important the road
 	 * 
@@ -119,8 +124,9 @@ public enum FunctionalRoadClass {
 	 *            the importance of the road, the lower, the more important,
 	 *            ranging from 0 to 7
 	 */
-	FunctionalRoadClass(final int frc) {
+	FunctionalRoadClass(final int frc, final String name) {
 		this.functionalRoadClass = (byte) (frc);
+		this.name = name;
 	}
 
 	/**
@@ -132,6 +138,11 @@ public enum FunctionalRoadClass {
 	 */
 	public byte getByteRepresentation() {
 		return functionalRoadClass;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

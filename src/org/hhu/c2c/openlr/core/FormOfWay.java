@@ -14,50 +14,50 @@ public enum FormOfWay {
 	/**
 	 * The physical road type is unknown.
 	 */
-	UNDEFINED(0),
+	UNDEFINED(0, Messages.getString("FormOfWay.Text.UNDEFINED")), //$NON-NLS-1$
 
 	/**
 	 * A Motorway is defined as a road permitted for motorized vehicles only in
 	 * combination with a prescribed minimum speed. It has two or more
 	 * physically separated carriageways and no single level-crossings.
 	 */
-	MOTORWAY(1),
+	MOTORWAY(1, Messages.getString("FormOfWay.Text.MOTORWAY")), //$NON-NLS-1$
 
 	/**
 	 * A multiple carriageway is defined as a road with physically separated
 	 * carriageways regardless of the number of lanes. If a road is also a
 	 * motorway, it should be coded as such and not as a multiple carriageway.
 	 */
-	MULTIPLE_CARRIAGEWAY(2),
+	MULTIPLE_CARRIAGEWAY(2, Messages.getString("FormOfWay.Text.MULTIPLE_CARRIAGEWAY")), //$NON-NLS-1$
 
 	/**
 	 * All roads without separate carriageways are considered as roads with a
 	 * single carriageway.
 	 */
-	SINGLE_CARRIAGEWAY(3),
+	SINGLE_CARRIAGEWAY(3, Messages.getString("FormOfWay.Text.SINGLE_CARRIAGEWAY")), //$NON-NLS-1$
 
 	/**
 	 * A Roundabout is a road which forms a ring on which traffic travelling in
 	 * only one direction is allowed.
 	 */
-	ROUNDABOUT(4),
+	ROUNDABOUT(4, Messages.getString("FormOfWay.Text.ROUNDABOUT")), //$NON-NLS-1$
 
 	/**
 	 * A Traffic Square is an open area (partly) enclosed by roads which is used
 	 * for non-traffic purposes and which is not a Roundabout.
 	 */
-	TRAFFICSQUARE(5),
+	TRAFFICSQUARE(5, Messages.getString("FormOfWay.Text.TRAFFICSQUARE")), //$NON-NLS-1$
 
 	/**
 	 * A Slip Road is a road especially designed to enter or leave a line.
 	 */
-	SLIPROAD(6),
+	SLIPROAD(6, Messages.getString("FormOfWay.Text.SLIPROAD")), //$NON-NLS-1$
 
 	/**
 	 * The physical road type is known but does not fit into one of the other
 	 * categories.
 	 */
-	OTHER(7);
+	OTHER(7, Messages.getString("FormOfWay.Text.OTHER")); //$NON-NLS-1$
 
 	/**
 	 * Describes a bitmask, masking the three least significant bits:
@@ -101,8 +101,8 @@ public enum FormOfWay {
 		case 7:
 			return OTHER;
 		default:
-			throw new RuntimeException(
-					Messages.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
+			throw new RuntimeException(Messages
+					.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
 		}
 	}
 
@@ -113,13 +113,19 @@ public enum FormOfWay {
 	private byte formOfWay;
 
 	/**
+	 * Holds the name of the form of way
+	 */
+	private String name;
+
+	/**
 	 * Creating a new {@link FormOfWay}.
 	 * 
 	 * @param fow
 	 *            the form of way
 	 */
-	FormOfWay(final int fow) {
+	FormOfWay(final int fow, final String name) {
 		this.formOfWay = (byte) fow;
+		this.name = name;
 	}
 
 	/**
@@ -130,5 +136,10 @@ public enum FormOfWay {
 	 */
 	public byte getByteRepresentation() {
 		return formOfWay;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }
