@@ -54,7 +54,9 @@ public class Decoder {
 			throws ValidationException {
 		if (bytes.length < MINIMUM_NUMBER_OF_BYTES) {
 			throw new ValidationException(
-					Messages.getString("Decoder.Exception.MINIMUM_NUMBER_OF_BYTES", MINIMUM_NUMBER_OF_BYTES)); //$NON-NLS-1$
+					Messages
+							.getString(
+									"Decoder.Exception.MINIMUM_NUMBER_OF_BYTES", MINIMUM_NUMBER_OF_BYTES)); //$NON-NLS-1$
 		}
 
 		ByteArrayFiFo fifo = new ByteArrayFiFo(bytes);
@@ -95,29 +97,38 @@ public class Decoder {
 
 		boolean positiveOffsetFlag = (fifo.peek() & POSITIVE_OFFSET_FLAG_BITMASK) == POSITIVE_OFFSET_FLAG_BITMASK;
 		boolean negativeOffsetFlag = (fifo.peek() & NEGATIVE_OFFSET_FLAG_BITMASK) == NEGATIVE_OFFSET_FLAG_BITMASK;
+
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
 		lrb.addLocationReferencePoint(lrpb.get());
 
-		// if pooffF is set, there should be at least one byte left
-		if (positiveOffsetFlag && fifo.capacity() >= 1) {
-			lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
-		} else {
-			throw new ValidationException(
-					Messages.getString("Decoder.Exception.POSITIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
+		// check if poffF is set
+		if (positiveOffsetFlag) {
+			// there should be one or two byte left
+			if (fifo.capacity() > 0) {
+				lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
+			} else {
+				throw new ValidationException(
+						Messages
+								.getString("Decoder.Exception.POSITIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
+			}
 		}
 
 		// if noffF is set, the byte for the offset must be there
-		if (negativeOffsetFlag && fifo.capacity() == 1) {
-			lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
-		} else {
-			throw new ValidationException(
-					Messages.getString("Decoder.Exception.NEGATIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
+		if (negativeOffsetFlag) {
+			// there should only be one byte left
+			if (fifo.capacity() > 0) {
+				lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
+			} else {
+				throw new ValidationException(
+						Messages
+								.getString("Decoder.Exception.NEGATIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
+			}
 		}
 
-		// if there are somy bytes left, somwthing went wrong
+		// if there are somy bytes left, something went wrong
 		if (fifo.capacity() != 0) {
-			throw new ValidationException(
-					Messages.getString("Decoder.Exception.BYTES_NOT_EXHAUSTED")); //$NON-NLS-1$
+			throw new ValidationException(Messages
+					.getString("Decoder.Exception.BYTES_NOT_EXHAUSTED")); //$NON-NLS-1$
 		}
 
 		return lrb.get();
@@ -169,14 +180,19 @@ public class Decoder {
 	 */
 	private Coordinate getCoordinate(final Coordinate previous,
 			final ByteArrayFiFo fifo) {
-		return new Coordinate(CoordinateHelper.getDegreeFromRelative(
-				CoordinateHelper.getRelativeCoordinateIntValue(fifo
-						.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
-				previous.getLongitude()), CoordinateHelper
-				.getDegreeFromRelative(CoordinateHelper
-						.getRelativeCoordinateIntValue(fifo
-								.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
-						previous.getLatitude()));
+		return new Coordinate(
+				CoordinateHelper
+						.getDegreeFromRelative(
+								CoordinateHelper
+										.getRelativeCoordinateIntValue(fifo
+												.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
+								previous.getLongitude()),
+				CoordinateHelper
+						.getDegreeFromRelative(
+								CoordinateHelper
+										.getRelativeCoordinateIntValue(fifo
+												.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
+								previous.getLatitude()));
 	}
 
 	/**
