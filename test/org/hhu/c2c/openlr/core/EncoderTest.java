@@ -26,11 +26,11 @@ public class EncoderTest {
 	public void testExampleFromTechnicalReport() {
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			new Encoder().write(out, Example.getExample());
+			new Encoder().write(out, Example.asLocationReference());
 			byte[] actual = out.toByteArray();
 			
-			for (int i = 0; i < Example.EXAMPLE.length;i++) {
-				assertEquals(Example.EXAMPLE[i],actual[i]);
+			for (int i = 0; i < Example.asBinaryInputStream().length;i++) {
+				assertEquals(Example.asBinaryInputStream()[i],actual[i]);
 			}
 			
 		} catch (ValidationException e) {

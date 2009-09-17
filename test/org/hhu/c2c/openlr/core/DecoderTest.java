@@ -29,9 +29,9 @@ public class DecoderTest {
 	public void testDecoderWithExampleFromTechnicalReport() {
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			new Encoder().write(out, Example.getExample());
+			new Encoder().write(out, Example.asLocationReference());
 			LocationReference lr = new Decoder().decode(out.toByteArray());
-			assertEquals(new Decoder().decode(Example.EXAMPLE), lr);
+			assertEquals(new Decoder().decode(Example.asBinaryInputStream()), lr);
 		} catch (ValidationException e) {
 			fail(e.getMessage());
 			e.printStackTrace();
