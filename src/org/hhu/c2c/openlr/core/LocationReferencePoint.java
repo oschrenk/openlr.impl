@@ -29,14 +29,14 @@ import org.hhu.c2c.openlr.geo.Coordinate;
 public class LocationReferencePoint {
 
 	/**
-	 * Holds the coordinate
-	 */
-	private final Coordinate coordinate;
-
-	/**
 	 * Holds the bearing
 	 */
 	private final Bearing bearing;
+
+	/**
+	 * Holds the coordinate
+	 */
+	private final Coordinate coordinate;
 
 	/**
 	 * Holds the distance to the the next location reference point. When this
@@ -46,14 +46,14 @@ public class LocationReferencePoint {
 	private final Distance distanceToNextPoint;
 
 	/**
-	 * Holds the functional road class
-	 */
-	private final FunctionalRoadClass functionalRoadClass;
-
-	/**
 	 * Holda the form of way
 	 */
 	private final FormOfWay formOfWay;
+
+	/**
+	 * Holds the functional road class
+	 */
+	private final FunctionalRoadClass functionalRoadClass;
 
 	/**
 	 * Holds the lowest functional road class to the next location reference

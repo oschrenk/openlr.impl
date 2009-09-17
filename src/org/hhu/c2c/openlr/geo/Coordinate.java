@@ -18,16 +18,16 @@ public class Coordinate {
 	// TODO make sure of five decimal places
 
 	/**
-	 * Holds the longitude, for east-west measuring, represented by vertical
-	 * lines
-	 */
-	private final float longitude;
-
-	/**
 	 * Holds the latitude, for north-south measuring, represented by horizontal
 	 * lines
 	 */
 	private final float latitude;
+
+	/**
+	 * Holds the longitude, for east-west measuring, represented by vertical
+	 * lines
+	 */
+	private final float longitude;
 
 	/**
 	 * Creates a new coordinate by passing longitude and a latitude parameter.
