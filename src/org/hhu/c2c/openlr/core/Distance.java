@@ -38,7 +38,7 @@ public class Distance implements Comparable<Distance> {
 	 *            the byte value
 	 * @return a new distance, measured in meter
 	 */
-	public static Distance newDistance(final byte distance) {
+	public static Distance newDistance(final int distance) {
 		return new Distance((int) (distance * Rules.ONE_BIT_DISTANCE));
 	}
 
@@ -81,8 +81,8 @@ public class Distance implements Comparable<Distance> {
 	 * 
 	 * @return the byte representation using the full 8 bits of a byte
 	 */
-	public byte getByteRepresentation() {
-		return (byte) (distance / Rules.ONE_BIT_DISTANCE);
+	public int getByteRepresentation() {
+		return 0xFF & (int) (distance / Rules.ONE_BIT_DISTANCE);
 	}
 
 	/**
