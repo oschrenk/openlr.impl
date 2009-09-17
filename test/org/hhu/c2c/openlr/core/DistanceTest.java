@@ -24,26 +24,18 @@ public class DistanceTest {
 
 	/**
 	 * Tests if the distance can be converted between different representations.
-	 * There should be the same.
+	 * As the interval length is 58.6 there should be at max 59 apart, as it is
+	 * not round but just the decimal places cut off.
 	 */
 	@Test
 	public void testRepresentationsConversions() {
 		Distance distance;
 
-		distance = new Distance(0);
-		assertEquals("Expected to be equal", distance.getDistance(), Distance
-				.newDistance(distance.getByteRepresentation()).getDistance());
-
-		distance = new Distance(1000);
-		assertEquals("Expected to be equal", distance.getDistance(), Distance
-				.newDistance(distance.getByteRepresentation()).getDistance());
-
-		distance = new Distance(5000);
-		assertEquals("Expected to be equal", distance.getDistance(), Distance
-				.newDistance(distance.getByteRepresentation()).getDistance());
-
-		distance = new Distance(15000);
-		assertEquals("Expected to be equal", distance.getDistance(), Distance
-				.newDistance(distance.getByteRepresentation()).getDistance());
+		for (int i = 0; i < 15000; i++) {
+			distance = new Distance(i);
+			assertEquals("Expected to be equal", distance.getDistance(),
+					Distance.newDistance(distance.getByteRepresentation())
+							.getDistance(), 59f);
+		}
 	}
 }
