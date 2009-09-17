@@ -1,7 +1,6 @@
 package org.hhu.c2c.openlr.io;
 
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT;
-import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RELATIVE_FORMAT_INT_MULTIPLIER;
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RESOLUTION_PARAMETER;
@@ -124,15 +123,8 @@ public class CoordinateHelper {
 	 * @param coordinate
 	 *            a byte array of the length of six
 	 * @return a new coordinate
-	 * @throws IllegalArgumentException
-	 *             if the array is malformed, not containing six bytes
 	 */
 	protected static Coordinate getCoordinate(final byte[] coordinate) {
-		if (coordinate.length != NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE) {
-			throw new IllegalArgumentException(
-					"The byte array must have a length of 6");
-		}
-
 		return new Coordinate(CoordinateHelper
 				.getFloatRepresentation(getLongitude(coordinate)),
 				CoordinateHelper
