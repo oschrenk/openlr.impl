@@ -20,7 +20,7 @@ import org.hhu.c2c.openlr.l10n.Messages;
  * @version %I%, %G%
  * 
  */
-public class Distance {
+public class Distance implements Comparable<Distance> {
 
 	/*
 	 * Breaks "Single Responsibility Principle" as the class is now also,
@@ -59,11 +59,15 @@ public class Distance {
 	 */
 	public Distance(final int distance) {
 		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS) {
-			throw new IllegalArgumentException(Messages.getString("Distance.Exception.OVER_MAXIMUM" , Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS)); //$NON-NLS-1$
+			throw new IllegalArgumentException(
+					Messages
+							.getString(
+									"Distance.Exception.OVER_MAXIMUM", Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS)); //$NON-NLS-1$
 		}
 
 		if (distance < 0) {
-			throw new IllegalArgumentException(Messages.getString("Distance.Exception.ONLY_POSITIVE")); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages
+					.getString("Distance.Exception.ONLY_POSITIVE")); //$NON-NLS-1$
 		}
 
 		this.distance = distance;
@@ -88,6 +92,42 @@ public class Distance {
 	 */
 	public int getDistance() {
 		return distance;
+	}
+
+	@Override
+	public int compareTo(Distance o) {
+		if (getDistance() < o.getDistance())
+			return -1;
+		if (getDistance() > o.getDistance())
+			return 1;
+		return 0;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + distance;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Distance other = (Distance) obj;
+		if (distance != other.distance)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return distance + " m";
 	}
 
 }

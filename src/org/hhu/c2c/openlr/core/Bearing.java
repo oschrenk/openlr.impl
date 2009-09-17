@@ -152,7 +152,7 @@ package org.hhu.c2c.openlr.core;
  * @version %I%, %G%
  * 
  */
-public class Bearing {
+public class Bearing implements Comparable<Bearing> {
 	// TODO add function to calculate bearing as tex to javadoc
 
 	/**
@@ -250,5 +250,38 @@ public class Bearing {
 			degree = degree + 360.0f;
 		}
 		return degree;
+	}
+
+	@Override
+	public int compareTo(Bearing o) {
+		return Float.compare(this.getBearing(), o.getBearing());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(bearing);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bearing other = (Bearing) obj;
+		if (Float.floatToIntBits(bearing) != Float
+				.floatToIntBits(other.bearing))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return bearing + "\uc2b0";
 	}
 }

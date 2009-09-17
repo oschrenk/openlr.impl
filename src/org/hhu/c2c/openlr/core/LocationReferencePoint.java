@@ -185,4 +185,81 @@ public class LocationReferencePoint {
 		return lowestFRCToNextPoint;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bearing == null) ? 0 : bearing.hashCode());
+		result = prime * result
+				+ ((coordinate == null) ? 0 : coordinate.hashCode());
+		result = prime
+				* result
+				+ ((distanceToNextPoint == null) ? 0 : distanceToNextPoint
+						.hashCode());
+		result = prime * result
+				+ ((formOfWay == null) ? 0 : formOfWay.hashCode());
+		result = prime
+				* result
+				+ ((functionalRoadClass == null) ? 0 : functionalRoadClass
+						.hashCode());
+		result = prime
+				* result
+				+ ((lowestFRCToNextPoint == null) ? 0 : lowestFRCToNextPoint
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LocationReferencePoint other = (LocationReferencePoint) obj;
+		if (bearing == null) {
+			if (other.bearing != null)
+				return false;
+		} else if (!bearing.equals(other.bearing))
+			return false;
+		if (coordinate == null) {
+			if (other.coordinate != null)
+				return false;
+		} else if (!coordinate.equals(other.coordinate))
+			return false;
+		if (distanceToNextPoint == null) {
+			if (other.distanceToNextPoint != null)
+				return false;
+		} else if (!distanceToNextPoint.equals(other.distanceToNextPoint))
+			return false;
+		if (formOfWay == null) {
+			if (other.formOfWay != null)
+				return false;
+		} else if (!formOfWay.equals(other.formOfWay))
+			return false;
+		if (functionalRoadClass == null) {
+			if (other.functionalRoadClass != null)
+				return false;
+		} else if (!functionalRoadClass.equals(other.functionalRoadClass))
+			return false;
+		if (lowestFRCToNextPoint == null) {
+			if (other.lowestFRCToNextPoint != null)
+				return false;
+		} else if (!lowestFRCToNextPoint.equals(other.lowestFRCToNextPoint))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "LocationReferencePoint: \n"
+				+ "\tBearing: " + bearing + "\n"
+				+ "\tCoordinate: " + coordinate + "\n"
+				+ "\tDNP: " + distanceToNextPoint + "\n"
+				+ "\tFOW: " + formOfWay + "\n"
+				+ "\tFRC: " + functionalRoadClass + "\n"
+				+ "\tLFRCNP: " + lowestFRCToNextPoint + "\n";
+	}
+
 }

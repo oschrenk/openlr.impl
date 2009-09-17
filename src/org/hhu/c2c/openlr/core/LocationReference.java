@@ -229,4 +229,66 @@ public class LocationReference {
 	public boolean hasPositiveOffset() {
 		return positiveOffset.getDistance() != 0;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (areaFlag ? 1231 : 1237);
+		result = prime * result + (attributeFlag ? 1231 : 1237);
+		result = prime * result
+				+ ((negativeOffset == null) ? 0 : negativeOffset.hashCode());
+		result = prime * result + ((points == null) ? 0 : points.hashCode());
+		result = prime * result
+				+ ((positiveOffset == null) ? 0 : positiveOffset.hashCode());
+		result = prime * result + version;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LocationReference other = (LocationReference) obj;
+		if (areaFlag != other.areaFlag)
+			return false;
+		if (attributeFlag != other.attributeFlag)
+			return false;
+		if (negativeOffset == null) {
+			if (other.negativeOffset != null)
+				return false;
+		} else if (!negativeOffset.equals(other.negativeOffset))
+			return false;
+		if (points == null) {
+			if (other.points != null)
+				return false;
+		} else if (!points.equals(other.points))
+			return false;
+		if (positiveOffset == null) {
+			if (other.positiveOffset != null)
+				return false;
+		} else if (!positiveOffset.equals(other.positiveOffset))
+			return false;
+		if (version != other.version)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "LocationReference: \n"
+				+ "\tAF: " + areaFlag + "\n"
+				+ "\tAtF: " + attributeFlag + "\n"
+				+ "\tVER: " + version + "\n"
+				+ "\tPOFF: " + positiveOffset + "\n"
+				+ "\tNOFF: " + negativeOffset + "\n"
+		
+				+ "\tPoints: \n" + points + "\n";
+				
+	}
+
 }
