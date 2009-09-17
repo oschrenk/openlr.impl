@@ -62,7 +62,6 @@ public class Decoder {
 		ByteArrayFiFo fifo = new ByteArrayFiFo(bytes);
 
 		LocationReferenceBuilder lrb = new LocationReferenceBuilder();
-		lrb.start();
 
 		// read header byte
 		lrb
@@ -99,7 +98,7 @@ public class Decoder {
 		boolean negativeOffsetFlag = (fifo.peek() & NEGATIVE_OFFSET_FLAG_BITMASK) == NEGATIVE_OFFSET_FLAG_BITMASK;
 
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
-		lrb.addLocationReferencePoint(lrpb.get());
+		lrb.addLocationReferencePoint(lrpb.build());
 
 		// check if poffF is set
 		if (positiveOffsetFlag) {
@@ -131,7 +130,7 @@ public class Decoder {
 					.getString("Decoder.Exception.BYTES_NOT_EXHAUSTED")); //$NON-NLS-1$
 		}
 
-		return lrb.get();
+		return lrb.build();
 	}
 
 	/**
@@ -152,7 +151,6 @@ public class Decoder {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(point);
 
-		lrpb.start();
 		lrpb.setCoordinate(CoordinateHelper.getCoordinate(fifo
 				.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_COORDINATE)));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
@@ -163,7 +161,7 @@ public class Decoder {
 				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
 		lrpb.setDnp(Distance.newDistance(fifo.pop()));
-		return lrpb.get();
+		return lrpb.build();
 	}
 
 	/**
@@ -217,7 +215,6 @@ public class Decoder {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(currentPoint);
 
-		lrpb.start();
 		lrpb.setCoordinate(getCoordinate(previous, fifo));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> FRC_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
@@ -228,6 +225,6 @@ public class Decoder {
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
 		lrpb.setDnp(Distance.newDistance(fifo.pop()));
 
-		return lrpb.get();
+		return lrpb.build();
 	}
 }
