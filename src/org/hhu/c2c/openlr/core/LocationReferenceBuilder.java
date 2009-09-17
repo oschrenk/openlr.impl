@@ -58,7 +58,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#hasAreaFlag()
 	 */
-	transient private boolean areaFlag;
+	private boolean areaFlag;
 
 	/**
 	 * The <code>AF</code> (<b>attribute flag</b>) indicates whether there are
@@ -73,7 +73,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#hasAttributeFlag()
 	 **/
-	transient private boolean attributeFlag;
+	private boolean attributeFlag;
 
 	/**
 	 * The <code>NOFF</code> (<b>negative offset</b>) value indicates the
@@ -82,12 +82,12 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#getNegativeOffset()
 	 */
-	transient private Distance negativeOffset;
+	private Distance negativeOffset;
 
 	/**
 	 * Holds a list of location reference points.
 	 */
-	transient private List<LocationReferencePoint> points;
+	private List<LocationReferencePoint> points;
 
 	/**
 	 * The <code>POFF</code> (<b>positive offset</b>) value indicates the
@@ -96,7 +96,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#getPositiveOffset()
 	 */
-	transient private Distance positiveOffset;
+	private Distance positiveOffset;
 
 	/**
 	 * The version is used to distinguish between several physical and data
@@ -107,7 +107,7 @@ public class LocationReferenceBuilder implements
 	 * 
 	 * @see LocationReference#getVersion()
 	 */
-	transient private byte version;
+	private byte version;
 
 	/**
 	 * 
