@@ -15,7 +15,7 @@ public class Messages {
 	/**
 	 * The bundle name
 	 */
-	private static final String BUNDLE_NAME = "org.hhu.c2c.openlr.i10n"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.hhu.c2c.openlr.l10n.messages"; //$NON-NLS-1$
 
 	/** Holds the localization bundle */
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
