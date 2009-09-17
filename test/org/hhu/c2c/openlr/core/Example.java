@@ -41,25 +41,24 @@ public class Example {
 			throws ValidationException {
 		LocationReferenceBuilder lrb = new LocationReferenceBuilder();
 
-		lrb.start();
 		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()
-				.start().setCoordinate(6.12683f, 49.60851f).setFrc(
+				.setCoordinate(6.12683f, 49.60851f).setFrc(
 						FunctionalRoadClass.THIRD_CLASS_ROAD).setFow(
 						FormOfWay.MULTIPLE_CARRIAGEWAY).setLfrcnp(
 						FunctionalRoadClass.THIRD_CLASS_ROAD).setBearing(135f)
-				.setDnp(561).get());
+				.setDnp(561).build());
 		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()
-				.start().setCoordinate(6.12838f, 49.60398f).setFrc(
+				.setCoordinate(6.12838f, 49.60398f).setFrc(
 						FunctionalRoadClass.THIRD_CLASS_ROAD).setFow(
 						FormOfWay.SINGLE_CARRIAGEWAY).setLfrcnp(
 						FunctionalRoadClass.FIFTH_CLASS_ROAD).setBearing(227f)
-				.setDnp(274).get());
+				.setDnp(274).build());
 		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()
-				.start().setCoordinate(6.12817f, 49.60305f).setFrc(
+				.setCoordinate(6.12817f, 49.60305f).setFrc(
 						FunctionalRoadClass.FIFTH_CLASS_ROAD).setFow(
-						FormOfWay.SINGLE_CARRIAGEWAY).setBearing(290f).get());
+						FormOfWay.SINGLE_CARRIAGEWAY).setBearing(290f).build());
 		lrb.setPositiveOffset(150);
-		return lrb.get();
+		return lrb.build();
 	}
 
 }

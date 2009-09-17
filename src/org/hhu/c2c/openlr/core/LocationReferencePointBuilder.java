@@ -61,10 +61,10 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
-	 * {@link Builder#get()}
+	 * {@link Builder#build()}
 	 */
 	@Override
-	public LocationReferencePoint get() throws ValidationException {
+	public LocationReferencePoint build() throws ValidationException {
 		// TODO what if last point
 		// TODO test distances < 15000, when constructing
 		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
@@ -209,10 +209,10 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
-	 * {@link Builder#start()}
+	 * {@link Builder#reset()}
 	 */
 	@Override
-	public LocationReferencePointBuilder start() {
+	public LocationReferencePointBuilder reset() {
 		init();
 		return this;
 	}

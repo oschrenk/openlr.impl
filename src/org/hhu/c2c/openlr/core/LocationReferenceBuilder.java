@@ -110,6 +110,14 @@ public class LocationReferenceBuilder implements
 	private byte version;
 
 	/**
+	 * Constructs a new {@link LocationReferenceBuilder} that helps building new
+	 * location references.
+	 */
+	public LocationReferenceBuilder() {
+		init();
+	}
+
+	/**
 	 * 
 	 * @param point
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
@@ -123,10 +131,10 @@ public class LocationReferenceBuilder implements
 	}
 
 	/**
-	 * {@link Builder#get()}
+	 * {@link Builder#build()}
 	 */
 	@Override
-	public LocationReference get() throws ValidationException {
+	public LocationReference build() throws ValidationException {
 		validate();
 		return new LocationReference(areaFlag, attributeFlag, version, points,
 				positiveOffset, negativeOffset);
@@ -248,10 +256,10 @@ public class LocationReferenceBuilder implements
 	}
 
 	/**
-	 * {@link Builder#start()}
+	 * {@link Builder#reset()}
 	 */
 	@Override
-	public LocationReferenceBuilder start() {
+	public LocationReferenceBuilder reset() {
 		init();
 		return this;
 	}

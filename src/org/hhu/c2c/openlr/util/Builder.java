@@ -20,15 +20,14 @@ public interface Builder<B, O> {
 	 * @return the final object
 	 * @throws ValidationException
 	 */
-	O get() throws ValidationException;
+	O build() throws ValidationException;
 
 	/**
-	 * When called the implementing builder should reset and init the current
-	 * <i>product</i>
+	 * Resets the construction
 	 * 
 	 * @return The class of the builder for use in a fluid interface
 	 */
-	B start();
+	B reset();
 
 	/**
 	 * Checks if the current state of the object being built describes a valid
