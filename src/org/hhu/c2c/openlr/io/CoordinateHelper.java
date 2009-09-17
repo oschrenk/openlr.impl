@@ -27,12 +27,12 @@ public class CoordinateHelper {
 	 *            the previous coordinat
 	 * @return a byte array representation of a relative coordinate
 	 */
-	protected static byte[] getByteArrayRepresentation(final Coordinate current,
-			final Coordinate previous) {
-		int longitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
-				.getLongitude() - previous.getLongitude()));
-		int latitude = (int) (RELATIVE_FORMAT_INT_MULTIPLIER * (current
-				.getLatitude() - previous.getLatitude()));
+	protected static byte[] getByteArrayRepresentation(
+			final Coordinate current, final Coordinate previous) {
+		int longitude = Math.round((RELATIVE_FORMAT_INT_MULTIPLIER * (current
+				.getLongitude() - previous.getLongitude())));
+		int latitude = Math.round((RELATIVE_FORMAT_INT_MULTIPLIER * (current
+				.getLatitude() - previous.getLatitude())));
 
 		byte[] relativeCoordinate = new byte[NUMBER_OF_BYTES_FOR_RELATIVE_COORDINATE];
 		relativeCoordinate[0] = (byte) (longitude >> 8);
@@ -46,12 +46,15 @@ public class CoordinateHelper {
 	 * Returns a longitude or latitude encoded as a float as a byte array
 	 * representation
 	 * 
-	 * @param angularMeasurement longitude or latitude in degree
+	 * @param angularMeasurement
+	 *            longitude or latitude in degree
 	 * @return a byte array representation of a longitude or latitude
 	 */
-	protected static byte[] getByteArrayRepresentation(final float angularMeasurement) {
+	protected static byte[] getByteArrayRepresentation(
+			final float angularMeasurement) {
 		byte[] longOrLat = new byte[NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT];
-		long longitude = CoordinateHelper.getLongRepresentation(angularMeasurement);
+		long longitude = CoordinateHelper
+				.getLongRepresentation(angularMeasurement);
 		longOrLat[0] = (byte) (longitude >> 16);
 		longOrLat[1] = (byte) (longitude >> 8);
 		longOrLat[2] = (byte) (longitude >> 0);
@@ -114,7 +117,7 @@ public class CoordinateHelper {
 		int relativeCoordinate = coordinate[0] << 8;
 		return relativeCoordinate | coordinate[1];
 	}
-	
+
 	/**
 	 * Creates a new {@link Coordinate} from the given byte array
 	 * 
@@ -132,7 +135,8 @@ public class CoordinateHelper {
 
 		return new Coordinate(CoordinateHelper
 				.getFloatRepresentation(getLongitude(coordinate)),
-				CoordinateHelper.getFloatRepresentation(getLatitude(coordinate)));
+				CoordinateHelper
+						.getFloatRepresentation(getLatitude(coordinate)));
 	}
 
 	/**
