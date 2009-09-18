@@ -18,8 +18,6 @@ import org.hhu.c2c.openlr.util.ValidationException;
 public class LocationReferenceBuilder implements
 		Builder<LocationReferenceBuilder, LocationReference> {
 
-	// TODO test distances
-
 	/**
 	 * Declares the default value for the area flag. As of right now, the
 	 * protocol doesn't support location references describing areas, so this
