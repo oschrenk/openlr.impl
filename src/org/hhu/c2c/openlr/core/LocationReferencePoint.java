@@ -64,7 +64,7 @@ public class LocationReferencePoint {
 	// TODO set to a default value like -1 or so when last point?
 
 	/**
-	 * Constructs a new location reference point, wihtout a value for lfrcnp and
+	 * Constructs a new location reference point, without a value for lfrcnp and
 	 * distance, indicating that it is used to describe the last point of a
 	 * location reference.
 	 * 
@@ -252,13 +252,11 @@ public class LocationReferencePoint {
 
 	@Override
 	public String toString() {
-		return "LocationReferencePoint: \n"
-				+ "\tBearing: " + bearing + "\n"
-				+ "\tCoordinate: " + coordinate + "\n"
-				+ "\tDNP: " + distanceToNextPoint + "\n"
-				+ "\tFOW: " + formOfWay + "\n"
-				+ "\tFRC: " + functionalRoadClass + "\n"
-				+ "\tLFRCNP: " + lowestFRCToNextPoint + "\n";
+		return "LocationReferencePoint: \n" + "\tBearing: " + bearing + "\n"
+				+ "\tCoordinate: " + coordinate + "\n" + "\tDNP: "
+				+ distanceToNextPoint + "\n" + "\tFOW: " + formOfWay + "\n"
+				+ "\tFRC: " + functionalRoadClass + "\n" + "\tLFRCNP: "
+				+ lowestFRCToNextPoint + "\n";
 	}
 
 }

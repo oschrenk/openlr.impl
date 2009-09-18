@@ -64,7 +64,6 @@ public class LocationReferencePointBuilder implements
 	 */
 	@Override
 	public LocationReferencePoint build() throws ValidationException {
-		// TODO what if last point
 		// TODO test distances < 15000, when constructing
 		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
 				bearing, dnp);
@@ -111,7 +110,7 @@ public class LocationReferencePointBuilder implements
 	 * Sets the coordinate
 	 * 
 	 * @param coordinate
-	 *            the new cordinate
+	 *            the new coordinate
 	 * @return the same instance of this {@link LocationReferencePointBuilder}
 	 *         for use in a fluid interface
 	 */

@@ -23,7 +23,7 @@ public class CoordinateHelper {
 	 * @param current
 	 *            the current coordinate
 	 * @param previous
-	 *            the previous coordinat
+	 *            the previous coordinate
 	 * @return a byte array representation of a relative coordinate
 	 */
 	protected static byte[] getByteArrayRepresentation(
@@ -80,7 +80,7 @@ public class CoordinateHelper {
 	}
 
 	/**
-	 * Returns the float represenation of longitude or latitude encoded as a
+	 * Returns the float representation of longitude or latitude encoded as a
 	 * long value
 	 * 
 	 * @param degree
@@ -98,7 +98,7 @@ public class CoordinateHelper {
 	 * 
 	 * @param degree
 	 *            a longitude or latitude
-	 * @return the long representation of the longitude (ot latitude)
+	 * @return the long representation of the longitude (or latitude)
 	 */
 	private static long getLongRepresentation(final float degree) {
 		return (long) (Math.signum(degree) / 2 + (degree / 360)

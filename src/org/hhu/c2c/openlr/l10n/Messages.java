@@ -45,7 +45,7 @@ public class Messages {
 	 * 
 	 * @param key
 	 * @param objects
-	 *            the objects thatare used in the formatted string
+	 *            the objects that are used in the formatted string
 	 * @return the formatted bundle string with the given key
 	 */
 	public static String getString(String key, Object... objects) {

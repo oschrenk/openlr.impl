@@ -16,7 +16,7 @@ public enum FormOfWay {
 	UNDEFINED(0, Messages.getString("FormOfWay.Text.UNDEFINED")), //$NON-NLS-1$
 
 	/**
-	 * A Motorway is defined as a road permitted for motorized vehicles only in
+	 * A motorway is defined as a road permitted for motorized vehicles only in
 	 * combination with a prescribed minimum speed. It has two or more
 	 * physically separated carriageways and no single level-crossings.
 	 */
@@ -36,7 +36,7 @@ public enum FormOfWay {
 	SINGLE_CARRIAGEWAY(3, Messages.getString("FormOfWay.Text.SINGLE_CARRIAGEWAY")), //$NON-NLS-1$
 
 	/**
-	 * A Roundabout is a road which forms a ring on which traffic travelling in
+	 * A Roundabout is a road which forms a ring on which traffic traveling in
 	 * only one direction is allowed.
 	 */
 	ROUNDABOUT(4, Messages.getString("FormOfWay.Text.ROUNDABOUT")), //$NON-NLS-1$
@@ -77,7 +77,7 @@ public enum FormOfWay {
 	 * @param fow
 	 *            the byte containing the form of way encoded as the last three
 	 *            significant bits of a byte
-	 * @return the form of way corrsesponding to the byte value of the three
+	 * @return the form of way corresponding to the byte value of the three
 	 *         least significant bits
 	 */
 	public static FormOfWay getFormOfWay(byte fow) {

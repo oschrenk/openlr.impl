@@ -18,7 +18,7 @@ import org.hhu.c2c.openlr.core.LocationReferencePoint;
 import org.hhu.c2c.openlr.geo.Coordinate;
 
 /**
- * Used for marshalling a {@link LocationReference} into a byte stream
+ * Used for marshaling a {@link LocationReference} into a byte stream
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
  * 

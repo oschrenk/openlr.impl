@@ -41,7 +41,7 @@ public class LocationReferenceBuilder implements
 	private static final boolean ATTRIBUTE_FLAG_DEFAULT = true;
 
 	/**
-	 * As of right now the Open LR Standard has only one protocol. By defintion
+	 * As of right now the Open LR Standard has only one protocol. By definition
 	 * the standard version number is <code>2</code>.
 	 * 
 	 * @see #version

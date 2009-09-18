@@ -25,12 +25,12 @@ public class Distance implements Comparable<Distance> {
 	 * Breaks "Single Responsibility Principle" as the class is now also,
 	 * responsible for its own creation. But as this class is very static by
 	 * contract (the protocol definition of Open LR won't change that fast), we
-	 * can accept that. Also we prohibit casses outside this package to access
+	 * can accept that. Also we prohibit cases outside this package to access
 	 * the method.
 	 */
 	/**
 	 * Returns a new distance value by passing a byte value. The whole byte is
-	 * used to compute the distance. Each bit value represents an intervall of
+	 * used to compute the distance. Each bit value represents an interval of
 	 * 56.8 meter in compliance with the data format rules.
 	 * 
 	 * @param distance

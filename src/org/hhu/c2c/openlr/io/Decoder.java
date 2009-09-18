@@ -41,13 +41,13 @@ public class Decoder {
 	 * Converts the given byte array into a location reference
 	 * 
 	 * @param bytes
-	 *            the byte arra representing a location reference
+	 *            the byte array representing a location reference
 	 * @return a location reference
 	 * @throws ValidationException
 	 *             if the location reference trying wasn't valid
 	 * @throws IllegalArgumentException
-	 *             if the byte array is malformed, containing either less or
-	 *             more bytes than required
+	 *             if the byte array is has either less or more bytes than
+	 *             required
 	 */
 	public LocationReference decode(final byte[] bytes)
 			throws ValidationException {
@@ -84,8 +84,8 @@ public class Decoder {
 			lrb.addLocationReferencePoint(point);
 		}
 
-		// we have to prepare the last one very carfully as the last attribute
-		// has info about the last point and the complete lr
+		// we have to prepare the last one very carefully as the last attribute
+		// has info about the last point and the complete location reference
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		lrpb.setCoordinate(getCoordinate(point.getCoordinate(), fifo));
 		lrpb.setFrc(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
@@ -123,7 +123,7 @@ public class Decoder {
 			}
 		}
 
-		// if there are somy bytes left, something went wrong
+		// if there are some bytes left, something went wrong
 		if (fifo.capacity() != 0) {
 			throw new ValidationException(Messages
 					.getString("Decoder.Exception.BYTES_NOT_EXHAUSTED")); //$NON-NLS-1$
@@ -171,7 +171,7 @@ public class Decoder {
 	 * @param previous
 	 *            the coordinate of the previous location reference point
 	 * @param fifo
-	 *            the {@link ByteArrayFiFo} cholding the current location
+	 *            the {@link ByteArrayFiFo} holding the current location
 	 *            reference point
 	 * @return the absolute coordinate of the current location reference point
 	 */
@@ -198,12 +198,12 @@ public class Decoder {
 	 * reference point.
 	 * 
 	 * @param previous
-	 *            The absolute coordinate from the prrevious location reference
+	 *            The absolute coordinate from the previous location reference
 	 *            point
 	 * @param currentPoint
 	 *            the byte array representation of the current relative location
 	 *            reference point
-	 * @return the current location reference point with absolut values
+	 * @return the current location reference point with absolute values
 	 * @throws ValidationException
 	 *             if the location reference point trying to build couldn't be
 	 *             validated

@@ -165,7 +165,7 @@ public class Bearing implements Comparable<Bearing> {
 	 * Breaks "Single Responsibility Principle" as the class is now also,
 	 * responsible for its own creation. But as this class is very static by
 	 * contract (the protocol definition of Open LR won't change that fast), we
-	 * can accept that. Also we prohibit casses outside this package to access
+	 * can accept that. Also we prohibit cases outside this package to access
 	 * the method.
 	 */
 	/**

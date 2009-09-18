@@ -74,7 +74,7 @@ public enum FunctionalRoadClass {
 	 * @param frc
 	 *            the byte containing the functional road class encoded as the
 	 *            last three significant bits of a byte
-	 * @return the functional road class corrsesponding to the byte value of the
+	 * @return the functional road class corresponding to the byte value of the
 	 *         three least significant bits
 	 */
 	public static FunctionalRoadClass getFunctionalRoadClass(byte frc) {
