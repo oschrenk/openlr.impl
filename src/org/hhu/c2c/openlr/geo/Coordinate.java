@@ -16,8 +16,7 @@ import org.hhu.c2c.openlr.l10n.Messages;
  * 
  */
 public class Coordinate {
-	// TODO make sure of five decimal places
-
+	
 	/**
 	 * Holds the latitude, for north-south measuring, represented by horizontal
 	 * lines
