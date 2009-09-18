@@ -76,8 +76,6 @@ public class Distance implements Comparable<Distance> {
 	 * Returns the byte representation of the distance. All 8 bits of a byte are
 	 * used to encode a distance.
 	 * 
-	 * //TODO add tex formula for calculation of the byte value of the distance
-	 * 
 	 * @return the byte representation using the full 8 bits of a byte
 	 */
 	public int getByteRepresentation() {

@@ -152,7 +152,6 @@ package org.hhu.c2c.openlr.core;
  * 
  */
 public class Bearing implements Comparable<Bearing> {
-	// TODO add function to calculate bearing as tex to javadoc
 
 	/**
 	 * Describes a bitmask masking the least five significant bits: "0001 1111"
@@ -226,8 +225,6 @@ public class Bearing implements Comparable<Bearing> {
 	/**
 	 * Returns the byte representation of the bearing. The <code>FRC</code> is
 	 * encoded using five bit, storing 32 values from 0 to 31.
-	 * 
-	 * //TODO add tex formula for calculation of bearing
 	 * 
 	 * @return the byte representation using the five least significant bits
 	 */

@@ -124,7 +124,6 @@ public class LocationReferenceBuilder implements
 	 */
 	public LocationReferenceBuilder addLocationReferencePoint(
 			final LocationReferencePoint point) {
-		// TODO only the last one is allowed to miss dnp & lfrcnp
 		points.add(point);
 		return this;
 	}
@@ -267,11 +266,30 @@ public class LocationReferenceBuilder implements
 	 * Validates the instance of the location reference that is currently being
 	 * built.
 	 */
-	private void validate() {
-		// TODO there have to be at least two points
-		// TODO attribute flag beachten
-		// TODO area flag beachten
-		// TODO versions feld untersuchen, kompabiltität prüfen
+	private void validate() throws ValidationException {
+		// TODO move to a new class
+		if (points.size() < Rules.MINIMUM_NUMBER_OF_LR_POINTS) {
+			throw new ValidationException(
+					"There have to be at least %d points.");
+		}
+
+		if (attributeFlag != ATTRIBUTE_FLAG_DEFAULT) {
+			throw new ValidationException("Attribute flag not supported.");
+		}
+
+		if (areaFlag != AREA_FLAG_DEFAULT) {
+			throw new ValidationException("Area flag is nout supported.");
+		}
+
+		if (version != VERSION_NUMBER_DEFAULT) {
+			throw new ValidationException("Protocol version not supported.");
+		}
+
+		boolean malFormedPoints = false;
+		for (LocationReferencePoint point : points) {
+			// TODO check points
+		}
+		// TODO another method for last point?
 	}
 
 	/**
@@ -279,6 +297,11 @@ public class LocationReferenceBuilder implements
 	 */
 	@Override
 	public boolean validates() {
-		return false;
+		try {
+			validate();
+		} catch (ValidationException e) {
+			return false;
+		}
+		return true;
 	}
 }
