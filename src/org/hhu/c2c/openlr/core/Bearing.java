@@ -209,27 +209,13 @@ public class Bearing implements Comparable<Bearing> {
 	}
 
 	/**
-	 * Returns the byte value of the bearing using only the five least
-	 * significant bits.
-	 * 
-	 * @param degree
-	 *            the degree
-	 * @return the byte value of the bearing using only the five least
-	 *         significant bits.
-	 */
-	private byte getBearing(final float degree) {
-		// can only be between 0 and 31
-		return (byte) (degree / ONE_32TH_CIRCLE);
-	}
-
-	/**
 	 * Returns the byte representation of the bearing. The <code>FRC</code> is
 	 * encoded using five bit, storing 32 values from 0 to 31.
 	 * 
 	 * @return the byte representation using the five least significant bits
 	 */
-	public byte getByteRepresentation() {
-		return (byte) (getBearing(bearing) & BITMASK);
+	public int getByteRepresentation() {
+		return (byte) (bearing / ONE_32TH_CIRCLE) & BITMASK;
 	}
 
 	/**
