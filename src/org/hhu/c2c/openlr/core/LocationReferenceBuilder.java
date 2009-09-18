@@ -3,6 +3,7 @@ package org.hhu.c2c.openlr.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.Builder;
 import org.hhu.c2c.openlr.util.ValidationException;
 
@@ -270,19 +271,19 @@ public class LocationReferenceBuilder implements
 		// TODO move to a new class
 		if (points.size() < Rules.MINIMUM_NUMBER_OF_LR_POINTS) {
 			throw new ValidationException(
-					"There have to be at least %d points.");
+					Messages.getString("LocationReferenceBuilder.Exception.MINIMUM_NUMBER_OF_POINTS", Rules.MINIMUM_NUMBER_OF_LR_POINTS)); //$NON-NLS-1$
 		}
 
 		if (attributeFlag != ATTRIBUTE_FLAG_DEFAULT) {
-			throw new ValidationException("Attribute flag not supported.");
+			throw new ValidationException(Messages.getString("LocationReferenceBuilder.Exception.ATTRIBUTE_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		if (areaFlag != AREA_FLAG_DEFAULT) {
-			throw new ValidationException("Area flag is nout supported.");
+			throw new ValidationException(Messages.getString("LocationReferenceBuilder.Exception.AREA_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		if (version != VERSION_NUMBER_DEFAULT) {
-			throw new ValidationException("Protocol version not supported.");
+			throw new ValidationException(Messages.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		boolean malFormedPoints = false;
