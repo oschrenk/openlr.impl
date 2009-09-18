@@ -178,8 +178,6 @@ public class LocationReferencePointBuilder implements
 		return this;
 	}
 
-	// TODO better javadoc for lfrcnp
-
 	/**
 	 * Sets the functional road class
 	 * 
@@ -194,7 +192,11 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
-	 * Sets the lowest functional road class to the next point
+	 * The <b>lowest FRC to the next point</b> (<code>LFRCNP</code>) is the
+	 * lowest FRC value which appears in the location reference path between two
+	 * consecutive LR-points. This information could be used to limit the number
+	 * of road classes which need to be scanned during the decoding. The highest
+	 * FRC value is 0 and the lowest possible FRC value is valued with 7.
 	 * 
 	 * @param lfrcnp
 	 *            the new lowest functional road class to the next point
