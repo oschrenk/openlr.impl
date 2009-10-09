@@ -61,8 +61,6 @@ public class LocationReferencePoint {
 	 */
 	private FunctionalRoadClass lowestFRCToNextPoint;
 
-	// TODO set to a default value like -1 or so when last point?
-
 	/**
 	 * Constructs a new location reference point, without a value for lfrcnp and
 	 * distance, indicating that it is used to describe the last point of a
