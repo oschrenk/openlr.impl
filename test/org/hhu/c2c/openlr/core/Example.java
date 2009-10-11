@@ -1,6 +1,6 @@
 package org.hhu.c2c.openlr.core;
 
-import org.hhu.c2c.openlr.util.ValidationException;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * This example data is taken from the OpenLR (v1.0) white paper pp. 36-40
@@ -33,11 +33,11 @@ public class Example {
 	 * {@link LocationReferencePointBuilder} respectively.
 	 * 
 	 * @return the example as a location reference
-	 * @throws ValidationException
+	 * @throws LocationReferenceException
 	 *             if the location reference can't be properly decoded
 	 */
 	protected static LocationReference asLocationReference()
-			throws ValidationException {
+			throws LocationReferenceException {
 		LocationReferenceBuilder lrb = new LocationReferenceBuilder();
 
 		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()

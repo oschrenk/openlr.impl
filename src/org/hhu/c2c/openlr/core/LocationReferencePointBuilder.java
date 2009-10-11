@@ -2,7 +2,7 @@ package org.hhu.c2c.openlr.core;
 
 import org.hhu.c2c.openlr.geo.Coordinate;
 import org.hhu.c2c.openlr.util.Builder;
-import org.hhu.c2c.openlr.util.ValidationException;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * The {@link LocationReferencePointBuilder} helps building valid
@@ -63,7 +63,7 @@ public class LocationReferencePointBuilder implements
 	 * {@link Builder#build()}
 	 */
 	@Override
-	public LocationReferencePoint build() throws ValidationException {
+	public LocationReferencePoint build() throws LocationReferenceException {
 		// TODO test distances < 15000, when constructing
 		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
 				bearing, dnp);
@@ -221,7 +221,7 @@ public class LocationReferencePointBuilder implements
 	 * {@link Builder#validate()}
 	 */
 	@Override
-	public void validate() throws ValidationException {
+	public void validate() throws LocationReferenceException {
 		
 	}
 

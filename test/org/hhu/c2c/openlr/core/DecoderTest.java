@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.hhu.c2c.openlr.io.Decoder;
 import org.hhu.c2c.openlr.io.Encoder;
-import org.hhu.c2c.openlr.util.ValidationException;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 import org.junit.Test;
 
 /**
@@ -31,7 +31,7 @@ public class DecoderTest {
 			new Encoder().write(out, Example.asLocationReference());
 			LocationReference lr = new Decoder().decode(out.toByteArray());
 			assertEquals(new Decoder().decode(Example.asBinaryInputStream()), lr);
-		} catch (ValidationException e) {
+		} catch (LocationReferenceException e) {
 			fail(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {

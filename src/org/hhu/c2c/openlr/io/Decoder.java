@@ -27,7 +27,7 @@ import org.hhu.c2c.openlr.core.LocationReferencePointBuilder;
 import org.hhu.c2c.openlr.geo.Coordinate;
 import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.ByteArrayFiFo;
-import org.hhu.c2c.openlr.util.ValidationException;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * Used for unmarshalling a byte representation of a location reference.
@@ -43,16 +43,16 @@ public class Decoder {
 	 * @param bytes
 	 *            the byte array representing a location reference
 	 * @return a location reference
-	 * @throws ValidationException
+	 * @throws LocationReferenceException
 	 *             if the location reference trying wasn't valid
 	 * @throws IllegalArgumentException
 	 *             if the byte array is has either less or more bytes than
 	 *             required
 	 */
 	public LocationReference decode(final byte[] bytes)
-			throws ValidationException {
+			throws LocationReferenceException {
 		if (bytes.length < MINIMUM_NUMBER_OF_BYTES) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString(
 									"Decoder.Exception.MINIMUM_NUMBER_OF_BYTES", MINIMUM_NUMBER_OF_BYTES)); //$NON-NLS-1$
@@ -105,7 +105,7 @@ public class Decoder {
 			if (fifo.capacity() > 0) {
 				lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
 			} else {
-				throw new ValidationException(
+				throw new LocationReferenceException(
 						Messages
 								.getString("Decoder.Exception.POSITIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
 			}
@@ -117,7 +117,7 @@ public class Decoder {
 			if (fifo.capacity() > 0) {
 				lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
 			} else {
-				throw new ValidationException(
+				throw new LocationReferenceException(
 						Messages
 								.getString("Decoder.Exception.NEGATIVE_OFFSET_NOT_FOUND")); //$NON-NLS-1$
 			}
@@ -125,7 +125,7 @@ public class Decoder {
 
 		// if there are some bytes left, something went wrong
 		if (fifo.capacity() != 0) {
-			throw new ValidationException(Messages
+			throw new LocationReferenceException(Messages
 					.getString("Decoder.Exception.BYTES_NOT_EXHAUSTED")); //$NON-NLS-1$
 		}
 
@@ -141,12 +141,12 @@ public class Decoder {
 	 *            the byte representation of a location reference point with an
 	 *            absolute coordinate
 	 * @return the location reference point
-	 * @throws ValidationException
+	 * @throws LocationReferenceException
 	 *             if the location reference point trying to build couldn't be
 	 *             validated
 	 */
 	private LocationReferencePoint getAbsoluteLRP(final byte[] point)
-			throws ValidationException {
+			throws LocationReferenceException {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(point);
 
@@ -204,13 +204,13 @@ public class Decoder {
 	 *            the byte array representation of the current relative location
 	 *            reference point
 	 * @return the current location reference point with absolute values
-	 * @throws ValidationException
+	 * @throws LocationReferenceException
 	 *             if the location reference point trying to build couldn't be
 	 *             validated
 	 */
 	private LocationReferencePoint getLRPfromRelative(
 			final Coordinate previous, final byte[] currentPoint)
-			throws ValidationException {
+			throws LocationReferenceException {
 		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 		ByteArrayFiFo fifo = new ByteArrayFiFo(currentPoint);
 

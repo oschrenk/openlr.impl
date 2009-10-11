@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.hhu.c2c.openlr.io.Encoder;
-import org.hhu.c2c.openlr.util.ValidationException;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 import org.junit.Test;
 
 
@@ -32,7 +32,7 @@ public class EncoderTest {
 				assertEquals(Example.asBinaryInputStream()[i],actual[i]);
 			}
 			
-		} catch (ValidationException e) {
+		} catch (LocationReferenceException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();

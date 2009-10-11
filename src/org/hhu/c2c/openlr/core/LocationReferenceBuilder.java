@@ -6,7 +6,7 @@ import java.util.List;
 import org.hhu.c2c.openlr.geo.Coordinate;
 import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.Builder;
-import org.hhu.c2c.openlr.util.ValidationException;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * The <b>location reference factory</b> is used for creating and receiving byte
@@ -193,7 +193,7 @@ public class LocationReferenceBuilder implements
 	 * {@link Builder#build()}
 	 */
 	@Override
-	public LocationReference build() throws ValidationException {
+	public LocationReference build() throws LocationReferenceException {
 		validate();
 		return new LocationReference(areaFlag, attributeFlag, version, points,
 				positiveOffset, negativeOffset);
@@ -327,41 +327,41 @@ public class LocationReferenceBuilder implements
 	 * Validates the instance of the location reference that is currently being
 	 * built.
 	 */
-	public void validate() throws ValidationException {
+	public void validate() throws LocationReferenceException {
 		if (points.size() < Rules.MINIMUM_NUMBER_OF_LR_POINTS) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString(
 									"LocationReferenceBuilder.Exception.MINIMUM_NUMBER_OF_POINTS", Rules.MINIMUM_NUMBER_OF_LR_POINTS)); //$NON-NLS-1$
 		}
 
 		if (attributeFlag != ATTRIBUTE_FLAG_DEFAULT) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.ATTRIBUTE_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		if (areaFlag != AREA_FLAG_DEFAULT) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.AREA_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		if (version != VERSION_NUMBER_DEFAULT) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 		
 		LocationReferencePoint lastPoint = points.get(points.size());
 		if (lastPoint.getDistanceToNextPoint().getDistance() > 0) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_DISTANCE")); //$NON-NLS-1$
 		}
 		
 		if (lastPoint.getLowestFRCToNextPoint() != null) {
-			throw new ValidationException(
+			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_LFRCNP")); //$NON-NLS-1$
 		}
