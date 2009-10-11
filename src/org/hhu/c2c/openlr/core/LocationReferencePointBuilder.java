@@ -218,11 +218,11 @@ public class LocationReferencePointBuilder implements
 	}
 
 	/**
-	 * {@link Builder#validates()}
+	 * {@link Builder#validate()}
 	 */
 	@Override
-	public boolean validates() {
-		// TODO Auto-generated method stub
-		return false;
+	public void validate() throws ValidationException {
+		
 	}
+
 }

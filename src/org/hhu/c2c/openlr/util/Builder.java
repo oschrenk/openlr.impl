@@ -31,9 +31,7 @@ public interface Builder<B, O> {
 	/**
 	 * Checks if the current state of the object being built describes a valid
 	 * object
-	 * 
-	 * @return <code>true</code> if the current state of the object being built
-	 *         describes a valid object, <code>false</code> otherwise
+	 * @throws ValidationException 
 	 */
-	boolean validates();
+	void validate() throws ValidationException;
 }
