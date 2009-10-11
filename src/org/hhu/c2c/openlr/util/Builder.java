@@ -17,9 +17,9 @@ public interface Builder<B, O> {
 	/**
 	 * 
 	 * @return the final object
-	 * @throws ValidationException
+	 * @throws LocationReferenceException
 	 */
-	O build() throws ValidationException;
+	O build() throws LocationReferenceException;
 
 	/**
 	 * Resets the construction
@@ -31,7 +31,7 @@ public interface Builder<B, O> {
 	/**
 	 * Checks if the current state of the object being built describes a valid
 	 * object
-	 * @throws ValidationException 
+	 * @throws LocationReferenceException 
 	 */
-	void validate() throws ValidationException;
+	void validate() throws LocationReferenceException;
 }
