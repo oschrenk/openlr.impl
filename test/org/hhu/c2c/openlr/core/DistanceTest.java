@@ -2,6 +2,7 @@ package org.hhu.c2c.openlr.core;
 
 import static org.junit.Assert.assertEquals;
 
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 import org.junit.Test;
 
 /**
@@ -15,7 +16,7 @@ public class DistanceTest {
 	/**
 	 * Tests various edge cases for constructing
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = LocationReferenceException.class)
 	public void testConstructing() {
 		new Distance(-1);
 		new Distance(Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + 1);
@@ -33,7 +34,7 @@ public class DistanceTest {
 		for (int i = 0; i < 15000; i++) {
 			distance = new Distance(i);
 			assertEquals("Expected to be equal", distance.getDistance(),
-					Distance.newDistance(distance.getByteRepresentation())
+					new Distance(distance.getByteRepresentation())
 							.getDistance(), 59f);
 		}
 	}
