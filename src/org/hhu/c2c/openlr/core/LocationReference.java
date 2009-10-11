@@ -13,7 +13,6 @@ import java.util.List;
  * a shortest-path calculation between each consecutive pair of LR- points.
  * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
-
  * 
  */
 public class LocationReference {
@@ -280,15 +279,13 @@ public class LocationReference {
 
 	@Override
 	public String toString() {
-		return "LocationReference: \n"
-				+ "\tAF: " + areaFlag + "\n"
-				+ "\tAtF: " + attributeFlag + "\n"
-				+ "\tVER: " + version + "\n"
-				+ "\tPOFF: " + positiveOffset + "\n"
-				+ "\tNOFF: " + negativeOffset + "\n"
-		
+		return "LocationReference: \n" + "\tAF: " + areaFlag + "\n" + "\tAtF: "
+				+ attributeFlag + "\n" + "\tVER: " + version + "\n"
+				+ "\tPOFF: " + positiveOffset + "\n" + "\tNOFF: "
+				+ negativeOffset + "\n"
+
 				+ "\tPoints: \n" + points + "\n";
-				
+
 	}
 
 }
