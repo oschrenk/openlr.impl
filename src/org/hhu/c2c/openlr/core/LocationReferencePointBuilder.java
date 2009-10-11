@@ -64,7 +64,6 @@ public class LocationReferencePointBuilder implements
 	 */
 	@Override
 	public LocationReferencePoint build() throws LocationReferenceException {
-		// TODO test distances < 15000, when constructing
 		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
 				bearing, dnp);
 	}
