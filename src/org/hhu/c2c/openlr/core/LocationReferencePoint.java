@@ -143,7 +143,6 @@ public class LocationReferencePoint {
 	 * @return the distance to the next location reference point
 	 */
 	public Distance getDistanceToNextPoint() {
-		// TODO the last lr point has distance = 0?
 		return distanceToNextPoint;
 	}
 
