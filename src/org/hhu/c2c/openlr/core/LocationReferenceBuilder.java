@@ -107,7 +107,7 @@ public class LocationReferenceBuilder implements
 	 * @see LocationReference#getVersion()
 	 */
 	private byte version;
-	
+
 	/**
 	 * Constructs a new {@link LocationReferenceBuilder} that helps building new
 	 * location references.
@@ -119,7 +119,8 @@ public class LocationReferenceBuilder implements
 	/**
 	 * Adds a new location reference point to the location reference.
 	 * 
-	 * @param point a location reference point
+	 * @param point
+	 *            a location reference point
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
@@ -161,7 +162,7 @@ public class LocationReferenceBuilder implements
 				distance)));
 		return this;
 	}
-	
+
 	/**
 	 * Adds the last location reference point
 	 * 
@@ -178,17 +179,16 @@ public class LocationReferenceBuilder implements
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
-	public LocationReferenceBuilder close(
-			final float longitude, final float latitude,
-			final FunctionalRoadClass frc, final FormOfWay fow,
-			final float bearing) {
-		
+	public LocationReferenceBuilder close(final float longitude,
+			final float latitude, final FunctionalRoadClass frc,
+			final FormOfWay fow, final float bearing) {
+
 		// TODO catch IllegalArgumentException
 		points.add(new LocationReferencePoint(new Coordinate(longitude,
-				latitude), frc, fow, new Bearing(bearing) ));
+				latitude), frc, fow, new Bearing(bearing)));
 		return this;
 	}
-	
+
 	/**
 	 * {@link Builder#build()}
 	 */
@@ -352,20 +352,20 @@ public class LocationReferenceBuilder implements
 					Messages
 							.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
-		
+
 		LocationReferencePoint lastPoint = points.get(points.size());
 		if (lastPoint.getDistanceToNextPoint().getDistance() > 0) {
 			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_DISTANCE")); //$NON-NLS-1$
 		}
-		
+
 		if (lastPoint.getLowestFRCToNextPoint() != null) {
 			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_LFRCNP")); //$NON-NLS-1$
 		}
-		
+
 		// TODO one might still add multiple last points
 	}
 }
