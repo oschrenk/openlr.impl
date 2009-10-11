@@ -3,6 +3,7 @@ package org.hhu.c2c.openlr.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hhu.c2c.openlr.geo.Coordinate;
 import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.Builder;
 import org.hhu.c2c.openlr.util.ValidationException;
@@ -106,7 +107,7 @@ public class LocationReferenceBuilder implements
 	 * @see LocationReference#getVersion()
 	 */
 	private byte version;
-
+	
 	/**
 	 * Constructs a new {@link LocationReferenceBuilder} that helps building new
 	 * location references.
@@ -116,8 +117,9 @@ public class LocationReferenceBuilder implements
 	}
 
 	/**
+	 * Adds a new location reference point to the location reference.
 	 * 
-	 * @param point
+	 * @param point a location reference point
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
 	 */
@@ -127,6 +129,66 @@ public class LocationReferenceBuilder implements
 		return this;
 	}
 
+	/**
+	 * Adds a new location reference point to the location reference.
+	 * 
+	 * @param longitude
+	 *            the longitude of the coordinate
+	 * @param latitude
+	 *            the latitude of the coordinate
+	 * @param frc
+	 *            the functional road class
+	 * @param fow
+	 *            the form of way
+	 * @param lfrcnp
+	 *            the lowest functional road class to the next point
+	 * @param bearing
+	 *            the bearing the distance
+	 * @param distance
+	 *            the distance to the next point
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder addLocationReferencePoint(
+			final float longitude, final float latitude,
+			final FunctionalRoadClass frc, final FormOfWay fow,
+			final FunctionalRoadClass lfrcnp, final float bearing,
+			final int distance) {
+
+		// TODO catch IllegalArgumentException
+		points.add(new LocationReferencePoint(new Coordinate(longitude,
+				latitude), frc, fow, frc, new Bearing(bearing), new Distance(
+				distance)));
+		return this;
+	}
+	
+	/**
+	 * Adds the last location reference point
+	 * 
+	 * @param longitude
+	 *            the longitude of the coordinate
+	 * @param latitude
+	 *            the latitude of the coordinate
+	 * @param frc
+	 *            the functional road class
+	 * @param fow
+	 *            the form of way
+	 * @param bearing
+	 *            the bearing the distance
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 */
+	public LocationReferenceBuilder close(
+			final float longitude, final float latitude,
+			final FunctionalRoadClass frc, final FormOfWay fow,
+			final float bearing) {
+		
+		// TODO catch IllegalArgumentException
+		points.add(new LocationReferencePoint(new Coordinate(longitude,
+				latitude), frc, fow, new Bearing(bearing) ));
+		return this;
+	}
+	
 	/**
 	 * {@link Builder#build()}
 	 */
@@ -265,42 +327,45 @@ public class LocationReferenceBuilder implements
 	 * Validates the instance of the location reference that is currently being
 	 * built.
 	 */
-	private void validate() throws ValidationException {
-		// TODO move to a new class
+	public void validate() throws ValidationException {
 		if (points.size() < Rules.MINIMUM_NUMBER_OF_LR_POINTS) {
 			throw new ValidationException(
-					Messages.getString("LocationReferenceBuilder.Exception.MINIMUM_NUMBER_OF_POINTS", Rules.MINIMUM_NUMBER_OF_LR_POINTS)); //$NON-NLS-1$
+					Messages
+							.getString(
+									"LocationReferenceBuilder.Exception.MINIMUM_NUMBER_OF_POINTS", Rules.MINIMUM_NUMBER_OF_LR_POINTS)); //$NON-NLS-1$
 		}
 
 		if (attributeFlag != ATTRIBUTE_FLAG_DEFAULT) {
-			throw new ValidationException(Messages.getString("LocationReferenceBuilder.Exception.ATTRIBUTE_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
+			throw new ValidationException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.ATTRIBUTE_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		if (areaFlag != AREA_FLAG_DEFAULT) {
-			throw new ValidationException(Messages.getString("LocationReferenceBuilder.Exception.AREA_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
+			throw new ValidationException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.AREA_FLAG_IS_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
 		if (version != VERSION_NUMBER_DEFAULT) {
-			throw new ValidationException(Messages.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
+			throw new ValidationException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
-
-		boolean malFormedPoints = false;
-		for (LocationReferencePoint point : points) {
-			// TODO check points
+		
+		LocationReferencePoint lastPoint = points.get(points.size());
+		if (lastPoint.getDistanceToNextPoint().getDistance() > 0) {
+			throw new ValidationException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_DISTANCE")); //$NON-NLS-1$
 		}
-		// TODO another method for last point?
-	}
-
-	/**
-	 * {@link Builder#validates()}
-	 */
-	@Override
-	public boolean validates() {
-		try {
-			validate();
-		} catch (ValidationException e) {
-			return false;
+		
+		if (lastPoint.getLowestFRCToNextPoint() != null) {
+			throw new ValidationException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_LFRCNP")); //$NON-NLS-1$
 		}
-		return true;
+		
+		// TODO one might still add multiple last points
 	}
 }
