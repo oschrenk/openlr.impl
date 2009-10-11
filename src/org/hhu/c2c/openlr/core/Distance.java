@@ -1,6 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
 import org.hhu.c2c.openlr.l10n.Messages;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * The distance describes can be used to describe the distance between two
@@ -25,8 +26,7 @@ public class Distance implements Comparable<Distance> {
 	 * Breaks "Single Responsibility Principle" as the class is now also,
 	 * responsible for its own creation. But as this class is very static by
 	 * contract (the protocol definition of Open LR won't change that fast), we
-	 * can accept that. Also we prohibit cases outside this package to access
-	 * the method.
+	 * can accept that.
 	 */
 	/**
 	 * Returns a new distance value by passing a byte value. The whole byte is
@@ -36,8 +36,24 @@ public class Distance implements Comparable<Distance> {
 	 * @param distance
 	 *            the byte value
 	 * @return a new distance, measured in meter
+	 * @throws LocationReferenceException
+	 *             if the distance violates the first rule of the data format
+	 *             rules
 	 */
-	public static Distance newDistance(final int distance) {
+	public static Distance newDistance(final int distance)
+			throws LocationReferenceException {
+		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS) {
+			throw new LocationReferenceException(
+					Messages
+							.getString(
+									"Distance.Exception.OVER_MAXIMUM", Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS)); //$NON-NLS-1$
+		}
+
+		if (distance < 0) {
+			throw new LocationReferenceException(Messages
+					.getString("Distance.Exception.ONLY_POSITIVE")); //$NON-NLS-1$
+		}
+
 		return new Distance((int) (distance * Rules.ONE_BIT_DISTANCE));
 	}
 
@@ -52,23 +68,8 @@ public class Distance implements Comparable<Distance> {
 	 * 
 	 * @param distance
 	 *            the distance in meter
-	 * @throws IllegalArgumentException
-	 *             if the distance violates the first rule of the data format
-	 *             rules
 	 */
-	public Distance(final int distance) {
-		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS) {
-			throw new IllegalArgumentException(
-					Messages
-							.getString(
-									"Distance.Exception.OVER_MAXIMUM", Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS)); //$NON-NLS-1$
-		}
-
-		if (distance < 0) {
-			throw new IllegalArgumentException(Messages
-					.getString("Distance.Exception.ONLY_POSITIVE")); //$NON-NLS-1$
-		}
-
+	protected Distance(final int distance) {
 		this.distance = distance;
 	}
 
