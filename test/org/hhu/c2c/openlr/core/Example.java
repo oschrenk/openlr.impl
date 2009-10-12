@@ -39,23 +39,21 @@ public class Example {
 	protected static LocationReference asLocationReference()
 			throws LocationReferenceException {
 		LocationReferenceBuilder lrb = new LocationReferenceBuilder();
+		LocationReferencePointBuilder lrpb = new LocationReferencePointBuilder();
 
-		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()
-				.setCoordinate(6.12683f, 49.60851f).setFrc(
-						FunctionalRoadClass.THIRD_CLASS_ROAD).setFow(
+		lrb.addLocationReferencePoint(lrpb.setCoordinate(6.12683f, 49.60851f)
+				.setFrc(FunctionalRoadClass.THIRD_CLASS_ROAD).setFow(
 						FormOfWay.MULTIPLE_CARRIAGEWAY).setLfrcnp(
 						FunctionalRoadClass.THIRD_CLASS_ROAD).setBearing(135f)
 				.setDnp(561).build());
-		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()
-				.setCoordinate(6.12838f, 49.60398f).setFrc(
-						FunctionalRoadClass.THIRD_CLASS_ROAD).setFow(
-						FormOfWay.SINGLE_CARRIAGEWAY).setLfrcnp(
-						FunctionalRoadClass.FIFTH_CLASS_ROAD).setBearing(227f)
-				.setDnp(274).build());
-		lrb.addLocationReferencePoint(new LocationReferencePointBuilder()
-				.setCoordinate(6.12817f, 49.60305f).setFrc(
-						FunctionalRoadClass.FIFTH_CLASS_ROAD).setFow(
-						FormOfWay.SINGLE_CARRIAGEWAY).setBearing(290f).build());
+		lrb.addLocationReferencePoint(lrpb.reset().setCoordinate(6.12838f,
+				49.60398f).setFrc(FunctionalRoadClass.THIRD_CLASS_ROAD).setFow(
+				FormOfWay.SINGLE_CARRIAGEWAY).setLfrcnp(
+				FunctionalRoadClass.FIFTH_CLASS_ROAD).setBearing(227f).setDnp(
+				274).build());
+		lrb.close(lrpb.reset().setCoordinate(6.12817f, 49.60305f).setFrc(
+				FunctionalRoadClass.FIFTH_CLASS_ROAD).setFow(
+				FormOfWay.SINGLE_CARRIAGEWAY).setBearing(290f).build());
 		lrb.setPositiveOffset(150);
 		return lrb.build();
 	}
