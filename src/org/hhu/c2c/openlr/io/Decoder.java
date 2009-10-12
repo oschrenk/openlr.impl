@@ -97,7 +97,7 @@ public class Decoder {
 		boolean negativeOffsetFlag = (fifo.peek() & NEGATIVE_OFFSET_FLAG_BITMASK) == NEGATIVE_OFFSET_FLAG_BITMASK;
 
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
-		lrb.addLocationReferencePoint(lrpb.build());
+		lrb.close(lrpb.build());
 
 		// check if poffF is set
 		if (positiveOffsetFlag) {
