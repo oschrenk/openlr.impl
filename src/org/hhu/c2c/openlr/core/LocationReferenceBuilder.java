@@ -159,7 +159,6 @@ public class LocationReferenceBuilder implements
 			final FunctionalRoadClass lfrcnp, final float bearing,
 			final int distance) throws LocationReferenceException {
 
-		// TODO catch IllegalArgumentException
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
 				longitude, latitude), frc, fow, frc, new Bearing(bearing),
 				Distance.newDistance(distance)));
@@ -189,7 +188,6 @@ public class LocationReferenceBuilder implements
 			final FormOfWay fow, final float bearing)
 			throws LocationReferenceException {
 
-		// TODO catch IllegalArgumentException
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
 				longitude, latitude), frc, fow, new Bearing(bearing)));
 		return this;
