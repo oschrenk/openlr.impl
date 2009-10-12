@@ -109,6 +109,12 @@ public class LocationReferenceBuilder implements
 	private byte version;
 
 	/**
+	 * A counter to see, if the location reference was close properly by calling
+	 * {@link #close(float, float, FunctionalRoadClass, FormOfWay, float)}
+	 */
+	private int closeCounter;
+
+	/**
 	 * Constructs a new {@link LocationReferenceBuilder} that helps building new
 	 * location references.
 	 */
@@ -188,6 +194,8 @@ public class LocationReferenceBuilder implements
 			final FormOfWay fow, final float bearing)
 			throws LocationReferenceException {
 
+		closeCounter++;
+
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
 				longitude, latitude), frc, fow, new Bearing(bearing)));
 		return this;
@@ -213,6 +221,7 @@ public class LocationReferenceBuilder implements
 		this.points = new ArrayList<LocationReferencePoint>();
 		this.positiveOffset = new Distance(0);
 		this.negativeOffset = new Distance(0);
+		this.closeCounter = 0;
 	}
 
 	/**
@@ -370,6 +379,17 @@ public class LocationReferenceBuilder implements
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_LFRCNP")); //$NON-NLS-1$
 		}
 
-		// TODO one might still add multiple last points
+		if (closeCounter == 0) {
+			throw new LocationReferenceException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.LAST_POINT_MISSING")); //$NON-NLS-1$
+		}
+
+		if (closeCounter > 1) {
+			throw new LocationReferenceException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.MULTIPLE_LAST_POINTS")); //$NON-NLS-1$
+		}
+
 	}
 }
