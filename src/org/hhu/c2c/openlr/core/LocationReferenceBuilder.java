@@ -402,6 +402,7 @@ public class LocationReferenceBuilder implements
 							.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
+		// TODO get rid of checks, traversing all points
 		int numberOfPoints = points.size();
 		LocationReferencePoint point;
 
