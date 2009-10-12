@@ -196,7 +196,7 @@ public class Decoder {
 			// this exception should never be thrown as the decoder should
 			// always return a valid value, as the binary encoded bytes can only
 			// represent valid data
-			throw new RuntimeException(Messages.getString("FATAL_ERROR")); //$NON-NLS-1$
+			throw new RuntimeException(Messages.getString("General.Error.GURU_MEDITATION_FAILURE")); //$NON-NLS-1$
 		}
 	}
 
