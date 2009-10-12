@@ -1,6 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
 import org.hhu.c2c.openlr.geo.Coordinate;
+import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.Builder;
 import org.hhu.c2c.openlr.util.LocationReferenceException;
 
@@ -64,6 +65,7 @@ public class LocationReferencePointBuilder implements
 	 */
 	@Override
 	public LocationReferencePoint build() throws LocationReferenceException {
+		validate();
 		return new LocationReferencePoint(coordinate, frc, fow, lfrcnp,
 				bearing, dnp);
 	}
@@ -226,7 +228,40 @@ public class LocationReferencePointBuilder implements
 	 */
 	@Override
 	public void validate() throws LocationReferenceException {
-
+		if (bearing == null) {
+			throw new LocationReferenceException(Messages
+					.getString("LocationReferencePointBuilder.Exception.BEARING_NOT_SET")); //$NON-NLS-1$
+		}
+		
+		if (coordinate == null) {
+			throw new LocationReferenceException(Messages
+					.getString("LocationReferencePointBuilder.Exception.COORDINATE_NOT_SET")); //$NON-NLS-1$
+		}
+		
+		if (fow == null) {
+			throw new LocationReferenceException(Messages
+					.getString("LocationReferencePointBuilder.Exception.FOW_NOT_SET")); //$NON-NLS-1$
+		}
+		
+		if (frc == null) {
+			throw new LocationReferenceException(Messages
+					.getString("LocationReferencePointBuilder.Exception.FRC_NOT_SET")); //$NON-NLS-1$
+		}
+		
+		if (dnp == null && lfrcnp == null) {
+			// might be last point, allow it
+			return;
+		}
+		
+		if (dnp == null) {
+			throw new LocationReferenceException(Messages
+					.getString("LocationReferencePointBuilder.Exception.DISTANCE_NOT_SET")); //$NON-NLS-1$
+		}
+		
+		if (lfrcnp == null) {
+			throw new LocationReferenceException(Messages
+					.getString("LocationReferencePointBuilder.Exception.LFRCNP_NOT_SET")); //$NON-NLS-1$
+		}
 	}
 
 }
