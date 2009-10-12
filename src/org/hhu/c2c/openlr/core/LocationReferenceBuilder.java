@@ -202,6 +202,28 @@ public class LocationReferenceBuilder implements
 	}
 
 	/**
+	 * Adds the last location reference point, ignoring the lowest functional
+	 * road classs and distance if given by the point
+	 * 
+	 * @see LocationReferenceBuilder#close(float, float, FunctionalRoadClass,
+	 *      FormOfWay, float)
+	 * 
+	 * @param point
+	 *            the last location reference point
+	 * 
+	 * @return the same instance of this {@link LocationReferenceBuilder} for
+	 *         use in a fluid interface
+	 * @throws LocationReferenceException
+	 *             if the angular measurements for the coordinates are misformed
+	 */
+	public LocationReferenceBuilder close(LocationReferencePoint point)
+			throws LocationReferenceException {
+		return close(point.getCoordinate().getLongitude(), point
+				.getCoordinate().getLatitude(), point.getFunctionalRoadClass(),
+				point.getFormOfWay(), point.getBearing().getBearing());
+	}
+
+	/**
 	 * {@link Builder#build()}
 	 */
 	@Override
@@ -366,8 +388,9 @@ public class LocationReferenceBuilder implements
 							.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
-		LocationReferencePoint lastPoint = points.get(points.size());
-		if (lastPoint.getDistanceToNextPoint().getDistance() > 0) {
+		LocationReferencePoint lastPoint = points.get(points.size() - 1);
+		if (lastPoint.getDistanceToNextPoint() != null
+				&& lastPoint.getDistanceToNextPoint().getDistance() != 0) {
 			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_DISTANCE")); //$NON-NLS-1$
