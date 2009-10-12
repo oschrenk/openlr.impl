@@ -197,7 +197,7 @@ public class LocationReferenceBuilder implements
 		closeCounter++;
 
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
-				longitude, latitude), frc, fow, new Bearing(bearing)));
+				longitude, latitude), frc, fow, FunctionalRoadClass.UNDEFINED_CLASS_ROAD, new Bearing(bearing), new Distance(0)));
 		return this;
 	}
 
@@ -396,7 +396,7 @@ public class LocationReferenceBuilder implements
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_DISTANCE")); //$NON-NLS-1$
 		}
 
-		if (lastPoint.getLowestFRCToNextPoint() != null) {
+		if (lastPoint.getLowestFRCToNextPoint() != FunctionalRoadClass.UNDEFINED_CLASS_ROAD) {
 			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_LFRCNP")); //$NON-NLS-1$

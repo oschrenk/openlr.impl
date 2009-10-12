@@ -23,37 +23,50 @@ public enum FunctionalRoadClass {
 	/**
 	 * First class road
 	 */
-	FIRST_CLASS_ROAD(1, Messages.getString("FunctionalRoadClass.Text.FIRST_CLASS_ROAD")), //$NON-NLS-1$
+	FIRST_CLASS_ROAD(1, Messages
+			.getString("FunctionalRoadClass.Text.FIRST_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Second class road
 	 */
-	SECOND_CLASS_ROAD(2, Messages.getString("FunctionalRoadClass.Text.SECOND_CLASS_ROAD")), //$NON-NLS-1$
+	SECOND_CLASS_ROAD(2, Messages
+			.getString("FunctionalRoadClass.Text.SECOND_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Third class road
 	 */
-	THIRD_CLASS_ROAD(3, Messages.getString("FunctionalRoadClass.Text.THIRD_CLASS_ROAD")), //$NON-NLS-1$
+	THIRD_CLASS_ROAD(3, Messages
+			.getString("FunctionalRoadClass.Text.THIRD_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Fourth class road
 	 */
-	FOURTH_CLASS_ROAD(4, Messages.getString("FunctionalRoadClass.Text.FOURTH_CLASS_ROAD")), //$NON-NLS-1$
+	FOURTH_CLASS_ROAD(4, Messages
+			.getString("FunctionalRoadClass.Text.FOURTH_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Fifth class road
 	 */
-	FIFTH_CLASS_ROAD(5, Messages.getString("FunctionalRoadClass.Text.FIFTH_CLASS_ROAD")), //$NON-NLS-1$
+	FIFTH_CLASS_ROAD(5, Messages
+			.getString("FunctionalRoadClass.Text.FIFTH_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Sixth class road
 	 */
-	SIXTH_CLASS_ROAD(6, Messages.getString("FunctionalRoadClass.Text.SIXTH_CLASS_ROAD")), //$NON-NLS-1$
+	SIXTH_CLASS_ROAD(6, Messages
+			.getString("FunctionalRoadClass.Text.SIXTH_CLASS_ROAD")), //$NON-NLS-1$
 
 	/**
 	 * Other class road
 	 */
-	OTHER_CLASS_ROAD(7, Messages.getString("FunctionalRoadClass.Text.OTHER_CLASS_ROAD")); //$NON-NLS-1$
+	OTHER_CLASS_ROAD(7, Messages
+			.getString("FunctionalRoadClass.Text.OTHER_CLASS_ROAD")), //$NON-NLS-1$
+
+	/**
+	 * Undefined class road, for internal use
+	 */
+	UNDEFINED_CLASS_ROAD(255, Messages
+			.getString("FunctionalRoadClass.Text.UNDEFINED_CLASS_ROAD")); //$NON-NLS-1$
 
 	/**
 	 * Describes a bitmask, masking the three least significant bits:
@@ -70,6 +83,8 @@ public enum FunctionalRoadClass {
 	/**
 	 * Creates a new functional road class with the passed byte. Only the three
 	 * least significant bits are used.
+	 * 
+	 * The undefined functional road class can't be constructed by this method
 	 * 
 	 * @param frc
 	 *            the byte containing the functional road class encoded as the

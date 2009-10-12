@@ -51,8 +51,6 @@ public class LocationReferencePointBuilder implements
 	 */
 	private FunctionalRoadClass lfrcnp;
 
-	// TODO default to a something else, null value or so?
-
 	/**
 	 * Constructs a new {@link LocationReferencePointBuilder}
 	 */
@@ -249,7 +247,8 @@ public class LocationReferencePointBuilder implements
 		}
 		
 		if (dnp == null && lfrcnp == null) {
-			// might be last point, allow it
+			dnp = new Distance(0);
+			lfrcnp = FunctionalRoadClass.UNDEFINED_CLASS_ROAD;
 			return;
 		}
 		

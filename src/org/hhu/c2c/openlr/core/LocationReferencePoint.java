@@ -59,33 +59,7 @@ public class LocationReferencePoint {
 	 * point. When this location reference point is the last one of a location
 	 * reference this is <code>null</code>
 	 */
-	private FunctionalRoadClass lowestFRCToNextPoint;
-
-	/**
-	 * Constructs a new location reference point, without a value for lfrcnp and
-	 * distance, indicating that it is used to describe the last point of a
-	 * location reference.
-	 * 
-	 * @param coordinate
-	 *            the coordinate
-	 * @param frc
-	 *            the functional road class
-	 * @param fow
-	 *            the form of way
-	 * @param bearing
-	 *            the bearing
-	 */
-	protected LocationReferencePoint(final Coordinate coordinate,
-			final FunctionalRoadClass frc, final FormOfWay fow,
-			final Bearing bearing) {
-		// TODO how to handle that the last point has no lfrcnp?
-
-		this.coordinate = coordinate;
-		this.functionalRoadClass = frc;
-		this.formOfWay = fow;
-		this.bearing = bearing;
-		this.distanceToNextPoint = new Distance(0);
-	}
+	private final FunctionalRoadClass lowestFRCToNextPoint;
 
 	/**
 	 * Constructs a new location reference point with all the neccesary
