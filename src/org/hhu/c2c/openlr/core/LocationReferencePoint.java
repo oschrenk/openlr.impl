@@ -78,7 +78,8 @@ public class LocationReferencePoint {
 	protected LocationReferencePoint(final Coordinate coordinate,
 			final FunctionalRoadClass frc, final FormOfWay fow,
 			final Bearing bearing) {
-		// TODO handle last point differently? DNP=0? LFRCNP= ????
+		// TODO how to handle that the last point has no lfrcnp?
+
 		this.coordinate = coordinate;
 		this.functionalRoadClass = frc;
 		this.formOfWay = fow;
