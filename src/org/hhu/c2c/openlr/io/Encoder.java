@@ -25,8 +25,6 @@ import org.hhu.c2c.openlr.geo.Coordinate;
  */
 public class Encoder {
 
-	// TODO complete reference on how to encode a location reference
-
 	/**
 	 * Writes the given location reference to the given output stream.
 	 * 
