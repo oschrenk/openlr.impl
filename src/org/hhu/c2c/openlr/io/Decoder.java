@@ -177,19 +177,27 @@ public class Decoder {
 	 */
 	private Coordinate getCoordinate(final Coordinate previous,
 			final ByteArrayFiFo fifo) {
-		return new Coordinate(
-				CoordinateHelper
-						.getDegreeFromRelative(
-								CoordinateHelper
-										.getRelativeCoordinateIntValue(fifo
-												.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
-								previous.getLongitude()),
-				CoordinateHelper
-						.getDegreeFromRelative(
-								CoordinateHelper
-										.getRelativeCoordinateIntValue(fifo
-												.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
-								previous.getLatitude()));
+		try {
+			return Coordinate
+					.newCoordinate(
+							CoordinateHelper
+									.getDegreeFromRelative(
+											CoordinateHelper
+													.getRelativeCoordinateIntValue(fifo
+															.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
+											previous.getLongitude()),
+							CoordinateHelper
+									.getDegreeFromRelative(
+											CoordinateHelper
+													.getRelativeCoordinateIntValue(fifo
+															.pop(NUMBER_OF_BYTES_FOR_RELATIVE_ANGULAR_MEASUREMENT)),
+											previous.getLatitude()));
+		} catch (LocationReferenceException e) {
+			// this exception should never be thrown as the decoder should
+			// always return a valid value, as the binary encoded bytes can only
+			// represent valid data
+			throw new RuntimeException(Messages.getString("FATAL_ERROR")); //$NON-NLS-1$
+		}
 	}
 
 	/**

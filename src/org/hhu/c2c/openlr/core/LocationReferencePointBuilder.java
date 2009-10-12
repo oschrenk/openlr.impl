@@ -131,10 +131,12 @@ public class LocationReferencePointBuilder implements
 	 * 
 	 * @return the same instance of this {@link LocationReferencePointBuilder}
 	 *         for use in a fluid interface
+	 * @throws LocationReferenceException
+	 *             if the angular measurements for the coordinates are misformed
 	 */
 	public LocationReferencePointBuilder setCoordinate(final float longitude,
-			final float latitude) {
-		return setCoordinate(new Coordinate(longitude, latitude));
+			final float latitude) throws LocationReferenceException {
+		return setCoordinate(Coordinate.newCoordinate(longitude, latitude));
 	}
 
 	/**
@@ -158,9 +160,12 @@ public class LocationReferencePointBuilder implements
 	 *            the new distance to the next location reference point in meter
 	 * @return the same instance of this {@link LocationReferencePointBuilder}
 	 *         for use in a fluid interface
+	 * @throws LocationReferenceException
+	 *             if distance doesn't follow the data rules
 	 */
-	public LocationReferencePointBuilder setDnp(int dnp) {
-		return setDnp(new Distance(dnp));
+	public LocationReferencePointBuilder setDnp(int dnp)
+			throws LocationReferenceException {
+		return setDnp(Distance.newDistance(dnp));
 	}
 
 	/**
@@ -221,7 +226,7 @@ public class LocationReferencePointBuilder implements
 	 */
 	@Override
 	public void validate() throws LocationReferenceException {
-		
+
 	}
 
 }

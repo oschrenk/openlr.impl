@@ -1,6 +1,7 @@
 package org.hhu.c2c.openlr.geo;
 
 import org.hhu.c2c.openlr.l10n.Messages;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * A <b>Coordinate pair</b> (<code>COORD</code>) stands for a pair of WGS84
@@ -11,12 +12,11 @@ import org.hhu.c2c.openlr.l10n.Messages;
  * @see <a href="http://en.wikipedia.org/wiki/World_Geodetic_System_1984">WGS84
  *      (World Geodetic System 1984)</a>
  * 
- * 
  * @author Oliver Schrenk <oliver.schrenk@uni-duesseldorf.de>
  * 
  */
 public class Coordinate {
-	
+
 	/**
 	 * Holds the latitude, for north-south measuring, represented by horizontal
 	 * lines
@@ -38,22 +38,38 @@ public class Coordinate {
 	 * @param latitude
 	 *            the latitude, for north-south measuring, represented by
 	 *            horizontal lines
-	 * @throws IllegalArgumentException
+	 * @return a new coordinate
+	 * @throws LocationReferenceException
 	 *             If either the longitude or the latitude a misformed. (eg.
 	 *             being lower than -180 degree or above 180 degrees)
 	 */
-	public Coordinate(final float longitude, final float latitude) {
+	public static Coordinate newCoordinate(final float longitude,
+			final float latitude) throws LocationReferenceException {
 		if (longitude < -180 || longitude > 180) {
-			throw new IllegalArgumentException(Messages
+			throw new LocationReferenceException(Messages
 					.getString("Coordinate.Exeption.LONGITUDE_MISFORMED")); //$NON-NLS-1$
 		}
 
 		if (latitude < -180 || latitude > 180) {
-			throw new IllegalArgumentException(Messages
+			throw new LocationReferenceException(Messages
 					.getString("Coordinate.Exeption.LATITUDE_MISFORMED")); //$NON-NLS-1$
 
 		}
 
+		return new Coordinate(longitude, latitude);
+	}
+
+	/**
+	 * Creates a new coordinate by passing longitude and a latitude parameter.
+	 * 
+	 * @param longitude
+	 *            the longitude, for east-west measuring, represented by
+	 *            vertical lines
+	 * @param latitude
+	 *            the latitude, for north-south measuring, represented by
+	 *            horizontal lines
+	 */
+	protected Coordinate(final float longitude, final float latitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

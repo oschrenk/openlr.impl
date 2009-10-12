@@ -149,17 +149,20 @@ public class LocationReferenceBuilder implements
 	 *            the distance to the next point
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
+	 * @throws LocationReferenceException
+	 *             if the angular measurements for the coordinates are misformed
+	 *             or the distance doesn't follow the data rules
 	 */
 	public LocationReferenceBuilder addLocationReferencePoint(
 			final float longitude, final float latitude,
 			final FunctionalRoadClass frc, final FormOfWay fow,
 			final FunctionalRoadClass lfrcnp, final float bearing,
-			final int distance) {
+			final int distance) throws LocationReferenceException {
 
 		// TODO catch IllegalArgumentException
-		points.add(new LocationReferencePoint(new Coordinate(longitude,
-				latitude), frc, fow, frc, new Bearing(bearing), new Distance(
-				distance)));
+		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
+				longitude, latitude), frc, fow, frc, new Bearing(bearing),
+				Distance.newDistance(distance)));
 		return this;
 	}
 
@@ -178,14 +181,17 @@ public class LocationReferenceBuilder implements
 	 *            the bearing the distance
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
 	 *         use in a fluid interface
+	 * @throws LocationReferenceException
+	 *             if the angular measurements for the coordinates are misformed
 	 */
 	public LocationReferenceBuilder close(final float longitude,
 			final float latitude, final FunctionalRoadClass frc,
-			final FormOfWay fow, final float bearing) {
+			final FormOfWay fow, final float bearing)
+			throws LocationReferenceException {
 
 		// TODO catch IllegalArgumentException
-		points.add(new LocationReferencePoint(new Coordinate(longitude,
-				latitude), frc, fow, new Bearing(bearing)));
+		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
+				longitude, latitude), frc, fow, new Bearing(bearing)));
 		return this;
 	}
 

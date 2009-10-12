@@ -6,7 +6,9 @@ import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RELATIVE_FORMAT_INT_MULTI
 import static org.hhu.c2c.openlr.io.PhysicalDataFormat.RESOLUTION_PARAMETER;
 
 import org.hhu.c2c.openlr.geo.Coordinate;
+import org.hhu.c2c.openlr.l10n.Messages;
 import org.hhu.c2c.openlr.util.ByteArrayFiFo;
+import org.hhu.c2c.openlr.util.LocationReferenceException;
 
 /**
  * <b>CoordinateUtils</b> is a collection of small helper functions for
@@ -126,11 +128,18 @@ public class CoordinateHelper {
 	 */
 	protected static Coordinate getCoordinate(final byte[] coordinate) {
 		ByteArrayFiFo fifo = new ByteArrayFiFo(coordinate);
-		return new Coordinate(
-				getFloatRepresentation(getAbsoluteAngularMeasurement(fifo
-						.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT))),
-				getFloatRepresentation(getAbsoluteAngularMeasurement(fifo
-						.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT))));
+		try {
+			return Coordinate.newCoordinate(
+					getFloatRepresentation(getAbsoluteAngularMeasurement(fifo
+							.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT))),
+					getFloatRepresentation(getAbsoluteAngularMeasurement(fifo
+							.pop(NUMBER_OF_BYTES_FOR_ABSOLUTE_ANGULAR_MEASUREMENT))));
+		} catch (LocationReferenceException e) {
+			// this exception should never be thrown as the decoder should
+			// always return a valid value, as the binary encoded bytes can only
+			// represent valid data
+			throw new RuntimeException(Messages.getString("FATAL_ERROR")); //$NON-NLS-1$
+		}
 	}
 
 	/**
