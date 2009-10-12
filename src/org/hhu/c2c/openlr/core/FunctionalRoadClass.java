@@ -59,7 +59,7 @@ public enum FunctionalRoadClass {
 	 * Describes a bitmask, masking the three least significant bits:
 	 * "0000 0100"
 	 */
-	private static final byte THREE_BIT_BITMASK = 7;
+	private static final int THREE_BIT_BITMASK = 7;
 
 	/*
 	 * Breaks "Single Responsibility Principle" as the class is now also,
@@ -108,7 +108,7 @@ public enum FunctionalRoadClass {
 	 * Holds the byte value (the three least significant bits) of the functional
 	 * road class
 	 */
-	private final byte functionalRoadClass;
+	private final int functionalRoadClass;
 
 	/**
 	 * Holds the name of the functional road class
@@ -135,7 +135,7 @@ public enum FunctionalRoadClass {
 	 * 
 	 * @return the byte representation using the three least significant bits
 	 */
-	public byte getByteRepresentation() {
+	public int getByteRepresentation() {
 		return functionalRoadClass;
 	}
 

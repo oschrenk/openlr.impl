@@ -103,7 +103,7 @@ public class Decoder {
 		if (positiveOffsetFlag) {
 			// there should be one or two byte left
 			if (fifo.capacity() > 0) {
-				lrb.setPositiveOffset(Distance.newDistance(fifo.pop()));
+				lrb.setPositiveOffset(Distance.newDistanceFromByteRepresentation(fifo.pop()));
 			} else {
 				throw new LocationReferenceException(
 						Messages
@@ -115,7 +115,7 @@ public class Decoder {
 		if (negativeOffsetFlag) {
 			// there should only be one byte left
 			if (fifo.capacity() > 0) {
-				lrb.setNegativeOffset(Distance.newDistance(fifo.pop()));
+				lrb.setNegativeOffset(Distance.newDistanceFromByteRepresentation(fifo.pop()));
 			} else {
 				throw new LocationReferenceException(
 						Messages
@@ -159,7 +159,7 @@ public class Decoder {
 		lrpb.setLfrcnp(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
-		lrpb.setDnp(Distance.newDistance(fifo.pop()));
+		lrpb.setDnp(Distance.newDistanceFromByteRepresentation(fifo.pop()));
 		return lrpb.build();
 	}
 
@@ -230,7 +230,7 @@ public class Decoder {
 		lrpb.setLfrcnp(FunctionalRoadClass.getFunctionalRoadClass((byte) ((fifo
 				.peek() >> LFRCNP_BITSHIFT) & FUNCTIONAL_ROAD_CLASS_BITMASK)));
 		lrpb.setBearing(Bearing.newBearing(fifo.pop()));
-		lrpb.setDnp(Distance.newDistance(fifo.pop()));
+		lrpb.setDnp(Distance.newDistanceFromByteRepresentation(fifo.pop()));
 
 		return lrpb.build();
 	}

@@ -35,13 +35,28 @@ public class Distance implements Comparable<Distance> {
 	 * 
 	 * @param distance
 	 *            the byte value
-	 * @return a new distance, measured in meter
+	 * @return a new distance
 	 * @throws LocationReferenceException
 	 *             if the distance violates the first rule of the data format
 	 *             rules
 	 */
-	public static Distance newDistance(final int distance)
+	public static Distance newDistanceFromByteRepresentation(final int distance)
 			throws LocationReferenceException {
+		return newDistanceFromMetricRepresentation((int) (distance * Rules.ONE_BIT_DISTANCE));
+	}
+
+	/**
+	 * Returns a new distance value by passing a value given in meter.
+	 * 
+	 * @param distance
+	 *            the distance in meter
+	 * @return a new distance
+	 * @throws LocationReferenceException
+	 *             if the distance violates the first rule of the data format
+	 *             rules
+	 */
+	public static Distance newDistanceFromMetricRepresentation(
+			final int distance) throws LocationReferenceException {
 		if (distance > Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS) {
 			throw new LocationReferenceException(
 					Messages
@@ -54,7 +69,7 @@ public class Distance implements Comparable<Distance> {
 					.getString("Distance.Exception.ONLY_POSITIVE")); //$NON-NLS-1$
 		}
 
-		return new Distance((int) (distance * Rules.ONE_BIT_DISTANCE));
+		return new Distance(distance);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package org.hhu.c2c.openlr.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.hhu.c2c.openlr.util.LocationReferenceException;
 import org.junit.Test;
@@ -15,11 +16,13 @@ public class DistanceTest {
 
 	/**
 	 * Tests various edge cases for constructing
+	 * 
+	 * @throws LocationReferenceException
 	 */
 	@Test(expected = LocationReferenceException.class)
-	public void testConstructing() {
-		new Distance(-1);
-		new Distance(Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + 1);
+	public void testConstructing() throws LocationReferenceException {
+		Distance.newDistanceFromByteRepresentation(-1);
+		Distance.newDistanceFromByteRepresentation(Rules.MAXIMUM_DISTANCE_BETWEEN_TWO_LR_POINTS + 1);
 	}
 
 	/**
@@ -31,11 +34,16 @@ public class DistanceTest {
 	public void testRepresentationsConversions() {
 		Distance distance;
 
-		for (int i = 0; i < 15000; i++) {
+		for (int i = 67; i < 15000; i++) {
 			distance = new Distance(i);
-			assertEquals("Expected to be equal", distance.getDistance(),
-					new Distance(distance.getByteRepresentation())
-							.getDistance(), 59f);
+			try {
+				assertEquals("Expected to be equal for distance " + i, distance
+						.getDistance(), Distance.newDistanceFromByteRepresentation(
+						distance.getByteRepresentation()).getDistance(), 59f);
+			} catch (LocationReferenceException e) {
+				fail("Should never happen");
+				e.printStackTrace();
+			}
 		}
 	}
 }

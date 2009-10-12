@@ -167,7 +167,7 @@ public class LocationReferencePointBuilder implements
 	 */
 	public LocationReferencePointBuilder setDnp(int dnp)
 			throws LocationReferenceException {
-		return setDnp(Distance.newDistance(dnp));
+		return setDnp(Distance.newDistanceFromMetricRepresentation(dnp));
 	}
 
 	/**

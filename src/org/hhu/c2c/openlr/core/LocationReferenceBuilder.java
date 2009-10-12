@@ -167,7 +167,7 @@ public class LocationReferenceBuilder implements
 
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
 				longitude, latitude), frc, fow, frc, new Bearing(bearing),
-				Distance.newDistance(distance)));
+				Distance.newDistanceFromByteRepresentation(distance)));
 		return this;
 	}
 
