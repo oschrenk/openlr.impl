@@ -149,8 +149,8 @@ public class LocationReferenceBuilder implements
 	 *            the form of way
 	 * @param lfrcnp
 	 *            the lowest functional road class to the next point
-	 * @param bearing
-	 *            the bearing the distance
+	 * @param degree
+	 *            the bearing in degree
 	 * @param distance
 	 *            the distance to the next point
 	 * @return the same instance of this {@link LocationReferenceBuilder} for
@@ -162,11 +162,11 @@ public class LocationReferenceBuilder implements
 	public LocationReferenceBuilder addLocationReferencePoint(
 			final float longitude, final float latitude,
 			final FunctionalRoadClass frc, final FormOfWay fow,
-			final FunctionalRoadClass lfrcnp, final float bearing,
+			final FunctionalRoadClass lfrcnp, final float degree,
 			final int distance) throws LocationReferenceException {
 
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
-				longitude, latitude), frc, fow, frc, new Bearing(bearing),
+				longitude, latitude), frc, fow, frc, new Bearing(degree),
 				Distance.newDistanceFromByteRepresentation(distance)));
 		return this;
 	}
