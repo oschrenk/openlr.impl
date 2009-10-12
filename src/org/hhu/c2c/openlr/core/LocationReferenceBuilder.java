@@ -197,7 +197,9 @@ public class LocationReferenceBuilder implements
 		closeCounter++;
 
 		points.add(new LocationReferencePoint(Coordinate.newCoordinate(
-				longitude, latitude), frc, fow, FunctionalRoadClass.UNDEFINED_CLASS_ROAD, new Bearing(bearing), new Distance(0)));
+				longitude, latitude), frc, fow,
+				FunctionalRoadClass.UNDEFINED_CLASS_ROAD, new Bearing(bearing),
+				new Distance(0)));
 		return this;
 	}
 
@@ -370,6 +372,18 @@ public class LocationReferenceBuilder implements
 									"LocationReferenceBuilder.Exception.MINIMUM_NUMBER_OF_POINTS", Rules.MINIMUM_NUMBER_OF_LR_POINTS)); //$NON-NLS-1$
 		}
 
+		if (closeCounter == 0) {
+			throw new LocationReferenceException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.LAST_POINT_MISSING")); //$NON-NLS-1$
+		}
+
+		if (closeCounter > 1) {
+			throw new LocationReferenceException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.MULTIPLE_LAST_POINTS")); //$NON-NLS-1$
+		}
+
 		if (attributeFlag != ATTRIBUTE_FLAG_DEFAULT) {
 			throw new LocationReferenceException(
 					Messages
@@ -388,31 +402,56 @@ public class LocationReferenceBuilder implements
 							.getString("LocationReferenceBuilder.Exception.PROTOCOL_VERSION_NOT_SUPPORTED")); //$NON-NLS-1$
 		}
 
-		LocationReferencePoint lastPoint = points.get(points.size() - 1);
-		if (lastPoint.getDistanceToNextPoint() != null
-				&& lastPoint.getDistanceToNextPoint().getDistance() != 0) {
+		int numberOfPoints = points.size();
+		LocationReferencePoint point;
+
+		// check each point for anomalies (except the last one)
+		for (int i = 0; i < numberOfPoints - 1; i++) {
+			point = points.get(i);
+
+			// check functional road class for undefined values
+			if (point.getFunctionalRoadClass() == FunctionalRoadClass.UNDEFINED_CLASS_ROAD
+					|| point.getLowestFRCToNextPoint() == FunctionalRoadClass.UNDEFINED_CLASS_ROAD) {
+				throw new LocationReferenceException(
+						Messages
+								.getString("LocationReferenceBuilder.Exception.UNDEFINED_FRC")); //$NON-NLS-1$
+			}
+
+		}
+
+		validateLastPoint(points.get(numberOfPoints - 1));
+
+	}
+
+	/**
+	 * Checks if the last point of the location reference has a valid format
+	 * 
+	 * @param point
+	 *            the last location reference point
+	 * @throws LocationReferenceException
+	 *             if the last point is misformed
+	 */
+	private void validateLastPoint(LocationReferencePoint point)
+			throws LocationReferenceException {
+		if (point.getDistanceToNextPoint() != null
+				&& point.getDistanceToNextPoint().getDistance() != 0) {
 			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_DISTANCE")); //$NON-NLS-1$
 		}
 
-		if (lastPoint.getLowestFRCToNextPoint() != FunctionalRoadClass.UNDEFINED_CLASS_ROAD) {
+		// check functional road class for undefined values
+		if (point.getFunctionalRoadClass() == FunctionalRoadClass.UNDEFINED_CLASS_ROAD) {
+			throw new LocationReferenceException(
+					Messages
+							.getString("LocationReferenceBuilder.Exception.UNDEFINED_FRC")); //$NON-NLS-1$
+		}
+
+		// the lowest functional road class to next point mus be undefined
+		if (point.getLowestFRCToNextPoint() != FunctionalRoadClass.UNDEFINED_CLASS_ROAD) {
 			throw new LocationReferenceException(
 					Messages
 							.getString("LocationReferenceBuilder.Exception.LAST_POINT_NO_LFRCNP")); //$NON-NLS-1$
 		}
-
-		if (closeCounter == 0) {
-			throw new LocationReferenceException(
-					Messages
-							.getString("LocationReferenceBuilder.Exception.LAST_POINT_MISSING")); //$NON-NLS-1$
-		}
-
-		if (closeCounter > 1) {
-			throw new LocationReferenceException(
-					Messages
-							.getString("LocationReferenceBuilder.Exception.MULTIPLE_LAST_POINTS")); //$NON-NLS-1$
-		}
-
 	}
 }
